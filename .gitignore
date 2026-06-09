@@ -1,0 +1,88 @@
+# ===================
+# Python
+# ===================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+.eggs/
+
+# ===================
+# Virtual Environment
+# ===================
+venv/
+.venv/
+env/
+.env
+# Keep .env.example
+!.env.example
+
+# ===================
+# Jupyter Notebook
+# ===================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+.jupyter/
+
+# ===================
+# macOS
+# ===================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ===================
+# IDE
+# ===================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.history/
+
+# ===================
+# pytest
+# ===================
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ===================
+# Model files (too large)
+# ===================
+*.gguf
+*.bin
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+models/
+
+# ===================
+# Database & logs
+# ===================
+*.db
+*.sqlite3
+logs/
+*.log
+
+# ===================
+# Node
+# ===================
+node_modules/
+dist/
+.DS_Store
+
+# ===================
+# Docker
+# ===================
+docker-compose.override.yml
+llama.cpp/

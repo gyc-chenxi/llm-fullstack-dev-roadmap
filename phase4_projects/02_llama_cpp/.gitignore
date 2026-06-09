@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Models
+models/*.gguf
+models/*.bin
+models/*.safetensors
+
+# Reports runtime
+reports/*.tmp
+observability/metrics_snapshots/*.txt
+
+# macOS
+.DS_Store
+
+# Runtime
+logs/
+.pids
+
+# llama.cpp build
+third_party/llama.cpp/build/

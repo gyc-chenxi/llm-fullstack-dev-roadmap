@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv /Users/chenxi/Documents/晨熙个人/0暑期自学大模型/phase2_llm_internals/attention_from_scratch/README.md /Users/chenxi/Documents/晨熙个人/0暑期自学大模型/phase2_llm_internals/08_attention_from_scratch.md)",
+      "Bash(rmdir /Users/chenxi/Documents/晨熙个人/0暑期自学大模型/phase2_llm_internals/attention_from_scratch)",
+      "Bash(mv /Users/chenxi/Documents/晨熙个人/0暑期自学大模型/phase2_llm_internals/lora_demo/README.md /Users/chenxi/Documents/晨熙个人/0暑期自学大模型/phase2_llm_internals/09_lora_demo.md)",
+      "Bash(rmdir /Users/chenxi/Documents/晨熙个人/0暑期自学大模型/phase2_llm_internals/lora_demo)",
+      "Bash(mv transformer.md 01_transformer.md)",
+      "WebSearch"
+    ]
+  }
+}

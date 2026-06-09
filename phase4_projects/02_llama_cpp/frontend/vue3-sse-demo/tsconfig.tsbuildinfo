@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/api/health.ts","./src/api/llm.ts","./src/composables/usechat.ts","./src/composables/usehealth.ts","./src/types/index.ts","./src/app.vue","./src/components/chatinput.vue","./src/components/healthbadge.vue","./src/components/messageitem.vue","./src/components/settingspanel.vue","./env.d.ts"],"errors":true,"version":"5.7.3"}
