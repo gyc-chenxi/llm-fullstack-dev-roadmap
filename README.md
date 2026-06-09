@@ -2,13 +2,14 @@
 
 <div align="center">
 
-**从 Prompt 入门到手搓企业级 AI-Gateway —— 本科生的大模型全栈工程实战路线**
+**从底层原理手撕到企业级 AI-Gateway —— 面向中厂面试的大模型全栈工程路线**
 
 [![100 Days](https://img.shields.io/badge/📅_Days-100-blue?style=for-the-badge)](.)
 [![7 Phases](https://img.shields.io/badge/🧩_Phases-7-orange?style=for-the-badge)](.)
-[![9+ Projects](https://img.shields.io/badge/🚀_Projects-9+-green?style=for-the-badge)](.)
+[![11+ Projects](https://img.shields.io/badge/🚀_Projects-11+-green?style=for-the-badge)](.)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](.)
-[![macOS](https://img.shields.io/badge/platform-macOS_Apple_Silicon-lightgrey?style=for-the-badge&logo=apple)](.)
+[![Cross-Platform](https://img.shields.io/badge/Platform-macOS_|_Linux_|_Windows-lightgrey?style=for-the-badge)](.)
+[![Nvidia GPU](https://img.shields.io/badge/GPU-Nvidia_CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](.)
 [![License MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](./LICENSE)
 
 </div>
@@ -16,16 +17,30 @@
 ---
 
 > 🎯 **不只是调用 API，而是从零手搓一个企业级 AI-Gateway。**
+>
+> 这是一条面向 **想进中厂的 AI 算法/应用开发面试者** 的 100 天学习路线——从 Python/Prompt/API 入门，到 RAG、Agent、LLaMA-Factory/vLLM 工业微调部署，最终自研多模型容灾 AI-Gateway。
 
 ---
 
-## 🧭 路线特色
+## 🧭 为什么选择这个路线？
 
 <div align="center">
 
-| 🔬 **拒绝无脑调包** | 🏭 **贴近工业界** | 🚀 **九大项目冲刺** | 🏆 **企业级大收官** |
-|:---:|:---:|:---:|:---:|
-| 深入 Transformer<br>Attention/KV Cache<br>RoPE/MoE/量化<br>**手写核心组件** | Docker/Redis/PG<br>FastAPI/SSE/Nginx<br>Conda/pip/pytest<br>**全链路工程基建** | MLX LM / llama.cpp<br>Diffusers / SAM 2<br>Qwen-VL / LangGraph<br>LlamaIndex / GraphRAG<br>**30天极限复现** | 多模型统一路由<br>限流/熔断/计费<br>Dashboard 监控<br>**Docker 一键部署** |
+| 🔬 **拒绝无脑调包** | 🏭 **破除本地环境局限** |
+|:---|:---|
+| 深入 Transformer/Attention<br>KV Cache/RoPE/MoE/量化<br>**PyTorch 手写核心组件** | macOS + **Windows + Linux**<br>Nvidia GPU + CUDA 全平台<br>**LLaMA-Factory 工业微调 + vLLM 生产推理** |
+
+| 💰 **API 商业化应用** | 📊 **效果量化评估** |
+|:---|:---|
+| OpenAI/DeepSeek/Qwen/Claude<br>**多厂商容灾路由 + 统一鉴权**<br>**Token 计费管控 + 预算预警** | RAGAS/TruLens 量化评测<br>**A/B 测试管道 + 改进闭环**<br>**用数据说话，面试不讲虚的** |
+
+</div>
+
+<div align="center">
+
+| 🚀 **11 大开源项目冲刺** | 🏆 **企业级大收官** |
+|:---|:---|
+| MLX LM / llama.cpp / vLLM<br>LLaMA-Factory / Diffusers / SAM 2<br>Qwen-VL / LangGraph / LlamaIndex<br>GraphRAG / SWE-agent | 多模型统一路由 + 容灾降级<br>Redis 限流 + 熔断 + Token 计费<br>**监控 Dashboard + Docker 一键部署** |
 
 </div>
 
@@ -33,119 +48,132 @@
 
 ## 👥 适合人群
 
-- ✅ 有 Python 基础、想入门大模型应用开发的本科生
-- ✅ 不想只停留在"调用 API"阶段的学习者
-- ✅ 想做出一个能放进简历和作品集的完整 AI 工程项目
-- ✅ 准备找 AI 工程/后端开发方向实习或工作的同学
+- ✅ 有 Python 基础、想入门大模型应用开发的本科生/初级开发者
+- ✅ **目标中厂 AI 算法/应用开发岗**的面试准备者
+- ✅ 不想只停留在"调用 API"阶段，**想理解底层原理**的学习者
+- ✅ 想做出一个**能写进简历和作品集**的完整 AI 工程项目
 
 ---
 
 ## 🗺️ 100 天路线总览
 
 ```mermaid
-graph LR
-    A[🛠️ Phase 0<br>工程基建<br>Day 1-5] --> B[💬 Phase 1<br>Prompt与API<br>Day 6-15]
-    B --> C[🧠 Phase 2<br>底层原理<br>Day 16-28]
-    C --> D[📚 Phase 3<br>RAG体系<br>Day 29-45]
-    D --> E[🔥 Phase 4<br>九大项目<br>Day 46-75]
-    E --> F[🤖 Phase 5<br>Agent架构<br>Day 76-84]
-    F --> G[🏗️ Phase 6<br>AI-Gateway<br>Day 85-100]
+graph TB
+    A["🛠️ Phase 0<br/>工程基建与极速复习<br/>Day 1-5<br/>⭐"] --> B["💬 Phase 1<br/>Prompt、API 与商业网关雏形<br/>Day 6-15<br/>⭐⭐"]
+    B --> C["🧠 Phase 2<br/>底层原理 + 工业微调与部署<br/>Day 16-28<br/>⭐⭐⭐⭐⭐"]
+    C --> D["📚 Phase 3<br/>RAG 体系 — 工业文档 + 量化评测<br/>Day 29-45<br/>⭐⭐⭐⭐"]
+    D --> E["🔥 Phase 4<br/>11 大开源项目极限冲刺<br/>Day 46-75<br/>⭐⭐⭐⭐⭐"]
+    E --> F["🤖 Phase 5<br/>Agent 与工作流架构<br/>Day 76-84<br/>⭐⭐⭐⭐"]
+    F --> G["🏗️ Phase 6<br/>终极 AI-Gateway<br/>Day 85-100<br/>⭐⭐⭐⭐⭐"]
 
-    style A fill:#e8f5e9,stroke:#4caf50
-    style B fill:#e3f2fd,stroke:#2196f3
-    style C fill:#fce4ec,stroke:#e91e63
-    style D fill:#fff3e0,stroke:#ff9800
-    style E fill:#f3e5f5,stroke:#9c27b0
-    style F fill:#e0f7fa,stroke:#00bcd4
-    style G fill:#fff8e1,stroke:#ffc107
+    style A fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
+    style B fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    style C fill:#fce4ec,stroke:#e91e63,stroke-width:2px
+    style D fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    style E fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style F fill:#e0f7fa,stroke:#00bcd4,stroke-width:2px
+    style G fill:#fff8e1,stroke:#ffc107,stroke-width:2px
 ```
+
+> 🟢 **核心叙事逻辑**：从底层手撕 → 工业微调部署 → 复杂文档 RAG → 量化评测 → Agent 编排 → 企业网关。**每一阶段都是上一阶段的工程化升级。**
+
+---
 
 | Phase | 🎯 主题 | ⏱️ 天数 | 📝 核心产出 | 📊 难度 |
 |:-----:|:--------|:------:|:------------|:------:|
-| **0** | 🛠️ 工程基建与极速复习 | Day 1-5 | Git/SSH/Linux/Docker/Redis/Python/PyTorch 复习 | ⭐ |
-| **1** | 💬 Prompt 工程与 API | Day 6-15 | Prompt Cookbook → 统一 LLM 客户端 → FastAPI 聊天服务 → SSE 流式 → Web Chat Demo | ⭐⭐ |
-| **2** | 🧠 大模型底层硬核拆解 | Day 16-28 | Transformer → Attention(MHA/MQA/GQA) → RoPE → KV Cache → PagedAttention → MoE → 量化 → LoRA → vLLM | ⭐⭐⭐⭐⭐ |
-| **3** | 📚 RAG 检索增强体系 | Day 29-45 | 文档解析 → Chunk 策略 → Embedding → 向量索引 → 混合检索 → LangGraph RAG → RAG 评估 → Web 应用 | ⭐⭐⭐⭐ |
-| **4** | 🔥 九大开源项目极限冲刺 | Day 46-75 | MLX LM / llama.cpp / Diffusers / SAM 2 / Qwen-VL / LangGraph RAG / LlamaIndex / GraphRAG / SWE-agent | ⭐⭐⭐⭐⭐ |
-| **5** | 🤖 Agent 与工作流架构 | Day 76-84 | ReAct → Tool Calling → LangGraph 多节点 Agent → Human-in-the-loop → Agent 安全 → 服务化 | ⭐⭐⭐⭐ |
-| **6** | 🏗️ 终极 AI-Gateway | Day 85-100 | 多模型路由 → Redis 限流 → 熔断降级 → Token 计费 → Dashboard → Docker 一键部署 | ⭐⭐⭐⭐⭐ |
+| **0** | 🛠️ 工程基建与极速复习 | Day 1-5 | Git/SSH/Docker/Redis/Python/PyTorch/跨平台环境 | ⭐ |
+| **1** | 💬 Prompt、API 与商业网关雏形 | Day 6-15 | Prompt Cookbook → 多厂商 API 接入 → 统一客户端 → FastAPI 聊天服务 → 容灾路由 → Token 计费 | ⭐⭐ |
+| **2** | 🧠 底层原理 + 工业微调与部署 | Day 16-28 | Transformer/Attention → RoPE/KV Cache → MoE/量化 → LoRA → **LLaMA-Factory** → **vLLM 生产部署** | ⭐⭐⭐⭐⭐ |
+| **3** | 📚 RAG 体系 — 工业文档 + 量化评测 | Day 29-45 | **工业级文档解析(表格/OCR)** → Chunk 策略 → 混合检索 → LangGraph RAG → **RAGAS/TruLens 评测** → Web 应用 | ⭐⭐⭐⭐ |
+| **4** | 🔥 11 大开源项目极限冲刺 | Day 46-75 | **LLaMA-Factory** / MLX LM / **vLLM** / llama.cpp / Diffusers / SAM 2 / Qwen-VL / LangGraph RAG / LlamaIndex / GraphRAG / SWE-agent | ⭐⭐⭐⭐⭐ |
+| **5** | 🤖 Agent 与工作流架构 | Day 76-84 | ReAct → Tool Calling → LangGraph 多节点 Agent → HITL → Agent 安全评估 → 开源平台实战(Dify/RAGFlow/Coze) | ⭐⭐⭐⭐ |
+| **6** | 🏗️ 终极 AI-Gateway | Day 85-100 | 多模型路由 → Redis 限流 → 熔断降级 → Token 计费 → RAG/Agent 接入 → Dashboard → Docker 一键部署 | ⭐⭐⭐⭐⭐ |
 
 <details>
-<summary><b>📖 展开查看每个 Phase 的详细日计划</b></summary>
+<summary><b>📖 展开查看每个 Phase 的详细节点（含 🆕 企业级新增模块）</b></summary>
 
 <br>
 
-| Phase 0 🛠️ 工程基建 |
-|:---|
-| **Day 1**: Python 高频特性复习（装饰器/async/Pydantic/NumPy/Pandas/Matplotlib） |
-| **Day 2**: ML/DL 基础复习（梯度下降/Softmax/交叉熵/过拟合/归一化） |
-| **Day 3**: 神经网络架构地图（MLP/CNN/RNN/LSTM/GRU/GNN） |
-| **Day 4**: NLP/CV/LLM 全景 + 43 个大模型核心概念术语表 |
-| **Day 5**: Git/GitHub/SSH + Docker/Redis/PostgreSQL + Linux/Shell + PyTorch 基础 + 项目工程化脚手架 + 开发工具链配置 |
+### Phase 0 🛠️ 工程师基建与极速复习 (Day 1-5)
 
-| Phase 1 💬 Prompt & API |
-|:---|
-| **Day 6-7**: Prompt Cookbook — 25+ 个可直接复制的 Prompt 模板（6 大类） |
-| **Day 8-9**: 统一 LLM 客户端 — 7 个 Provider 完整实现（OpenAI/DeepSeek/Qwen/Claude/Ollama/llama.cpp/vLLM） |
-| **Day 10-11**: FastAPI 聊天服务 — 完整可运行项目（含流式 SSE/中间件/鉴权/限流/测试） |
-| **Day 12-13**: Web Chat Demo — Vue3 + TypeScript + SSE 流式前端（Markdown 渲染/多对话/持久化） |
-| **Day 14-15**: Prompt 进阶 + 文档生成提示词 + API Key 管理 + LLM 调用测试指南 |
+| 天数 | 主题 | 核心内容 |
+|:---:|:-----|:--------|
+| Day 1 | Python 高频特性复习 | 列表推导式/装饰器/上下文管理器/类型注解/async-await/异常处理/NumPy/Pandas/Matplotlib |
+| Day 2 | ML/DL 基础复习 | AI/ML/DL/LLM 层级关系、梯度下降/Softmax/交叉熵/过拟合/归一化 |
+| Day 3 | 神经网络架构地图 | MLP/CNN/RNN/LSTM/GRU/GNN — 各架构的归纳偏置与适用场景 |
+| Day 4 | NLP/CV/LLM 全景 + 概念术语表 | NLP 演进脉络、CV 发展、ViT、**43 个 LLM 核心概念术语表** |
+| Day 5 | 🆕 **跨平台工程环境搭建** | **macOS(Apple Silicon) / Windows(WSL2+CUDA) / Linux(Ubuntu+NVIDIA GPU)** 三套环境标准配置、Git/GitHub/SSH、Docker/Redis/PostgreSQL、Linux/Shell 基础、PyTorch 基础、项目脚手架、开发工具链 |
 
-| Phase 2 🧠 底层原理 |
-|:---|
-| **Day 16**: Transformer 架构总览 — Shape 流动全景 + Pre-LN/Post-LN + 面试追问 |
-| **Day 17**: Scaled Dot-Product Attention — QKᵀ/√dₖ/Softmax 手写 + 矩阵维度流动 |
-| **Day 18**: MHA/MQA/GQA — KV Cache 带宽瓶颈 + 三者参数量与显存对比 |
-| **Day 19**: RoPE 旋转位置编码 — 复数旋转/相对位置内积/长上下文外推 |
-| **Day 20**: KV Cache 与自回归生成 — Prefill/Decode + KV Cache 显存公式 |
-| **Day 21**: PagedAttention/Continuous Batching — vLLM 吞吐提升 3x 的秘密 |
-| **Day 22**: MoE 混合专家 — Router/Top-K Expert/Shared Expert/负载均衡 |
-| **Day 23**: 量化技术 — GPTQ/AWQ/GGUF + llama.cpp 量化实操 + 决策树 |
-| **Day 24**: 手写 Multi-Head Attention + GQA — PyTorch 完整实现 + 官方验证 |
-| **Day 25**: LoRA/QLoRA 微调实战 — 完整训练循环 + MLX/PEFT + 超参数调优 |
-| **Day 26**: SFT/RLHF/DPO/蒸馏 — 四种微调对齐技术全景对比 + 训练代码 |
-| **Day 27**: 模型部署 — vLLM/Ollama/llama.cpp/MLX LM 四方案对比 + 压测 |
-| **Day 28**: 7 天参考总纲 — 面试拷问/排障场景/工程映射 |
+### Phase 1 💬 Prompt、API 与商业 LLM 网关雏形 (Day 6-15)
 
-| Phase 3 📚 RAG 体系 |
-|:---|
-| **Day 29-30**: 最简 RAG 实现 — 完整可运行：文档读取→Embedding→检索→真实 LLM 调用 |
-| **Day 31-33**: 文档解析器 — 5 种格式（PDF/MD/TXT/Word/HTML）+ 3 种分块策略 + 预处理管道 |
-| **Day 34-36**: 向量索引 — FAISS(FlatIP/IVFFlat/HNSW) + Chroma 进阶 + 性能 benchmark |
-| **Day 37-39**: 混合检索 — BM25 + 向量 + RRF 融合 + Reranker 精排 + 对比实验 |
-| **Day 40-41**: 高级分块策略 — 语义分块/递归分块/文档结构感知/Small-to-Big |
-| **Day 42-43**: LangGraph RAG 状态机 — 8 节点全部完整实现 + checkpoint 恢复 |
-| **Day 43-44**: RAG 评估 — Ragas 框架 + 改进闭环 + A/B 测试 + 可视化 |
-| **Day 44-45**: RAG Web 应用 + LlamaIndex 入门 |
+| 天数 | 主题 | 核心内容 |
+|:---:|:-----|:--------|
+| Day 6-7 | Prompt Cookbook | 25+ 可直接复制的 Prompt 模板（6 大类：文本处理/代码生成/分析推理/知识问答/结构化输出/角色扮演） |
+| Day 7-8 | Prompt 进阶 | Zero/Few-shot/CoT/Tree-of-Thought、结构化输出约束（JSON Schema/Function Calling）、防幻觉模板、System Prompt 设计 |
+| 🆕 Day 8-9 | **多厂商 API 深度接入** | **OpenAI / DeepSeek / Qwen(阿里云 DashScope) / Claude(Anthropic) / Gemini** — 各厂商 SDK 差异、鉴权方式对比(API Key / AK-SK / OAuth2)、**错误码映射表**、定价模型对比 |
+| Day 9-10 | 统一 LLM 客户端 | 抽象基类 + 工厂模式、7 个 Provider 完整实现（含流式/非流式统一接口）、连接池与重试策略 |
+| 🆕 Day 10-11 | **Token 计费管控** | 各厂商定价模型(输入/输出/缓存命中/图片/文件)、**实时计费引擎**、预算预警、用户配额管理、用量统计 Dashboard |
+| 🆕 Day 11-12 | **多模型容灾路由** | 主模型不可用 → **自动 fallback 备选**、同厂商阶梯降级(gpt-4o→gpt-4o-mini)、**跨厂商 failover**(OpenAI→DeepSeek→本地模型)、健康检查与恢复机制 |
+| 🆕 Day 12 | **统一鉴权网关** | 多租户 API Key 管理、`secrets.compare_digest` 防时序攻击、Key 轮换策略、**Rate Limit 按 Key 粒度** |
+| Day 12-13 | FastAPI 聊天服务 | OpenAI 兼容 API 格式、SSE 流式输出、中间件栈(CORS/Request-ID/计时/日志/Limiter)、Pydantic 校验、完整 pytest 测试 |
+| Day 14-15 | Web Chat Demo + 环境管理 | Vue3+TypeScript+SSE 前端（Markdown 渲染/代码高亮/多对话/持久化）、API Key 安全管理、LLM 调用测试指南 |
 
-| Phase 4 🔥 九大项目 |
-|:---|
-| **Day 46-50**: MLX LM — Apple Silicon 原生推理与微调 |
-| **Day 51-55**: llama.cpp — GGUF 模型本地 Serving |
-| **Day 56-58**: Diffusers — Stable Diffusion 图像生成 |
-| **Day 59-61**: SAM 2 — 视觉分割 |
-| **Day 62-64**: Qwen-VL / LLaVA — 多模态理解 |
-| **Day 65-67**: LangGraph RAG — 企业级 RAG 实战 |
-| **Day 68-70**: LlamaIndex — 知识库框架 |
-| **Day 71-73**: GraphRAG — 图谱检索增强 |
-| **Day 74-75**: SWE-agent — AI 代码修复 |
+> 🎯 **Phase 1 核心产出**：一个能接入 **5+ 厂商、支持容灾切换、实时计费、统一鉴权** 的多模型 API 网关雏形
 
-| Phase 5 🤖 Agent |
-|:---|
-| **Day 76-77**: ReAct Agent — 完整实现 + 3 个真实工具 + 跑通案例 |
-| **Day 78-79**: Tool Calling — 5 个真实工具 + 并行调用 + 注册中心 |
-| **Day 80-81**: LangGraph 多节点 Agent — Human-in-the-loop + Memory + Checkpoint |
-| **Day 82**: Agent 安全深度专题 — Prompt Injection 攻防实战 |
-| **Day 82-83**: Agent 服务化 API + 任务队列 + 持久化 + 前端可视化 |
-| **Day 83**: 开源 Agent 平台实战 — Dify/RAGFlow/Coze 三平台 |
-| **Day 83-84**: 多 Agent 协作 + Agent 评估体系 + 可观测性 |
+### Phase 2 🧠 大模型底层硬核拆解 + 工业级微调与部署 (Day 16-28)
 
-| Phase 6 🏗️ AI-Gateway |
-|:---|
-| **Day 85-88**: 需求设计 + 统一路由层（多 Provider 适配） |
-| **Day 89-92**: 治理层 — Redis 限流 + 熔断降级 + API Key 管理 |
-| **Day 93-96**: 计费系统 + Token 用量统计 + 监控 Dashboard |
-| **Day 97-100**: RAG/Agent 接入 + Docker Compose 一键部署 + 压测 |
+| 天数 | 主题 | 核心内容 |
+|:---:|:-----|:--------|
+| Day 16 | Transformer 架构总览 | Decoder-only 完整数据流、**Shape 流动全景(7B 模型每层维度变化)**、Pre-LN vs Post-LN、Decoder-only vs Encoder-Decoder 选型 |
+| Day 17 | Scaled Dot-Product Attention | QKᵀ/√dₖ 数学推导、为什么除以 √dₖ、Causal Mask、Softmax 饱和与梯度消失 |
+| Day 18 | MHA / MQA / GQA | 三种注意力机制参数量对比、**KV Cache 带宽瓶颈分析**、为什么现代大模型转向 GQA |
+| Day 19 | RoPE 旋转位置编码 | 复数空间旋转、相对位置内积、NTK-aware/YaRN **长上下文外推**技术 |
+| Day 20 | KV Cache 与自回归生成 | Prefill/Decode 两阶段、**KV Cache 显存公式(精确到字节)**、OOM 排查与显存优化 |
+| Day 21 | PagedAttention & Continuous Batching | vLLM 吞吐提升 3x 的秘密、静态 vs 动态 Batching、显存碎片化与分页解决方案 |
+| Day 22 | MoE 混合专家模型 | Router/Top-K Expert/Shared Expert、负载均衡、**DeepSeekMoE 架构分析** |
+| Day 23 | 量化技术详解 | GPTQ/AWQ/GGUF 原理对比、llama.cpp 量化实操、**量化级别决策树（4GB-24GB 显存）** |
+| Day 24 | 手写 Multi-Head Attention | PyTorch 从零实现 MHA + GQA、与官方 `nn.MultiheadAttention` 精度对比(<1e-4) |
+| Day 25 | LoRA/QLoRA 微调实战 | 低秩矩阵数学本质、完整训练循环(PEFT+Transformers Trainer)、超参数调优(r/alpha/target_modules)、merge/unmerge 策略 |
+| 🆕 Day 26 | **LLaMA-Factory 工业级微调** | LLaMA-Factory 架构与设计理念、**Web UI 快速上手 + CLI 批量微调**、支持模型(Llama/Qwen/DeepSeek/Mistral)、LoRA vs Full Fine-tuning vs QLoRA **一键切换**、多轮对话数据格式化、微调后评估(Perplexity/BLEU/ROUGE/自建评测集) |
+| 🆕 Day 27 | **vLLM 生产级推理部署** | **Nvidia GPU 环境完整部署**(Docker+vLLM vs 裸机安装)、关键参数调优(`max-model-len`/`gpu-memory-utilization`/`max-num-seqs`/`tensor-parallel-size`)、Prefix Caching、Multi-LoRA 动态切换、Speculative Decoding、**并发压测**(100/500/1000 并发下的 TTFT/TPOT/QPS) |
+| 🆕 Day 28 | **工业方案三国杀** | **MLX LM(Apple Silicon) vs LLaMA-Factory(Nvidia 微调) vs vLLM(生产推理)** — 硬件/速度/成本/适用场景全维度对比矩阵 + SFT/RLHF/DPO/知识蒸馏 全景对比 |
+
+> 🎯 **Phase 2 核心产出**：手写 Attention 通过官方验证 + LLaMA-Factory 完成一次完整微调 + vLLM 部署压测报告
+
+### Phase 3 📚 RAG 检索增强体系 — 工业文档 + 量化评测 (Day 29-45)
+
+| 天数 | 主题 | 核心内容 |
+|:---:|:-----|:--------|
+| Day 29-30 | 最简 RAG 实现 | 完整可运行：文档读取→Embedding→检索→**真实 LLM 调用**，5 步逐步拆解 |
+| 🆕 Day 31-32 | **工业级文档解析深水区** | PDF 四大难题(双栏排版/扫描件无文字层/表格识别/页眉页脚)、**PyMuPDF + Camelot + Tesseract OCR** 组合方案、表格转 Markdown 保真策略、扫描件 OCR 管道(预处理→文字识别→后处理纠错)、Word/HTML/EPUB 全格式兼容 |
+| Day 33-34 | Chunk 策略体系 | 固定大小/语义切分/递归切分/文档结构感知/**Small-to-Big 检索**/多粒度索引 |
+| 🆕 Day 35 | **高级数据预处理管道** | 文档清洗(页眉页脚/乱码/空行)、**去重(MinHash/SimHash)**、低质量文档过滤、元数据提取与注入、多语言文档处理 |
+| Day 36-37 | Embedding 与向量索引 | BGE/GTE/E5 模型选型、FAISS(FlatIP/IVFFlat/HNSW)+Chroma 进阶、**性能 benchmark**、增量更新 |
+| Day 38-39 | 混合检索 | BM25 + 向量 + RRF/加权融合 + **Cross-Encoder Reranker** 精排、Query Rewrite、对比实验(纯向量 vs 纯BM25 vs 混合) |
+| Day 40 | LangGraph RAG 状态机 | **8 节点完整实现**(分类→改写→检索→判断→重排→生成→验证→兜底)、条件边+循环路径、checkpoint 恢复 |
+| 🆕 Day 41-42 | **RAG 量化评测体系** | **Ragas** 深入(Faithfulness/Answer Relevance/Context Precision/Context Recall)、**TruLens** 反馈函数(Groundedness/Relevance)、评测数据集构建(4 类问题+标注)、**A/B 测试管道**(chunk_size/embedding/retrieval 交叉对比)、评测雷达图可视化、**评测驱动的迭代闭环**(指标分析→定位瓶颈→改进→复评) |
+| Day 43-44 | LlamaIndex 实战 | IngestionPipeline、QueryEngine、RouterQueryEngine、SubQuestionQueryEngine |
+| Day 45 | RAG Web 应用 | FastAPI + Vue3 + Docker、文件上传→**异步索引**→流式问答→引用来源展示 |
+
+> 🎯 **Phase 3 核心产出**：能处理复杂 PDF+表格的工业文档解析器 + RAGAS/TruLens 评测报告 + A/B 测试框架
+
+### Phase 4 🔥 11 大开源项目极限冲刺 (Day 46-75)
+
+| 天数 | 项目 | 核心产出 | 难度 |
+|:---:|:-----|:--------|:---:|
+| 🆕 Day 46-49 | **LLaMA-Factory 微调工厂** | 垂直领域模型微调(医疗/法律/代码三选一)，LoRA 适配器+评测报告 | ⭐⭐⭐ |
+| Day 50-53 | MLX LM | Apple Silicon 本地推理+LoRA 微调+前端 Chat UI | ⭐⭐⭐ |
+| 🆕 Day 54-56 | **vLLM 生产推理集群** | 多模型部署+Prefix Caching+Multi-LoRA+并发压测报告 | ⭐⭐⭐⭐ |
+| Day 57-60 | llama.cpp | GGUF 量化+llama.cpp server+OpenAI 兼容 API+Gateway 封装 | ⭐⭐⭐ |
+| Day 61-63 | Diffusers | Stable Diffusion/SDXL 图像生成 | ⭐⭐ |
+| Day 64-66 | SAM 2 | 视觉分割 | ⭐⭐⭐ |
+| Day 67-69 | Qwen-VL / LLaVA | 多模态理解 | ⭐⭐⭐ |
+| Day 70-71 | LangGraph RAG | 企业级 RAG 状态机实战 | ⭐⭐⭐⭐ |
+| Day 72-73 | LlamaIndex | 知识库框架 | ⭐⭐⭐ |
+| Day 74 | GraphRAG | 图谱检索增强 | ⭐⭐⭐ |
+| Day 75 | SWE-agent + 项目总结 | AI 代码修复 + 11 项目矩阵对比表 | ⭐⭐⭐ |
+
+> 🎯 **Phase 4 核心产出**：11 个项目最小可运行 Demo + 对比评测矩阵表 + 项目总结报告
 
 </details>
 
@@ -155,17 +183,21 @@ graph LR
 
 <div align="center">
 
-| 🧠 **大模型底层硬核能力** | 🔧 **全栈工程化能力** |
+| 🧠 **大模型底层硬核能力** | 🔧 **工业级全栈工程能力** |
 |:---|:---|
-| 手写 Attention、理解 KV Cache<br>会算显存、懂量化<br>面试能讲清楚 Transformer 到底在做什么 | Docker/Redis/PostgreSQL/Nginx<br>FastAPI/SSE/Pydantic<br>全链路从搭建到部署 |
+| 手写 Attention、精确计算 KV Cache 显存<br>懂量化(GPTQ/AWQ/GGUF)、懂 MoE 路由<br>面试能讲清楚 Transformer 的每一层 | Docker/Redis/PostgreSQL/Nginx<br>FastAPI/SSE/Pydantic 全链路<br>**跨平台(macOS+Windows+Linux)** 部署能力 |
 
-| 🤖 **Agent 设计与安全** | 📊 **RAG 体系完整闭环** |
+| 🤖 **企业级微调与部署** | 📊 **量化评测体系** |
 |:---|:---|
-| ReAct → LangGraph 多节点状态机<br>Human-in-the-loop<br>Prompt Injection 攻防<br>开源平台（Dify/RAGFlow/Coze）实战 | 文档解析 → 混合检索 → 评估<br>LangGraph 状态机编排<br>能做知识库问答产品 |
+| **LLaMA-Factory 工业微调流水线**<br>**vLLM 生产推理集群**(Prefix Cache/Multi-LoRA)<br>MLX LM + llama.cpp 本地部署 | **RAGAS + TruLens** 自动化评测<br>A/B 测试管道 + 改进闭环<br>**用数据说话，面试不讲虚的** |
 
-| 🎯 **面试差异化竞争力** | 📝 **能写进简历的作品集** |
+| 💰 **API 商业化能力** | 🎯 **面试差异化竞争力** |
 |:---|:---|
-| 不是"我会调 API"<br>而是"我手搓过 AI-Gateway"<br>能从底层原理解释为什么模型慢/为什么 OOM | 9 个开源项目 + 1 个企业级 AI-Gateway<br>完整的 GitHub 绿点墙<br>周记和踩坑记录随时可做面试素材 |
+| 5+ 厂商 API 深度接入<br>**Token 计费管控 + 预算预警**<br>多模型容灾路由 + 统一鉴权 | 不是"我会调 API"<br>而是"我手搓过 AI-Gateway"<br>能从底层原理解释为什么模型慢/为什么 OOM |
+
+| 📝 **能写进简历的作品集** |
+|:---|
+| 11 个开源项目 + **1 个企业级 AI-Gateway**<br>完整的 GitHub 绿点墙<br>周记和踩坑记录随时可做面试素材 |
 
 </div>
 
@@ -175,53 +207,61 @@ graph LR
 
 | 🏷️ 技能域 | 🛠️ 具体能力 | 📍 阶段 |
 |:----------|:-----------|:------:|
-| **工程基建** | Git/GitHub · SSH · Linux/Shell · Conda/pip/uv · Docker/Compose · Nginx · CI/CD · pyproject.toml · ruff | Phase 0, 6 |
+| **工程基建** | Git/GitHub · SSH · Linux/Shell · Conda/pip/uv · Docker/Compose · Nginx · **跨平台(Win/Mac/Linux+Nvidia GPU+CUDA)** · pyproject.toml · ruff | Phase 0, 6 |
 | **后端与数据** | FastAPI · Pydantic · Redis · PostgreSQL · 向量数据库(FAISS/Chroma) · SSE 流式 · 任务队列 | Phase 1, 6 |
-| **大模型使用** | Prompt Engineering(Zero/Few-shot/CoT) · 7 个 Provider API · Token 计费 · Function Calling · 结构化输出 | Phase 1 |
+| **大模型使用** | Prompt Engineering(Zero/Few-shot/CoT/Tree-of-Thought) · **5+ 厂商 API 深度接入** · Token 计费 · Function Calling · 结构化输出 | Phase 1 |
+| 🆕 **商业化网关** | **多厂商容灾路由 · Fallback 降级 · 统一鉴权 · Rate Limit · 预算预警 · 用量统计** | Phase 1, 6 |
 | **底层原理** | Transformer · Attention(MHA/MQA/GQA) · RoPE · KV Cache · PagedAttention · MoE · FlashAttention | Phase 2 |
-| **微调与对齐** | LoRA/QLoRA · SFT · RLHF · DPO · 知识蒸馏 · PEFT · 数据准备与清洗 | Phase 2 |
-| **模型部署** | vLLM · llama.cpp · Ollama · MLX LM · GGUF 量化 · OpenAI 兼容 API · Docker 部署 | Phase 2, 4 |
-| **RAG 体系** | 文档解析(5格式) · Chunk 策略(4种) · Embedding · 混合检索(BM25+Vector+Reranker) · LangGraph RAG · LlamaIndex · GraphRAG · RAG 评估(Ragas) | Phase 3, 4 |
-| **Agent** | ReAct · Tool Calling · LangGraph 状态机 · Human-in-the-loop · Agent 安全 · 多 Agent 协作 · Dify/RAGFlow/Coze | Phase 5 |
-| **多模态** | CLIP · Diffusers(SD/SDXL) · SAM 2 · Qwen-VL · LLaVA | Phase 4 |
-| **企业级网关** | 统一模型路由 · Fallback 降级 · Redis 限流 · 熔断 · Token 计费 · 监控 Dashboard · Docker Compose 一键部署 | Phase 6 |
+| 🆕 **工业微调** | LoRA/QLoRA · **LLaMA-Factory 微调流水线** · SFT · RLHF · DPO · 知识蒸馏 · PEFT | Phase 2 |
+| 🆕 **推理部署** | **vLLM 生产集群** · llama.cpp · Ollama · MLX LM · GGUF 量化 · **Prefix Caching** · Multi-LoRA · Speculative Decoding · 并发压测 | Phase 2, 4 |
+| 📚 **RAG 体系** | **工业文档解析(表格/OCR/扫描件)** · Chunk 策略(4种) · Embedding · 混合检索(BM25+Vector+Reranker) · LangGraph RAG · LlamaIndex · GraphRAG | Phase 3, 4 |
+| 🆕 **RAG 评测** | **Ragas · TruLens** · A/B 测试管道 · 评测数据集构建 · 改进闭环 · 评测可视化 | Phase 3 |
+| 🤖 **Agent** | ReAct · Tool Calling · LangGraph 状态机 · Human-in-the-loop · Agent 安全 · 多 Agent 协作 · Dify/RAGFlow/Coze | Phase 5 |
+| 👁️ **多模态** | CLIP · Diffusers(SD/SDXL) · SAM 2 · Qwen-VL · LLaVA | Phase 4 |
+| 🏗️ **企业级网关** | 统一模型路由 · Redis 限流 · 熔断降级 · Token 计费 · RAG/Agent 接入 · Dashboard · Docker Compose 一键部署 | Phase 6 |
 
 ---
 
-## 🏗️ 终极项目：AI-Gateway 架构
+## 🏗️ 终极项目：AI-Gateway 架构全景
 
 ```mermaid
 graph TB
     subgraph "🎨 用户入口层"
-        A[Vue3 Dashboard<br/>管理后台]
-        B[Web Chat<br/>聊天界面]
-        C[CLI / API<br/>程序调用]
+        A["Vue3 Dashboard<br/>管理后台"]
+        B["Web Chat<br/>聊天界面"]
+        C["CLI / API<br/>程序调用"]
     end
 
-    subgraph "⚡ API 服务层"
-        D[FastAPI Gateway<br/>统一入口]
-        E[中间件链<br/>鉴权/日志/限流/CORS]
+    subgraph "⚡ API 服务层 — FastAPI Gateway"
+        D["统一入口<br/>app.py"]
+        E["中间件链<br/>鉴权 | 日志 | 限流 | CORS | 计时"]
     end
 
     subgraph "🧭 路由与治理层"
-        F[Request Router<br/>模型路由]
-        G[Admission Controller<br/>限流熔断]
-        H[Redis Priority Queue<br/>任务队列]
+        F["Request Router<br/>多模型路由分发"]
+        G["Admission Controller<br/>限流熔断 | 健康检查"]
+        H["Redis Priority Queue<br/>任务队列 | 会话存储"]
     end
 
-    subgraph "🧠 模型执行层"
-        I[Chat Completion Runtime]
-        J[LangChain RAG Runtime]
-        K[LangGraph Agent Runtime]
+    subgraph "🧠 运行时引擎层"
+        I["Chat Completion<br/>Runtime"]
+        J["LangChain RAG<br/>Runtime"]
+        K["LangGraph Agent<br/>Runtime"]
     end
 
     subgraph "🔌 Provider 适配层"
-        L[OpenAI API]
-        M[DeepSeek API]
-        N[Qwen API]
-        O[Claude API]
-        P[llama.cpp Server]
-        Q[Ollama]
+        L["OpenAI API"]
+        M["DeepSeek API"]
+        N["Qwen API"]
+        O["Claude API"]
+        P["vLLM Server<br/>Nvidia GPU"]
+        Q["llama.cpp<br/>本地 CPU/GPU"]
+    end
+
+    subgraph "📊 可观测性"
+        R["Token 计费引擎"]
+        S["Metrics Dashboard"]
+        T["Trace 追踪"]
     end
 
     A & B & C --> D
@@ -231,127 +271,151 @@ graph TB
     G --> H
     H --> I & J & K
     I & J & K --> L & M & N & O & P & Q
+    F --> R
+    G --> S
+    K --> T
 
-    style A fill:#eef4ff,stroke:#b0c4de
-    style D fill:#eeffee,stroke:#82b366
-    style F fill:#f6f0fa,stroke:#9673a6
-    style I fill:#fff8f0,stroke:#d79b00
-    style L fill:#f4f4f4,stroke:#999999
+    style A fill:#eef4ff,stroke:#b0c4de,stroke-width:2px
+    style D fill:#eeffee,stroke:#82b366,stroke-width:2px
+    style F fill:#f6f0fa,stroke:#9673a6,stroke-width:2px
+    style I fill:#fff8f0,stroke:#d79b00,stroke-width:2px
+    style L fill:#f4f4f4,stroke:#999999,stroke-width:2px
+    style R fill:#fff3e0,stroke:#ff9800,stroke-width:2px
 ```
 
-| # | ✨ 技术亮点 |
-|:--:|:----------|
-| 1 | 🔀 **多模型统一路由** — 一个 API 地址接入 OpenAI/DeepSeek/Qwen/Claude/本地模型 |
-| 2 | 🛡️ **Redis 滑动窗口限流** — 按用户/按 API Key 的精细化流量控制 |
-| 3 | ⚡ **熔断降级** — 主模型不可用时自动 Fallback 到备选模型 |
-| 4 | 💰 **Token 计费引擎** — 实时统计各模型 Token 用量与成本 |
-| 5 | 📊 **实时监控 Dashboard** — Vue3 可视化后台，TTFT/TPOT/QPS 一目了然 |
-| 6 | 🤖 **RAG/Agent 接入** — LangChain RAG + LangGraph Agent 通过 Gateway 统一治理 |
-| 7 | 🔑 **API Key 管理** — 多租户鉴权 + 常量时间比较防时序攻击 |
-| 8 | 🐳 **Docker Compose 一键部署** — FastAPI + Redis + PostgreSQL + Nginx 全家桶 |
+> 🧠 **关键分层原则**：LangChain/LangGraph = 应用编排层，AI-Gateway = 模型服务治理层，vLLM/llama.cpp = 底层模型执行层。三层各司其职。
+
+| # | ✨ 技术亮点 | 🏭 解决什么企业痛点 |
+|:--:|:----------|:-------------------|
+| 1 | 🔀 **多模型统一路由** | 一个 API 接入 5+ 厂商 + 本地模型，前端无感知切换 |
+| 2 | 🛡️ **多模型容灾降级** | 主模型故障→自动 Fallback，**避免单点故障导致业务中断** |
+| 3 | 💰 **Token 计费引擎** | 实时统计各模型用量与成本，**防止 API 费用黑洞** |
+| 4 | 🔑 **多租户鉴权** | 按 API Key 粒度限流+计费，**SaaS 化运营基础** |
+| 5 | ⚡ **Redis 滑动窗口限流** | 防止恶意调用 + 保护上游 API 额度 |
+| 6 | 📊 **实时监控 Dashboard** | TTFT/TPOT/QPS/错误率 一目了然，**生产排障必备** |
+| 7 | 🤖 **RAG/Agent 接入** | LangChain RAG + LangGraph Agent 通过 Gateway 统一治理 |
+| 8 | 🐳 **Docker Compose 一键部署** | FastAPI + Redis + PostgreSQL + Nginx **全家桶** |
 
 ---
 
 ## 📂 仓库目录结构
 
 ```
-llm-fullstack-roadmap/
-├── README.md                          # 📖 项目首页
-├── learning-journal.md                # ✍️ 总学习心得与踩坑汇总
-├── LICENSE                            # MIT
+llm-fullstack-roadmap/              # 📦 仓库根目录
+│
+├── README.md                        # 📖 项目首页（你正在看的）
+├── learning-journal.md              # ✍️ 总学习心得与踩坑汇总
+├── LICENSE                          # MIT
 ├── .gitignore
 ├── requirements.txt
 │
-├── docs/                              # 📚 环境搭建、FAQ 等通用文档
-│   ├── 00_overview.md
-│   ├── 01_environment_setup.md
-│   ├── 01_original_plan.md
-│   └── 05_troubleshooting.md
+├── docs/                            # 📚 通用文档
+│   ├── 00_overview.md               #   项目总览
+│   ├── 01_environment_setup.md      #   🆕 三平台环境搭建（macOS/Win/Linux）
+│   ├── 01_original_plan.md          #   原始计划
+│   └── 05_troubleshooting.md        #   常见问题与排障
 │
-├── phase0_foundation/                 # 🛠️ Phase 0 — 基建与复习 (Day 1-5)
-│   ├── 01_python_review.md            #   Python 高频特性 + NumPy/Pandas/Matplotlib
-│   ├── 02_ml_dl_review.ipynb          #   ML/DL 基础复习（梯度下降/Softmax/交叉熵/过拟合）
-│   ├── 03_neural_network_map.ipynb    #   神经网络架构地图（MLP/CNN/RNN/LSTM/GNN）
-│   ├── 04_nlp_cv_llm_overview.ipynb   #   NLP/CV/LLM 全景总览
-│   ├── 05_llm_concepts_glossary.md    #   🌟 43 个 LLM 核心概念术语表
-│   ├── 06_git_github.md               #   Git 工作流 + SSH + Conventional Commits
-│   ├── 07_docker_basics.md            #   Docker + Redis + PostgreSQL 快速上手
-│   ├── 08_linux_shell_basics.md       #   Linux/Shell 命令行基础
-│   ├── 09_pytorch_basics.ipynb        #   PyTorch 基础实战
-│   ├── 10_project_scaffolding.md      #   项目工程化脚手架
-│   └── 11_developer_tools.md          #   开发工具链配置
+├── phase0_foundation/               # 🛠️ Phase 0 — 基建与复习 (Day 1-5)
+│   ├── 01_python_review.md          #   Python 高频特性 + NumPy/Pandas/Matplotlib
+│   ├── 02_ml_dl_review.ipynb        #   ML/DL 基础复习
+│   ├── 03_neural_network_map.ipynb  #   神经网络架构地图
+│   ├── 04_nlp_cv_llm_overview.ipynb #   NLP/CV/LLM 全景总览
+│   ├── 05_llm_concepts_glossary.md  #   🌟 43 个 LLM 核心概念术语表
+│   ├── 06_git_github.md             #   Git 工作流 + SSH + Conventional Commits
+│   ├── 07_docker_basics.md          #   Docker + Redis + PostgreSQL 快速上手
+│   ├── 08_linux_shell_basics.md     #   Linux/Shell 命令行基础
+│   ├── 09_pytorch_basics.ipynb      #   PyTorch 基础实战
+│   ├── 10_project_scaffolding.md    #   项目工程化脚手架
+│   └── 11_developer_tools.md        #   开发工具链配置
 │
-├── phase1_prompt_api/                 # 💬 Phase 1 — Prompt + API (Day 6-15)
-│   ├── 01_prompt_cookbook.md          #   25+ Prompt 模板库（6 大类）
-│   ├── 02_llm_client.md               #   统一 LLM 客户端（7 个 Provider）
-│   ├── 03_fastapi_chat.md             #   FastAPI 聊天服务（流式/鉴权/限流/测试）
-│   ├── 04_web_chat_demo.md            #   Vue3 + TypeScript SSE 流式前端
-│   ├── 05_prompt_advanced.md          #   Prompt 进阶（CoT/结构化输出/Few-shot）
-│   ├── 06_doc_generation_prompts.md   #   文档生成提示词（README/Runbook/架构图）
-│   ├── 07_env_secrets_mgmt.md         #   API Key 管理与安全
-│   └── 08_testing_guide.md            #   LLM 调用测试指南
+├── phase1_prompt_api/               # 💬 Phase 1 — Prompt + API (Day 6-15)
+│   ├── 01_prompt_cookbook.md        #   25+ Prompt 模板库（6 大类）
+│   ├── 02_llm_client.md             #   统一 LLM 客户端（7 个 Provider）
+│   ├── 03_fastapi_chat.md           #   FastAPI 聊天服务（含测试）
+│   ├── 04_web_chat_demo.md          #   Vue3 + TypeScript SSE 流式前端
+│   ├── 05_prompt_advanced.md        #   Prompt 进阶（CoT/结构化/防幻觉）
+│   ├── 06_doc_generation_prompts.md #   文档生成提示词
+│   ├── 07_env_secrets_mgmt.md       #   🆕 API Key 管理与安全
+│   ├── 08_testing_guide.md          #   LLM 调用测试指南
+│   └── llm_chat_service/            #   🆕 完整 FastAPI 项目
 │
-├── phase2_llm_internals/              # 🧠 Phase 2 — LLM 底层原理 (Day 16-28)
-│   ├── 00_transformer.md              #   Transformer 架构总览 + Shape 流动
-│   ├── 01_attention.ipynb             #   Scaled Dot-Product Attention
-│   ├── 02_mha_mqa_gqa.ipynb           #   MHA / MQA / GQA
-│   ├── 03_rope.ipynb                  #   RoPE 旋转位置编码
-│   ├── 04_kv_cache.ipynb              #   KV Cache 与自回归生成
-│   ├── 05_paged_attention.ipynb       #   PagedAttention
-│   ├── 06_moe.ipynb                   #   MoE 混合专家模型
-│   ├── 07_lora_rag_agent.ipynb        #   LoRA/QLoRA/RAG/Agent
-│   ├── 08_quantization.md             #   量化技术详解（GPTQ/AWQ/GGUF）
-│   ├── 09_attention_from_scratch.md   #   手写 MHA + GQA（PyTorch 完整实现）
-│   ├── 10_lora_demo.md                #   LoRA 微调实战（完整训练循环）
-│   ├── 11_fine-tuning_techniques.md   #   🌟 SFT/RLHF/DPO/蒸馏全景
-│   ├── 12_deployment_vllm.md          #   vLLM 推理引擎与部署
-│   └── _00_7day_deep_dive_reference.md # 面试拷问/排障场景/工程映射参考
+├── phase2_llm_internals/            # 🧠 Phase 2 — LLM 底层 + 工业微调 (Day 16-28)
+│   ├── 00_transformer.md            #   Transformer 架构总览 + Shape 流动
+│   ├── 01_attention.ipynb           #   Scaled Dot-Product Attention
+│   ├── 02_mha_mqa_gqa.ipynb         #   MHA / MQA / GQA
+│   ├── 03_rope.ipynb                #   RoPE 旋转位置编码
+│   ├── 04_kv_cache.ipynb            #   KV Cache 与自回归生成
+│   ├── 05_paged_attention.ipynb     #   PagedAttention
+│   ├── 06_moe.ipynb                 #   MoE 混合专家模型
+│   ├── 07_lora_rag_agent.ipynb      #   LoRA/QLoRA 基础
+│   ├── 08_quantization.md           #   量化技术详解（GPTQ/AWQ/GGUF）
+│   ├── 09_attention_from_scratch.md #   手写 MHA + GQA（PyTorch）
+│   ├── 10_lora_demo.md              #   LoRA 微调实战（完整训练循环）
+│   ├── 11_fine-tuning_techniques.md #   🌟 SFT/RLHF/DPO/蒸馏全景
+│   ├── 12_deployment_vllm.md        #   🆕 vLLM 推理引擎与部署
+│   └── _00_7day_deep_dive_ref.md    #   面试拷问/排障场景/工程映射参考
 │
-├── phase3_rag/                        # 📚 Phase 3 — RAG 体系 (Day 29-45)
-│   ├── 01_naive_rag.md                #   最简 RAG 完整实现（真实 LLM 调用）
-│   ├── 02_document_loader.md          #   文档解析器（5 格式 + 3 分块策略）
-│   ├── 03_vector_index.md             #   向量索引（FAISS/Chroma + 性能对比）
-│   ├── 04_hybrid_search.md            #   混合检索（BM25+Vector+RRF+Reranker）
-│   ├── 05_langgraph_rag.md            #   LangGraph RAG 状态机（8 节点完整实现）
-│   ├── 06_rag_evaluation.md           #   RAG 评估（Ragas + 改进闭环）
-│   ├── 07_rag_web_app.md              #   RAG Web 应用（FastAPI + Vue3 + Docker）
-│   ├── 08_advanced_chunking.md        #   高级分块策略（语义/递归/多粒度）
-│   └── 09_llamaindex_basics.md        #   LlamaIndex 入门
+├── phase3_rag/                      # 📚 Phase 3 — RAG 体系 (Day 29-45)
+│   ├── 01_naive_rag.md              #   最简 RAG 完整实现
+│   ├── 02_document_loader.md        #   🆕 工业文档解析器（5格式+表格+OCR）
+│   ├── 03_vector_index.md           #   向量索引（FAISS/Chroma+benchmark）
+│   ├── 04_hybrid_search.md          #   混合检索（BM25+Vector+RRF+Reranker）
+│   ├── 05_langgraph_rag.md          #   LangGraph RAG 状态机（8节点）
+│   ├── 06_rag_evaluation.md         #   🆕 RAGAS/TruLens 量化评测
+│   ├── 07_rag_web_app.md            #   RAG Web 应用（FastAPI+Vue3+Docker）
+│   ├── 08_advanced_chunking.md      #   高级分块策略
+│   └── 09_llamaindex_basics.md      #   LlamaIndex 入门
 │
-├── phase4_projects/                   # 🔥 Phase 4 — 九大项目 (Day 46-75)
-│   ├── 01_mlx_lm/                     #   MLX LM — Apple Silicon 推理与微调
-│   ├── 02_llama_cpp/                  #   llama.cpp — GGUF 模型本地 Serving
-│   ├── 03_diffusers.md                #   Diffusers — 图像生成
-│   ├── 04_sam2.md                     #   SAM 2 — 视觉分割
-│   ├── 05_qwen_vl_llava.md            #   Qwen-VL / LLaVA — 多模态理解
-│   ├── 06_langgraph_rag.md            #   LangGraph RAG — 企业级实战
-│   ├── 07_llamaindex.md               #   LlamaIndex — 知识库框架
-│   ├── 08_graphrag.md                 #   GraphRAG — 图谱检索增强
-│   ├── 09_swe_agent.md                #   SWE-agent — AI 代码修复
-│   └── PROJECTS_SUMMARY.md            #   项目矩阵总结
+├── phase4_projects/                 # 🔥 Phase 4 — 11 大项目 (Day 46-75)
+│   ├── 01_mlx_lm/                   #   MLX LM — Apple Silicon 推理与微调
+│   ├── 02_llama_cpp/                #   llama.cpp — GGUF Serving+Gateway
+│   ├── 03_diffusers.md              #   Diffusers — 图像生成
+│   ├── 04_sam2.md                   #   SAM 2 — 视觉分割
+│   ├── 05_qwen_vl_llava.md          #   Qwen-VL/LLaVA — 多模态理解
+│   ├── 06_langgraph_rag.md          #   LangGraph RAG — 企业级实战
+│   ├── 07_llamaindex.md             #   LlamaIndex — 知识库框架
+│   ├── 08_graphrag.md               #   GraphRAG — 图谱检索增强
+│   ├── 09_swe_agent.md              #   SWE-agent — AI 代码修复
+│   └── PROJECTS_SUMMARY.md          #   项目矩阵总结
 │
-├── phase5_agent/                      # 🤖 Phase 5 — Agent 架构 (Day 76-84)
-│   ├── 01_react_agent.md              #   ReAct Agent 完整实现
-│   ├── 02_tool_calling.md             #   工具定义/注册/并行调用
-│   ├── 03_langgraph_agent.md          #   LangGraph 多节点 Agent + HITL
-│   ├── 04_agent_api.md                #   Agent 服务化 API + 任务队列
+├── phase5_agent/                    # 🤖 Phase 5 — Agent 架构 (Day 76-84)
+│   ├── 01_react_agent.md            #   ReAct Agent 完整实现
+│   ├── 02_tool_calling.md           #   工具定义/注册/并行调用
+│   ├── 03_langgraph_agent.md        #   LangGraph 多节点 Agent + HITL
+│   ├── 04_agent_api.md              #   Agent 服务化 API + 任务队列
 │   ├── 05_open_source_agent_platforms.md # Dify/RAGFlow/Coze 实战
-│   ├── 06_multi_agent_patterns.md     #   多 Agent 协作 + CrewAI
-│   ├── 07_agent_evaluation.md         #   Agent 评估体系 + 可观测性
-│   └── 08_agent_security.md           #   Agent 安全（Prompt Injection 攻防）
+│   ├── 06_multi_agent_patterns.md   #   多 Agent 协作 + CrewAI
+│   ├── 07_agent_evaluation.md       #   Agent 评估体系 + 可观测性
+│   └── 08_agent_security.md         #   Agent 安全（注入攻防）
 │
-├── final_ai_gateway/                  # 🏗️ Phase 6 — AI-Gateway (Day 85-100)
-│   ├── design_doc.md                  #   设计文档
-│   ├── backend/                       #   FastAPI 网关后端
-│   ├── frontend/                      #   Vue3 Dashboard
-│   ├── configs/                       #   路由/模型配置
-│   ├── scripts/                       #   部署/压测脚本
-│   └── docker/                        #   Docker 部署文件
+├── final_ai_gateway/                # 🏗️ Phase 6 — AI-Gateway (Day 85-100)
+│   ├── design_doc.md                #   设计文档
+│   ├── backend/                     #   FastAPI 网关后端
+│   ├── frontend/                    #   Vue3 Dashboard
+│   ├── configs/                     #   路由/模型配置
+│   ├── scripts/                     #   部署/压测脚本
+│   └── docker/                      #   Docker 部署文件
 │
-└── weekly_logs/                       # 📝 每周学习周记
+└── weekly_logs/                     # 📝 每周学习周记
 ```
 
-> 💡 `.ipynb` 适合边看边跑代码的学习，`.md` 适合纯文本/公式/理论阅读。
+> 💡 `.ipynb` 适合边看边跑代码，`.md` 适合纯文本/公式/理论。🆕 标注为新增或大幅扩写的企业级模块。
+
+---
+
+## 🆕 企业级新增模块速查
+
+| 🆕 新增模块 | 📍 Phase | 🏭 解决什么企业真实痛点 |
+|:-----------|:-------:|:-----------------------|
+| 跨平台环境搭建 (Win/Linux+Nvidia GPU) | Phase 0 | 只写 Mac → 企业里 90% 是 Linux + Nvidia GPU |
+| 多厂商 API 深度接入 + 容灾路由 | Phase 1 | 单一 API 不可用 → **业务中断**，多厂商+容灾=高可用 |
+| Token 计费管控 + 预算预警 | Phase 1 | 无计费 → **API 费用黑洞**，精细化成本控制是 SaaS 基础 |
+| 统一鉴权 + 多租户 API Key 管理 | Phase 1 | 无鉴权 → 安全风险，多租户隔离是商业化的前提 |
+| LLaMA-Factory 工业微调 | Phase 2 | 手写 LoRA → 不适合快速迭代，**LLaMA-Factory 是工业标配** |
+| vLLM 生产级推理集群 | Phase 2 | Ollama 只能单人用，**vLLM 支持高并发 + Prefix Cache + Multi-LoRA** |
+| 工业级文档解析(表格+OCR+扫描件) | Phase 3 | PyMuPDF 只能读文字层，**表格/扫描件/OCR 才是企业真实文档** |
+| 高级数据预处理管道(MinHash去重) | Phase 3 | 低质量数据→检索效果差，**数据清洗决定 RAG 效果上限** |
+| RAGAS/TruLens 量化评测体系 | Phase 3 | 没有量化指标→**不知道改完变好了还是变差了**，面试讲不出效果 |
 
 ---
 
@@ -359,7 +423,7 @@ llm-fullstack-roadmap/
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/<your-username>/llm-fullstack-roadmap.git
+git clone https://github.com/gyc-chenxi/llm-fullstack-roadmap.git
 cd llm-fullstack-roadmap
 
 # 2. 创建虚拟环境
@@ -373,15 +437,20 @@ pip install -r requirements.txt
 # 每个 Phase 目录下有独立的学习内容、代码和踩坑记录
 ```
 
+> 🔗 **仓库地址**：[https://github.com/gyc-chenxi/llm-fullstack-roadmap](https://github.com/gyc-chenxi/llm-fullstack-roadmap)
+
 ---
 
 ## 📖 学习建议
 
-1. **🔢 按顺序推进** — Phase 0→6 严格递进，不要跳 Phase。前面跳了后面一定卡
-2. **📝 每天记录踩坑** — 每个 Phase 目录下有 `learning-issues.md`，遇到问题就记下来
-3. **🏃 先跑通再深入** — Phase 4 的 9 个项目只要求最小可运行 Demo，不要追求完美
-4. **✍️ 写周记** — `weekly_logs/` 下每周一篇，这是面试时最好的素材
-5. **🏗️ Phase 6 是核心** — 前面所有 Phase 的技能最终都汇聚到 AI-Gateway
+| # | 建议 | 说明 |
+|:--:|:-----|:----|
+| 1 | **🔢 按顺序推进** | Phase 0→6 严格递进，不要跳 Phase。前面跳了后面一定卡 |
+| 2 | **📝 每天记录踩坑** | 每个 Phase 目录下有 `learning-issues.md`，这是面试时最好的素材 |
+| 3 | **🏃 先跑通再深入** | Phase 4 的项目只要求最小可运行 Demo，不要追求完美 |
+| 4 | **✍️ 写周记** | `weekly_logs/` 下每周一篇，面试前翻一遍 |
+| 5 | **🏗️ Phase 6 是核心** | 前面所有技能最终都汇聚到 AI-Gateway，这是简历上最有分量的项目 |
+| 6 | 🆕 **不要只在 Mac 上跑** | 有条件的话在 Linux+Nvidia GPU 上跑一遍 vLLM 和 LLaMA-Factory |
 
 ---
 
@@ -389,10 +458,11 @@ pip install -r requirements.txt
 
 | 组件 | 要求 | 说明 |
 |:------|:------|:-----|
-| 💻 硬件 | MacBook M 系列 / NVIDIA GPU / CPU only | M 系列体验最佳（统一内存） |
+| 💻 硬件 | 🆕 **macOS(Apple Silicon) / Windows(WSL2) / Linux(Ubuntu)** | M 系列体验最佳（统一内存），**Nvidia GPU 跑 vLLM 和 LLaMA-Factory** |
 | 🐍 Python | 3.10 / 3.11 | 推荐 conda 管理环境 |
+| 🆕 CUDA | 12.1+ (Nvidia GPU) | vLLM + LLaMA-Factory 需要 |
 | 📦 Node.js | 18+ | 前端 Demo 需要 |
-| 🐳 Docker | 最新版 | Phase 0 Day 5 和 Phase 6 需要 |
+| 🐳 Docker | 最新版 | Phase 0 和 Phase 6 需要 |
 
 ---
 
@@ -423,6 +493,9 @@ pip install -r requirements.txt
 | **LangChain** | LLM 编排核心：Prompt/模型调用/数据加载 | ⭐⭐⭐⭐⭐ |
 | **LangGraph** | Agent 状态机编排 | ⭐⭐⭐⭐ |
 | **FastAPI** | 轻量后端框架，API 封装 | ⭐⭐⭐⭐⭐ |
+| 🆕 **LLaMA-Factory** | 工业级微调流水线，告别手写训练循环 | ⭐⭐⭐⭐⭐ |
+| 🆕 **vLLM** | 生产级推理引擎，高并发+低延迟 | ⭐⭐⭐⭐⭐ |
+| 🆕 **RAGAS / TruLens** | RAG 量化评测，用数据说话 | ⭐⭐⭐⭐ |
 | **Streamlit** | Python 快速搭建前端界面 | ⭐⭐⭐ |
 | **Dify / RAGFlow / Coze** | 低代码/开源平台，快速验证想法 | ⭐⭐⭐ |
 | **Claude Code / Cursor** | AI 辅助编程，提升效率 | ⭐⭐⭐⭐ |
@@ -436,8 +509,10 @@ pip install -r requirements.txt
 | **个人知识库助手** | RAG + Embedding + 向量数据库 + FastAPI | ⭐⭐ |
 | **智能客服系统** | RAG + 企业文档 + LangGraph + SSE 流式 | ⭐⭐⭐ |
 | **内容生成工具** | Prompt 模板 + Function Calling + Streamlit | ⭐⭐ |
+| 🆕 **垂直领域微调模型** | **LLaMA-Factory + LoRA/QLoRA + 评测报告** | ⭐⭐⭐⭐ |
+| 🆕 **vLLM 推理集群** | **vLLM + Prefix Cache + Multi-LoRA + 并发压测** | ⭐⭐⭐⭐ |
 | **AI 销售助手 Agent** | ReAct + Tool Calling + 数据库查询 + API 封装 | ⭐⭐⭐⭐ |
-| **多模型 AI-Gateway** | 路由/限流/熔断/计费 + Docker 部署 | ⭐⭐⭐⭐⭐ |
+| 🏆 **多模型 AI-Gateway** | **路由/容灾/限流/熔断/计费 + Docker 部署** | ⭐⭐⭐⭐⭐ |
 
 ---
 
@@ -445,7 +520,7 @@ pip install -r requirements.txt
 
 如果这个路线对你有帮助，请给一个 Star ⭐ 支持一下！
 
-[![Star History Chart](https://api.star-history.com/svg?repos=你的用户名/llm-fullstack-roadmap&type=Date)](https://star-history.com/#你的用户名/llm-fullstack-roadmap&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=gyc-chenxi/llm-fullstack-roadmap&type=Date)](https://star-history.com/#gyc-chenxi/llm-fullstack-roadmap&Date)
 
 ---
 
@@ -461,7 +536,8 @@ pip install -r requirements.txt
 
 **晨熙** — 本科毕业，大模型应用工程学习实践。
 
-> 这个仓库记录了我从零开始学习大模型全栈工程的完整路径。如果你也是本科生、也在入门大模型，希望这个路线能帮你少走一些弯路。
+> 这个仓库记录了我从零开始学习大模型全栈工程的完整路径。
+> 如果你也是本科生、也在入门大模型、也在准备中厂 AI 面试——希望这个路线能帮你少走一些弯路。
 
 ---
 
@@ -469,6 +545,7 @@ pip install -r requirements.txt
 
 **🌟 如果这个项目对你有帮助，请给一个 Star！**
 
-[![Star](https://img.shields.io/github/stars/你的用户名/llm-fullstack-roadmap?style=social)](https://github.com/你的用户名/llm-fullstack-roadmap)
+[![GitHub stars](https://img.shields.io/github/stars/gyc-chenxi/llm-fullstack-roadmap?style=social)](https://github.com/gyc-chenxi/llm-fullstack-roadmap)
+[![GitHub forks](https://img.shields.io/github/forks/gyc-chenxi/llm-fullstack-roadmap?style=social)](https://github.com/gyc-chenxi/llm-fullstack-roadmap)
 
 </div>
