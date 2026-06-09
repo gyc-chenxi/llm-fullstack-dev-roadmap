@@ -1,4 +1,4 @@
-# 🚀 100-Day LLM Full-Stack Engineering Roadmap
+# 🚀 100-Day LLM Full-Stack Dev Roadmap
 
 <div align="center">
 
@@ -301,7 +301,7 @@ graph TB
 ## 📂 仓库目录结构
 
 ```
-llm-fullstack-roadmap/              # 📦 仓库根目录
+llm-fullstack-dev-roadmap/              # 📦 仓库根目录
 │
 ├── README.md                        # 📖 项目首页（你正在看的）
 ├── learning-journal.md              # ✍️ 总学习心得与踩坑汇总
@@ -423,8 +423,8 @@ llm-fullstack-roadmap/              # 📦 仓库根目录
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/gyc-chenxi/llm-fullstack-roadmap.git
-cd llm-fullstack-roadmap
+git clone https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap.git
+cd llm-fullstack-dev-roadmap
 
 # 2. 创建虚拟环境
 conda create -n llm-roadmap python=3.11
@@ -437,7 +437,7 @@ pip install -r requirements.txt
 # 每个 Phase 目录下有独立的学习内容、代码和踩坑记录
 ```
 
-> 🔗 **仓库地址**：[https://github.com/gyc-chenxi/llm-fullstack-roadmap](https://github.com/gyc-chenxi/llm-fullstack-roadmap)
+> 🔗 **仓库地址**：[https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap](https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap)
 
 ---
 
@@ -520,7 +520,7 @@ pip install -r requirements.txt
 
 如果这个路线对你有帮助，请给一个 Star ⭐ 支持一下！
 
-[![Star History Chart](https://api.star-history.com/svg?repos=gyc-chenxi/llm-fullstack-roadmap&type=Date)](https://star-history.com/#gyc-chenxi/llm-fullstack-roadmap&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=gyc-chenxi/llm-fullstack-dev-roadmap&type=Date)](https://star-history.com/#gyc-chenxi/llm-fullstack-dev-roadmap&Date)
 
 ---
 
@@ -545,7 +545,7 @@ pip install -r requirements.txt
 
 **🌟 如果这个项目对你有帮助，请给一个 Star！**
 
-[![GitHub stars](https://img.shields.io/github/stars/gyc-chenxi/llm-fullstack-roadmap?style=social)](https://github.com/gyc-chenxi/llm-fullstack-roadmap)
-[![GitHub forks](https://img.shields.io/github/forks/gyc-chenxi/llm-fullstack-roadmap?style=social)](https://github.com/gyc-chenxi/llm-fullstack-roadmap)
+[![GitHub stars](https://img.shields.io/github/stars/gyc-chenxi/llm-fullstack-dev-roadmap?style=social)](https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap)
+[![GitHub forks](https://img.shields.io/github/forks/gyc-chenxi/llm-fullstack-dev-roadmap?style=social)](https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap)
 
 </div>
