@@ -427,17 +427,21 @@ git clone https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap.git
 cd llm-fullstack-dev-roadmap
 
 # 2. 创建虚拟环境
-conda create -n llm-roadmap python=3.11
-conda activate llm-roadmap
+conda create -n llm-dev python=3.11
+conda activate llm-dev
 
-# 3. 安装基础依赖
-pip install -r requirements.txt
+# 3. 安装核心依赖（按需选择）
+pip install -r requirements.txt              # 核心依赖，所有平台
+# 有 Nvidia GPU：额外装 vllm、bitsandbytes
+# 有 Apple Silicon：额外装 mlx、mlx-lm
 
 # 4. 从 Phase 0 开始，按天推进
 # 每个 Phase 目录下有独立的学习内容、代码和踩坑记录
 ```
 
 > 🔗 **仓库地址**：[https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap](https://github.com/gyc-chenxi/llm-fullstack-dev-roadmap)
+>
+> 📖 **不知道怎么开始？** 看 [START_HERE.md](./docs/START_HERE.md) — 根据你的时间选择路径
 
 ---
 
@@ -513,6 +517,42 @@ pip install -r requirements.txt
 | 🆕 **vLLM 推理集群** | **vLLM + Prefix Cache + Multi-LoRA + 并发压测** | ⭐⭐⭐⭐ |
 | **AI 销售助手 Agent** | ReAct + Tool Calling + 数据库查询 + API 封装 | ⭐⭐⭐⭐ |
 | 🏆 **多模型 AI-Gateway** | **路由/容灾/限流/熔断/计费 + Docker 部署** | ⭐⭐⭐⭐⭐ |
+
+---
+
+## 📊 项目当前状态
+
+> 🟢 Done · 🟡 Doing · 🔴 TODO · ⚪ Planned
+
+| Phase | 文档 | 可运行代码 | 核心 Demo | 总体 |
+|:-----:|:---:|:--------:|:--------:|:---:|
+| 0 — 工程基建 | 🟢 11/11 | 🟢 3 Notebook | — | 🟢 |
+| 1 — Prompt & API | 🟢 8/8 | 🔴 空壳项目 | 🔴 | 🟡 |
+| 2 — 底层原理 | 🟢 13/13 | 🟢 7 Notebook | 🟢 手写 Attention | 🟢 |
+| 3 — RAG 体系 | 🟡 5/9 充分 | 🔴 | 🔴 | 🟡 |
+| 4 — 11 大项目 | 🟡 2 完整 + 7 骨架 | 🟢 2 可运行 | 🟢 MLX/llama.cpp | 🟡 |
+| 5 — Agent | 🟡 3/8 充分 | 🔴 | 🔴 | 🟡 |
+| 6 — AI-Gateway | 🟢 设计文档 | 🔴 空目录 | 🔴 | 🔴 |
+
+> 📋 详细审计：[PROJECT_AUDIT.md](./PROJECT_AUDIT.md) · 路线图：[ROADMAP.md](./ROADMAP.md)
+
+---
+
+## 💼 作品集证据矩阵
+
+> 🎤 面试时每个项目的一句话讲法 → 详见 [docs/PORTFOLIO_GUIDE.md](./docs/PORTFOLIO_GUIDE.md)
+
+| Phase | 可展示项目 | 面试讲法 | 状态 |
+|:---:|:---------|:--------|:---:|
+| 1 | Unified LLM Client | 我封装了 5+ 厂商的统一调用层，支持容灾切换和计费 | 🟡 |
+| 2 | 手写 Attention | 手写 MHA+GQA，与 PyTorch 官方误差 < 1e-4 | 🟢 |
+| 2 | KV Cache 显存计算 | 能精确计算任意模型在任意上下文下的显存占用 | 🟢 |
+| 2 | LoRA 微调实战 | 用 LoRA/QLoRA 完成模型微调，参数仅训练 1% | 🟢 |
+| 3 | RAG 知识库系统 | 混合检索(BM25+向量+Reranker)+SSE 流式输出 | 🟡 |
+| 4 | MLX LM 本地推理 | Apple Silicon 上跑通模型推理+微调+前端 Chat UI | 🟢 |
+| 4 | llama.cpp Gateway | 封装 GGUF Serving + OpenAI 兼容 API + 健康检查 | 🟢 |
+| 5 | ReAct Agent | 实现 ReAct 范式 Agent，支持多轮工具调用 | 🟡 |
+| 6 | AI-Gateway | 多模型路由/Redis限流/熔断/计费，Docker 一键部署 | 🔴 |
 
 ---
 
