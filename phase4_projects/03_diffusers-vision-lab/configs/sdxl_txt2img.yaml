@@ -1,0 +1,21 @@
+task: sdxl_txt2img
+model_id: models/sdxl-base
+output_dir: outputs/images
+manifest_path: outputs/manifests/generation_manifest.jsonl
+
+prompt: "a cyberpunk city at night, neon lights, rain, cinematic lighting, ultra detailed"
+negative_prompt: "blurry, low quality, distorted, watermark, text"
+
+seed: 2026
+num_inference_steps: 20
+guidance_scale: 7.0
+width: 768
+height: 768
+
+device: auto
+dtype: float32
+
+runtime:
+  attention_slicing: true
+  vae_slicing: true
+  safety_checker: false

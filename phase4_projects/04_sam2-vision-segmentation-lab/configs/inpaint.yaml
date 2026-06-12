@@ -1,0 +1,17 @@
+model:
+  repo_or_path: models/diffusers/stable-diffusion-inpainting
+  fallback_repo: runwayml/stable-diffusion-inpainting
+  device: auto
+
+generation:
+  prompt: "a beautiful clean product design background, studio lighting"
+  negative_prompt: "low quality, blurry, watermark, distorted"
+  steps: 25
+  guidance_scale: 7.5
+  width: 512
+  height: 512
+  seed: 42
+
+mps:
+  torch_dtype: float32
+  attention_slicing: true

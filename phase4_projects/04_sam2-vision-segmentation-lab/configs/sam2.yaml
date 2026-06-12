@@ -1,0 +1,27 @@
+model:
+  size: tiny
+  checkpoint: models/sam2/checkpoints/sam2.1_hiera_tiny.pt
+  config: configs/sam2.1/sam2.1_hiera_t.yaml
+  device: auto
+
+image:
+  max_long_side: 1024
+  default_multimask_output: true
+
+auto_mask:
+  points_per_side: 32
+  pred_iou_thresh: 0.88
+  stability_score_thresh: 0.92
+  min_mask_region_area: 500
+
+postprocess:
+  min_area: 500
+  morph_kernel_size: 5
+  fill_holes: true
+  smooth_contour: true
+
+output:
+  masks_dir: outputs/masks
+  overlays_dir: outputs/overlays
+  reports_dir: outputs/reports
+  manifests_dir: outputs/manifests

@@ -1,0 +1,23 @@
+task: img2img
+model_id: models/sd15
+input_image: assets/input/sample_img2img.png
+output_dir: outputs/images
+manifest_path: outputs/manifests/generation_manifest.jsonl
+
+prompt: "turn this simple drawing into a cozy fantasy house, cinematic lighting, detailed digital art"
+negative_prompt: "blurry, low quality, distorted, watermark, text"
+
+seed: 43
+num_inference_steps: 25
+guidance_scale: 7.5
+strength: 0.55
+width: 512
+height: 512
+
+device: auto
+dtype: float32
+
+runtime:
+  attention_slicing: true
+  vae_slicing: true
+  safety_checker: false

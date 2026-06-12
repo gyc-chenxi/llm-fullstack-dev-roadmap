@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Env
+.env
+.venv/
+venv/
+
+# Hugging Face cache
+.cache/
+
+# Model weights
+models/sd15/
+models/sd15-inpaint/
+models/sdxl-base/
+models/controlnet-canny/
+models/**/*.safetensors
+models/**/*.ckpt
+models/**/*.bin
+
+# Outputs
+outputs/images/
+outputs/logs/
+outputs/manifests/
+
+# macOS
+.DS_Store

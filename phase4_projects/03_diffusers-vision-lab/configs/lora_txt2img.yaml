@@ -1,0 +1,26 @@
+task: lora_txt2img
+model_id: models/sd15
+output_dir: outputs/images
+manifest_path: outputs/manifests/generation_manifest.jsonl
+
+prompt: "a cat wearing a wizard hat, cinematic lighting, detailed digital art"
+negative_prompt: "blurry, low quality, distorted, watermark, text"
+
+seed: 88
+num_inference_steps: 25
+guidance_scale: 7.5
+width: 512
+height: 512
+
+device: auto
+dtype: float32
+
+lora:
+  path: models/lora
+  weight_name: my_style_lora.safetensors
+  scale: 0.75
+
+runtime:
+  attention_slicing: true
+  vae_slicing: true
+  safety_checker: false

@@ -1,0 +1,24 @@
+task: inpaint
+model_id: models/sd15-inpaint
+input_image: assets/input/sample_inpaint.png
+mask_image: assets/input/sample_mask.png
+output_dir: outputs/images
+manifest_path: outputs/manifests/generation_manifest.jsonl
+
+prompt: "replace the masked area with a glowing magical crystal, cinematic lighting, detailed digital art"
+negative_prompt: "blurry, low quality, distorted, watermark, text"
+
+seed: 44
+num_inference_steps: 25
+guidance_scale: 7.5
+strength: 0.85
+width: 512
+height: 512
+
+device: auto
+dtype: float32
+
+runtime:
+  attention_slicing: true
+  vae_slicing: true
+  safety_checker: false

@@ -1,0 +1,10 @@
+api:
+  host: 127.0.0.1
+  port: 8004
+
+gradio:
+  host: 127.0.0.1
+  port: 7864
+
+logging:
+  level: INFO

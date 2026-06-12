@@ -1,0 +1,38 @@
+# Core
+torch
+torchvision
+torchaudio
+
+# Diffusion stack
+diffusers
+transformers
+accelerate
+safetensors
+peft
+sentencepiece
+protobuf
+
+# Hugging Face Hub
+huggingface_hub[hf_transfer]
+
+# Image processing
+Pillow
+opencv-python
+numpy
+
+# API service
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+
+# CLI / logs / config
+typer
+rich
+PyYAML
+python-dotenv
+
+# Test / quality
+pytest
+httpx
+ruff

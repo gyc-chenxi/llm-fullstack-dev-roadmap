@@ -1,0 +1,27 @@
+task: controlnet_canny
+base_model_id: models/sd15
+controlnet_model_id: models/controlnet-canny
+
+input_image: assets/input/sample_img2img.png
+control_image: assets/control/sample_canny.png
+
+output_dir: outputs/images
+manifest_path: outputs/manifests/generation_manifest.jsonl
+
+prompt: "a futuristic forest research station, cinematic lighting, highly detailed digital art"
+negative_prompt: "blurry, low quality, distorted, watermark, text"
+
+seed: 77
+num_inference_steps: 25
+guidance_scale: 7.5
+width: 512
+height: 512
+controlnet_conditioning_scale: 1.0
+
+device: auto
+dtype: float32
+
+runtime:
+  attention_slicing: true
+  vae_slicing: true
+  safety_checker: false
