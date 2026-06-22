@@ -1,0 +1,19 @@
+# Application server configuration
+
+app:
+  host: "127.0.0.1"
+  port: 8006
+  reload: true
+  workers: 1
+  log_level: "info"
+
+cors:
+  allow_origins:
+    - "*"
+  allow_methods:
+    - GET
+    - POST
+    - OPTIONS
+  allow_headers:
+    - Content-Type
+    - Authorization

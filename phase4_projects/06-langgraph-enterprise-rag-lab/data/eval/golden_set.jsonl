@@ -1,0 +1,5 @@
+{"query":"RAG 是什么？","expected_keywords":["检索","生成","Retrieval","Augmented"]}
+{"query":"LangGraph 有什么特点？","expected_keywords":["状态机","LangGraph","节点","图"]}
+{"query":"Attention 机制的核心思想是什么？","expected_keywords":["Query","Key","Value","注意力","self-attention"]}
+{"query":"文档里有没有提到火星地下城市的税收政策？","expected_keywords":[],"expected_behavior":"fallback"}
+{"query":"知识库中涉及了哪些技术栈？","expected_keywords":["RAG","LangGraph","Chroma","BM25"]}

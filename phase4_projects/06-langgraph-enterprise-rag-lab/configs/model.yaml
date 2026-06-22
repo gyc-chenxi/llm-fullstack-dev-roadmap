@@ -1,0 +1,23 @@
+llm:
+  provider: openai_compatible
+  base_url: http://127.0.0.1:8080/v1
+  api_key: local
+  model: local-qwen2.5-7b-instruct
+  temperature: 0.1
+  timeout: 120
+
+embedding:
+  provider: sentence_transformers
+  model: BAAI/bge-m3
+  device_preference:
+    - mps
+    - cpu
+  batch_size: 16
+  normalize_embeddings: true
+
+reranker:
+  provider: FlagEmbedding
+  model: BAAI/bge-reranker-v2-m3
+  batch_size: 4
+  use_fp16: false
+  max_length: 1024

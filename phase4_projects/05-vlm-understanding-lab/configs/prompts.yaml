@@ -1,0 +1,20 @@
+ocr:
+  zh: "请提取图片中的所有文字，尽量保持原始换行、层级和表格结构。"
+  en: "Extract all visible text from the image while preserving layout."
+
+table_to_markdown:
+  zh: "请解析这张表格图片，并转换为 Markdown 表格。无法确定的单元格用 <uncertain> 标记。"
+
+chart_qa:
+  zh: "请分析这张图表：说明 X 轴、Y 轴、主要趋势、最大值、最小值和可能的业务含义。"
+
+image_caption:
+  zh: "请用 3-5 句中文描述图片中的主体、背景、颜色、光线、构图和氛围。"
+
+reverse_prompt:
+  zh: |
+    请分析这张图片，并输出适合 Stable Diffusion / SDXL / Flux 生成用的提示词。
+    严格按如下格式输出：
+    Positive: <主体、背景、构图、光线、色彩、材质、风格、镜头语言>
+    Negative: <低质量、错误结构、文字、水印、畸形等需要避免的元素>
+    Style tags: <英文风格标签，用逗号分隔>

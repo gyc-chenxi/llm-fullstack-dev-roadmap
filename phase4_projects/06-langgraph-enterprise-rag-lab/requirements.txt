@@ -1,0 +1,47 @@
+# Core graph runtime
+langgraph
+langchain
+langchain-core
+langchain-openai
+langgraph-checkpoint-sqlite
+
+# API
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+httpx
+
+# Vector database and retrieval
+chromadb
+sentence-transformers
+rank-bm25
+jieba
+numpy
+pandas
+
+# Reranker
+FlagEmbedding
+
+# Document loaders
+pypdf
+beautifulsoup4
+markdown-it-py
+python-multipart
+
+# HF tooling
+huggingface_hub
+
+# Observability and dev
+rich
+loguru
+orjson
+tenacity
+tqdm
+
+# Tests and quality
+pytest
+pytest-asyncio
+ruff
+mypy

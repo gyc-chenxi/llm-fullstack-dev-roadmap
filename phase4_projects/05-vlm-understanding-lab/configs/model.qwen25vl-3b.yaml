@@ -1,0 +1,9 @@
+model_id: "Qwen/Qwen2.5-VL-3B-Instruct"
+local_path: "models/Qwen2.5-VL-3B-Instruct"
+backend: "qwen2_5_vl"
+device: "auto"
+torch_dtype: "float16"
+max_new_tokens: 512
+max_pixels: 786432
+min_pixels: 3136
+temperature: 0.0

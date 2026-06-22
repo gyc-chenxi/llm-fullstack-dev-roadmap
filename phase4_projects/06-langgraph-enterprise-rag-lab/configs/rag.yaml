@@ -1,0 +1,22 @@
+chunking:
+  chunk_size: 700
+  chunk_overlap: 120
+  min_chunk_chars: 80
+
+retrieval:
+  dense_top_k: 8
+  bm25_top_k: 8
+  final_top_k: 10
+  rerank_top_k: 5
+  rrf_k: 60
+
+judge:
+  relevance_threshold: 0.45
+  faithfulness_threshold: 0.70
+  max_retries: 3
+
+generation:
+  max_context_docs: 5
+  max_context_chars_per_doc: 1800
+  temperature: 0.1
+  max_tokens: 1024

@@ -1,0 +1,20 @@
+# ============================================================
+# P7 LlamaIndex Lab — 模型参数配置
+# ============================================================
+
+# BGE Small Chinese v1.5 — 专为中文优化的轻量 Embedding 模型
+bge_small_zh:
+  model_name: "BAAI/bge-small-zh-v1.5"
+  dim: 512                    # 输出向量维度
+  max_seq_length: 512
+  size_mb: 130                # 模型文件大小
+  pooling: "mean"             # 池化策略：mean pooling
+  instruction_prefix: "为这个句子生成表示以用于检索相关文章："
+
+# GPT-4o-mini — 性价比最优的问答 LLM
+gpt4o_mini:
+  model_name: "gpt-4o-mini"
+  context_window: 128000
+  max_output_tokens: 16384
+  cost_per_1k_input: 0.00015  # USD
+  cost_per_1k_output: 0.0006  # USD

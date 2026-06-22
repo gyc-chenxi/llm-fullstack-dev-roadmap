@@ -1,0 +1,47 @@
+# ============================================================
+# P7 LlamaIndex Lab — Git 忽略规则
+# ============================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 环境
+.env
+*.env
+
+# 模型文件（体积大，不纳入版本控制）
+models/
+*.bin
+*.safetensors
+*.pth
+*.pt
+
+# 索引持久化 & 向量库（运行时产物）
+storage/
+data/vector_store/
+data/processed/
+
+# 日志
+logs/*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Conda
+.miniconda/
+miniconda3/
+
+# Jupyter
+.ipynb_checkpoints/

@@ -1,0 +1,16 @@
+[project]
+name = "p5-vlm-understanding-lab"
+version = "0.1.0"
+description = "Engineering lab for Qwen-VL / LLaVA multimodal understanding on Apple Silicon."
+requires-python = ">=3.11"
+authors = [
+  { name = "Your Name" }
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

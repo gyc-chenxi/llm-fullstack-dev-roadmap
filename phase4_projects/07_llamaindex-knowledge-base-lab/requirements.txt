@@ -1,0 +1,36 @@
+# ============================================================
+# P7: LlamaIndex 知识库应用 — 依赖清单
+# 平台：macOS Sequoia / Apple Silicon M5 / Python 3.11
+# ============================================================
+
+# --- LlamaIndex 核心 ---
+llama-index-core>=0.12.0
+llama-index>=0.12.0
+
+# --- 向量存储后端 ---
+llama-index-vector-stores-chroma>=0.4.0
+chromadb>=0.5.0
+
+# --- Embedding 模型支持 ---
+llama-index-embeddings-huggingface>=0.3.0
+sentence-transformers>=3.0.0
+
+# --- LLM 后端 ---
+llama-index-llms-openai>=0.3.0
+openai>=1.50.0
+
+# --- 文档读取器 ---
+llama-index-readers-file>=0.3.0
+
+# --- PyTorch (Apple Silicon MPS 加速) ---
+torch>=2.5.0
+transformers>=4.45.0
+
+# --- 工具库 ---
+accelerate>=1.0.0
+pydantic>=2.0.0
+pyyaml>=6.0
+rich>=13.0.0
+tqdm>=4.66.0
+click>=8.0.0
+pytest>=8.0.0

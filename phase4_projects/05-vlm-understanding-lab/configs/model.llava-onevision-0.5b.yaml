@@ -1,0 +1,7 @@
+model_id: "llava-hf/llava-onevision-qwen2-0.5b-si-hf"
+local_path: "models/llava-onevision-qwen2-0.5b-si-hf"
+backend: "llava_onevision"
+device: "auto"
+torch_dtype: "float16"
+max_new_tokens: 256
+temperature: 0.0

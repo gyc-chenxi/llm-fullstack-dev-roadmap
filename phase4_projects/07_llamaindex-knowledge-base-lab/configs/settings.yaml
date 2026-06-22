@@ -1,0 +1,42 @@
+# ============================================================
+# P7 LlamaIndex Lab — 运行时主配置
+# ============================================================
+
+# --- Embedding 模型 ---
+embedding:
+  model_name: "models/bge-small-zh-v1.5"   # 本地路径，避免每次联网
+  device: "mps"               # Apple Silicon MPS 加速
+  normalize: true
+  max_length: 512
+
+# --- LLM 配置 ---
+# 使用本地 Ollama 运行 Qwen2.5 7B，无需 API Key
+llm:
+  provider: "ollama"            # ollama | openai | deepseek
+  model: "qwen2.5:7b"           # 本地模型名（ollama list 可查看）
+  temperature: 0.0
+  max_tokens: 1024
+  # 无需 API Key！Ollama 本地运行
+
+# --- 索引配置 ---
+index:
+  persist_dir: "storage"
+  similarity_top_k: 5
+  chunk_size: 500
+  chunk_overlap: 50
+  embed_batch_size: 32
+
+# --- 向量库配置 (ChromaDB) ---
+vector_store:
+  persist_dir: "data/vector_store"
+  collection_name: "llamaindex_kb"
+
+# --- 数据路径 ---
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+
+# --- 日志配置 ---
+logging:
+  level: "INFO"
+  file: "logs/llamaindex.log"
