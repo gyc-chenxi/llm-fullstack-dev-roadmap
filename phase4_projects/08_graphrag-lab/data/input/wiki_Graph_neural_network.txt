@@ -1,0 +1,72 @@
+# Graph neural network
+
+Graph neural networks (GNNs) are artificial neural networks designed for tasks whose inputs are graphs.
+Because graphs usually do not have a canonical ordering of their nodes, GNN architectures are commonly designed to be permutation equivariant: reordering the nodes in the input reorders the corresponding node representations in the same way. For graph-level prediction tasks, GNNs typically use a permutation-invariant readout function, whose output is unchanged by the ordering of the nodes.
+A prominent example is molecular drug design.  Molecules can be represented as graphs, with nodes for atoms and edges for atomic bonds, often including known chemical properties as features.  Inputs may thus differ in size, due to varying number of atoms and bonds. A graph-level task may be to predict the efficacy of a given molecule for a specific medical application, such as eliminating E. coli bacteria.
+The key design element of GNNs is the use of pairwise message passing, such that graph nodes iteratively update their representations by exchanging information with their neighbors. Several GNN architectures have been proposed, which implement different flavors of message passing,  started by recursive or convolutional constructive approaches. A 2022 position paper argued that many architectures described as going "beyond" message passing can instead be interpreted as message passing over suitably modified graphs, and proposed the term "augmented message passing" for such approaches.
+
+In the more general subject of "geometric deep learning", certain existing neural network architectures can be interpreted as GNNs operating on suitably defined graphs. A convolutional neural network layer, in the context of computer vision, can be considered a GNN applied to graphs whose nodes are pixels, and only adjacent pixels are connected by edges in the graph. A transformer layer, in natural language processing, can be considered a GNN applied to complete graphs whose nodes are words or tokens in a passage of natural language text.
+Relevant application domains for GNNs include natural language processing, social networks, citation networks, molecular biology, chemistry, physics and NP-hard combinatorial optimization problems.
+Open source libraries implementing GNNs include PyTorch Geometric (PyTorch), TensorFlow GNN (TensorFlow), Deep Graph Library (framework agnostic), jraph (Google JAX), and GraphNeuralNetworks.jl/GeometricFlux.jl (Julia, Flux).
+
+Graph neural networks (GNNs) are artificial neural networks designed for tasks whose inputs are graphs.
+Because graphs usually do not have a canonical ordering of their nodes, GNN architectures are commonly designed to be permutation equivariant: reordering the nodes in the input reorders the corresponding node representations in the same way. For graph-level prediction tasks, GNNs typically use a permutation-invariant readout function, whose output is unchanged by the ordering of the nodes.
+A prominent example is molecular drug design.  Molecules can be represented as graphs, with nodes for atoms and edges for atomic bonds, often including known chemical properties as features.  Inputs may thus differ in size, due to varying number of atoms and bonds. A graph-level task may be to predict the efficacy of a given molecule for a specific medical application, such as eliminating E. coli bacteria.
+The key design element of GNNs is the use of pairwise message passing, such that graph nodes iteratively update their representations by exchanging information with their neighbors. Several GNN architectures have been proposed, which implement different flavors of message passing,  started by recursive or convolutional constructive approaches. A 2022 position paper argued that many architectures described as going "beyond" message passing can instead be interpreted as message passing over suitably modified graphs, and proposed the term "augmented message passing" for such approaches.
+
+In the more general subject of "geometric deep learning", certain existing neural network architectures can be interpreted as GNNs operating on suitably defined graphs. A convolutional neural network layer, in the context of computer vision, can be considered a GNN applied to graphs whose nodes are pixels, and only adjacent pixels are connected by edges in the graph. A transformer layer, in natural language processing, can be considered a GNN applied to complete graphs whose nodes are words or tokens in a passage of natural language text.
+Relevant application domains for GNNs include natural language processing, social networks, citation networks, molecular biology, chemistry, physics and NP-hard combinatorial optimization problems.
+Open source libraries implementing GNNs include PyTorch Geometric (PyTorch), TensorFlow GNN (TensorFlow), Deep Graph Library (framework agnostic), jraph (Google JAX), and GraphNeuralNetworks.jl/GeometricFlux.jl (Julia, Flux).
+
+== Architecture ==
+The architecture of a generic GNN implements the following fundamental layers:
+
+Permutation-equivariant layers: a permutation equivariant layer maps a representation of a graph into an updated representation of the same graph. In the literature, permutation equivariant layers are implemented via pairwise message passing between graph nodes. Intuitively, in a message passing layer, nodes update their representations by aggregating the messages received from their immediate neighbours. As such, each message passing layer increases the receptive field of the GNN by one hop.
+Local pooling: a local pooling layer coarsens the graph via downsampling. Local pooling is used to increase the receptive field of a GNN, in a similar fashion to pooling layers in convolutional neural networks. Examples include k-nearest neighbours pooling, top-k pooling, and self-attention pooling.
+Global pooling: a global pooling layer, also known as readout layer, provides fixed-size representation of the whole graph. The global pooling layer must be permutation invariant, such that permutations in the ordering of graph nodes and edges do not alter the final output. Examples include element-wise sum, mean or maximum.
+Standard message-passing GNNs are at most as expressive as the Weisfeiler Leman graph isomorphism test. In practice, this means that there exist different graph structures that cannot be distinguished by GNNs. More powerful GNNs operating on higher-dimension geometries such as simplicial complexes can be designed. As of 2022, whether or not future architectures will overcome the message passing primitive is an open research question.
+
+== Message passing layers ==
+
+Message passing layers are permutation-equivariant layers mapping a graph into an updated representation of the same graph. Formally, they can be expressed as message passing neural networks (MPNNs).
+Let
+
+G
+=
+(
+V
+,
+E
+)
+
+{\displaystyle G=(V,E)}
+
+be a graph, where
+
+V
+
+{\displaystyle V}
+
+is the node set and
+
+E
+
+{\displaystyle E}
+
+is the edge set. Let
+
+N
+
+u
+
+{\displaystyle N_{u}}
+
+be the neighbourhood of some node
+
+u
+∈
+V
+
+{\displaystyle u\in V}
+
+. Additionally, let

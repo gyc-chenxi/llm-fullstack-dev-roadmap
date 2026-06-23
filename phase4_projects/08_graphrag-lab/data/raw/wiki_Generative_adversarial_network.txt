@@ -1,0 +1,261 @@
+# Generative adversarial network
+
+A generative adversarial network (GAN) is a class of machine learning frameworks and a prominent framework for approaching generative artificial intelligence. The concept was initially developed by Ian Goodfellow and his colleagues in June 2014. In a GAN, two neural networks compete with each other in the form of a zero-sum game, where one agent's gain is another agent's loss.
+Given a training set, this technique learns to generate new data with the same statistics as the training set. For example, a GAN trained on photographs can generate new photographs that look at least superficially authentic to human observers, having many realistic characteristics. Though originally proposed as a form of generative model for unsupervised learning, GANs have also proved useful for semi-supervised learning, fully supervised learning, and reinforcement learning.
+The core idea of a GAN is based on the "indirect" training through the discriminator, another neural network that can tell how "realistic" the input seems, which itself is also being updated dynamically. This means that the generator is not trained to minimize the distance to a specific image, but rather to fool the discriminator. This enables the model to learn in an unsupervised manner.
+GANs are similar to mimicry in evolutionary biology, with an evolutionary arms race between both networks.
+
+
+
+A generative adversarial network (GAN) is a class of machine learning frameworks and a prominent framework for approaching generative artificial intelligence. The concept was initially developed by Ian Goodfellow and his colleagues in June 2014. In a GAN, two neural networks compete with each other in the form of a zero-sum game, where one agent's gain is another agent's loss.
+Given a training set, this technique learns to generate new data with the same statistics as the training set. For example, a GAN trained on photographs can generate new photographs that look at least superficially authentic to human observers, having many realistic characteristics. Though originally proposed as a form of generative model for unsupervised learning, GANs have also proved useful for semi-supervised learning, fully supervised learning, and reinforcement learning.
+The core idea of a GAN is based on the "indirect" training through the discriminator, another neural network that can tell how "realistic" the input seems, which itself is also being updated dynamically. This means that the generator is not trained to minimize the distance to a specific image, but rather to fool the discriminator. This enables the model to learn in an unsupervised manner.
+GANs are similar to mimicry in evolutionary biology, with an evolutionary arms race between both networks.
+
+
+== Definition ==
+
+
+=== Mathematical ===
+The original GAN is defined as the following game:
+Each probability space 
+  
+    
+      
+        (
+        Ω
+        ,
+        
+          μ
+          
+            ref
+          
+        
+        )
+      
+    
+    {\displaystyle (\Omega ,\mu _{\text{ref}})}
+  
+ defines a GAN game.
+There are 2 players: generator and discriminator.
+The generator's strategy set is 
+  
+    
+      
+        
+          
+            P
+          
+        
+        (
+        Ω
+        )
+      
+    
+    {\displaystyle {\mathcal {P}}(\Omega )}
+  
+, the set of all probability measures 
+  
+    
+      
+        
+          μ
+          
+            G
+          
+        
+      
+    
+    {\displaystyle \mu _{G}}
+  
+ on 
+  
+    
+      
+        Ω
+      
+    
+    {\displaystyle \Omega }
+  
+.
+The discriminator's strategy set is the set of Markov kernels 
+  
+    
+      
+        
+          μ
+          
+            D
+          
+        
+        :
+        Ω
+        →
+        
+          
+            P
+          
+        
+        [
+        0
+        ,
+        1
+        ]
+      
+    
+    {\displaystyle \mu _{D}:\Omega \to {\mathcal {P}}[0,1]}
+  
+, where 
+  
+    
+      
+        
+          
+            P
+          
+        
+        [
+        0
+        ,
+        1
+        ]
+      
+    
+    {\displaystyle {\mathcal {P}}[0,1]}
+  
+ is the set of probability measures on 
+  
+    
+      
+        [
+        0
+        ,
+        1
+        ]
+      
+    
+    {\displaystyle [0,1]}
+  
+.
+The GAN game is a zero-sum game, with objective function
+  
+    
+      
+        L
+        (
+        
+          μ
+          
+            G
+          
+        
+        ,
+        
+          μ
+          
+            D
+          
+        
+        )
+        :=
+        
+          E
+          
+            x
+            ∼
+            
+              μ
+              
+                ref
+              
+            
+            ,
+            y
+            ∼
+            
+              μ
+              
+                D
+              
+            
+            (
+            x
+            )
+          
+        
+        ⁡
+        [
+        ln
+        ⁡
+        y
+        ]
+        +
+        
+          E
+          
+            x
+            ∼
+            
+              μ
+              
+                G
+              
+            
+            ,
+            y
+            ∼
+            
+              μ
+              
+                D
+              
+            
+            (
+            x
+            )
+          
+        
+        ⁡
+        [
+        ln
+        ⁡
+        (
+        1
+        −
+        y
+        )
+        ]
+        .
+      
+    
+    {\displaystyle L(\mu _{G},\mu _{D}):=\operatorname {E} _{x\sim \mu _{\text{ref}},y\sim \mu _{D}(x)}[\ln y]+\operatorname {E} _{x\sim \mu _{G},y\sim \mu _{D}(x)}[\ln(1-y)].}
+  
+
+The generator aims to minimize the objective, and the discriminator aims to maximize the objective.
+
+The generator's task is to approach 
+  
+    
+      
+        
+          μ
+          
+            G
+          
+        
+        ≈
+        
+          μ
+          
+            ref
+          
+        
+      
+    
+    {\displaystyle \mu _{G}\approx \mu _{\text{ref}}}
+  
+, that is, to match its own output distribution as closely as possible to the reference distribution. The discriminator's task is to output a value close to 1 when the input appears to be from the reference distribution, and to output a value close to 0 when the input looks like it came from the generator distribution.
+
+
+=== In practice ===
+The generative network generates candidates while the discriminative network evaluates them. This creates a contest based 

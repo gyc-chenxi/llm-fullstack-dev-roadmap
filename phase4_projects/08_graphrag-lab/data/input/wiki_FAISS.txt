@@ -1,0 +1,62 @@
+# FAISS
+
+FAISS (Facebook AI Similarity Search) is an open-source library for similarity search and clustering of vectors. A 2024 overview paper describes FAISS as a toolbox of indexing methods and related primitives for search, clustering, compression, and transformation of vectors. It contains algorithms that search in sets of vectors of any size, up to ones that possibly do not fit in RAM. It also contains supporting code for evaluation and parameter tuning.
+FAISS is written in C++ with complete wrappers for Python and C. Some of the most useful algorithms are implemented on the GPU using CUDA.
+
+FAISS (Facebook AI Similarity Search) is an open-source library for similarity search and clustering of vectors. A 2024 overview paper describes FAISS as a toolbox of indexing methods and related primitives for search, clustering, compression, and transformation of vectors. It contains algorithms that search in sets of vectors of any size, up to ones that possibly do not fit in RAM. It also contains supporting code for evaluation and parameter tuning.
+FAISS is written in C++ with complete wrappers for Python and C. Some of the most useful algorithms are implemented on the GPU using CUDA.
+
+== Features ==
+FAISS is organized as a toolbox that contains a variety of indexing methods that commonly involve a chain of components (preprocessing, compression, non-exhaustive search, etc.). The scope of the library is intentionally limited to focus on ANNS algorithmic implementation and to avoid facilities related to database functionality, distributed computing or feature extraction algorithms.
+FAISS is designed with the following assumptions:
+
+Primary data type for vector representation is FP32. The support of other floating-point formats, such as BF16 and FP16, is provided.
+Prefer batches of input queries over a single input query for the search.
+Emphasize on allowing users to write a fast prototyping code using its Python wrappers.
+The code should be as open as possible, so that users can access all the implementation details of the indexes.
+The following major categories of indexing methods are supported:
+
+Brute-force search
+Inverted-lists based indices
+Graph indices, including  (Hierarchical navigable small world) HNSW and Navigating Spread-out Graph (NSG)
+Locality-sensitive hashing (LSH)
+The following families of vector quantization methods are supported:
+
+Binary Quantization
+Scalar Quantization (SQ)
+Product Quantization (PQ), including Polysemous Codes, Optimized Product Quantization (OPQ) and Quicker ADC (PQFastScan)
+Additive Quantization (AQ), including Residual Quantization (RQ) and Local Search Quantization (LSQ)
+Neural Quantization, including QINCO
+FAISS focuses on euclidean distance and inner product distance for floating-point data. The limited support of other distances (manhattan distance, Lp distance, etc.) is also available.
+FAISS code supports multithreading via OpenMP, utilizes BLAS via OpenBLAS or Intel MKL, and also uses custom SIMD kernels for x86 and ARM Neon CPUs.
+Besides the similarity search, FAISS provides the following useful facilities:
+
+k-means clustering
+Random-matrix rotations for spreading the variance over all the dimensions without changing the measured distances
+Principal component analysis
+Data deduplication, which is especially useful for image datasets.
+FAISS has a standalone Vector Codec functionality for the lossy compression of vectors, allowing to trade the representation accuracy for the binary size.
+
+== Applications ==
+Typical FAISS applications include  recommender systems, data mining, text retrieval and content moderation.
+FAISS was reported to index 1.5 trillion 144-dimensional vectors for internal Meta Platforms applications.
+FAISS is used in vector databases as a core component of a search engine (OpenSearch, Milvus, Vearch).
+FAISS is often considered as a baseline in similarity search benchmarks.
+FAISS has an integration with Haystack, LangChain frameworks.
+Various advanced code snippets for FAISS can be found on its snippets wiki page and case studies wiki page.
+
+== See also ==
+
+Nearest neighbor search
+Similarity search
+Vector database
+Vector quantization
+
+== References ==
+
+== External links ==
+Official website
+faiss on GitHub
+Official FAISS wiki
+Guidelines to choose a FAISS index
+Autofaiss - automatically create Faiss knn indices with the most optimal similarity search parameters

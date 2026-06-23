@@ -1,0 +1,152 @@
+# Long short-term memory
+
+Long short-term memory (LSTM) is a type of recurrent neural network (RNN) aimed at mitigating the vanishing gradient problem commonly encountered by traditional RNNs. Its relative insensitivity to gap length is its advantage over other RNNs, hidden Markov models, and other sequence learning methods. It aims to provide a short-term memory for RNN that can last thousands of timesteps (thus "long short-term memory"). The name is made in analogy with long-term memory and short-term memory and their relationship, studied by cognitive psychologists since the early 20th century.
+An LSTM unit is typically composed of a cell and three gates: an input gate, an output gate, and a forget gate. The cell remembers values over arbitrary time intervals, and the gates regulate the flow of information into and out of the cell. Forget gates decide what information to discard from the previous state, by mapping the previous state and the current input to a value between 0 and 1. A (rounded) value of 1 signifies retention of the information, and a value of 0 represents discarding. Input gates decide which pieces of new information to store in the current cell state, using the same system as forget gates. Output gates control which pieces of information in the current cell state to output, by assigning a value from 0 to 1 to the information, considering the previous and current states. Selectively outputting relevant information from the current state allows the LSTM network to maintain useful, long-term dependencies to make predictions, both in current and future time-steps.
+LSTM has wide applications in classification, data processing, time series analysis tasks, speech recognition,  machine translation, speech activity detection, robot control, video games, healthcare, energy forecasting.
+
+
+
+Long short-term memory (LSTM) is a type of recurrent neural network (RNN) aimed at mitigating the vanishing gradient problem commonly encountered by traditional RNNs. Its relative insensitivity to gap length is its advantage over other RNNs, hidden Markov models, and other sequence learning methods. It aims to provide a short-term memory for RNN that can last thousands of timesteps (thus "long short-term memory"). The name is made in analogy with long-term memory and short-term memory and their relationship, studied by cognitive psychologists since the early 20th century.
+An LSTM unit is typically composed of a cell and three gates: an input gate, an output gate, and a forget gate. The cell remembers values over arbitrary time intervals, and the gates regulate the flow of information into and out of the cell. Forget gates decide what information to discard from the previous state, by mapping the previous state and the current input to a value between 0 and 1. A (rounded) value of 1 signifies retention of the information, and a value of 0 represents discarding. Input gates decide which pieces of new information to store in the current cell state, using the same system as forget gates. Output gates control which pieces of information in the current cell state to output, by assigning a value from 0 to 1 to the information, considering the previous and current states. Selectively outputting relevant information from the current state allows the LSTM network to maintain useful, long-term dependencies to make predictions, both in current and future time-steps.
+LSTM has wide applications in classification, data processing, time series analysis tasks, speech recognition,  machine translation, speech activity detection, robot control, video games, healthcare, energy forecasting.
+
+
+== Motivation ==
+In theory, classic RNNs can keep track of arbitrary long-term dependencies in the input sequences. The problem with classic RNNs is computational (or practical) in nature: when training a classic RNN using back-propagation, the long-term gradients which are back-propagated can "vanish", meaning they can tend to zero due to very small numbers creeping into the computations, causing the model to effectively stop learning. RNNs using LSTM units partially solve the vanishing gradient problem, because LSTM units allow gradients to also flow with little to no attenuation. However, LSTM networks can still suffer from the exploding gradient problem.
+The intuition behind the LSTM architecture is to create an additional module in a neural network that learns when to remember and when to forget pertinent information. In other words, the network effectively learns which information might be needed later on in a sequence and when that information is no longer needed. For instance, in the context of natural language processing, the network can learn grammatical dependencies. An LSTM might process the sentence "Dave, as a result of his controversial claims, is now a pariah" by remembering the (statistically likely) grammatical gender and number of the subject Dave. Note that this information is pertinent for the pronoun his and note that this information is no longer important after the verb is.
+
+
+== Variants ==
+In the equations below, the lowercase variables represent vectors. Matrices 
+  
+    
+      
+        
+          W
+          
+            q
+          
+        
+      
+    
+    {\displaystyle W_{q}}
+  
+ and 
+  
+    
+      
+        
+          U
+          
+            q
+          
+        
+      
+    
+    {\displaystyle U_{q}}
+  
+ contain, respectively, the weights of the input and recurrent connections, where the subscript 
+  
+    
+      
+        
+          
+          
+            q
+          
+        
+      
+    
+    {\displaystyle _{q}}
+  
+ can either be the input gate 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+, output gate 
+  
+    
+      
+        o
+      
+    
+    {\displaystyle o}
+  
+, the forget gate 
+  
+    
+      
+        f
+      
+    
+    {\displaystyle f}
+  
+ or the memory cell 
+  
+    
+      
+        c
+      
+    
+    {\displaystyle c}
+  
+, depending on the activation being calculated. In this section, we are thus using a "vector notation". So, for example, 
+  
+    
+      
+        
+          c
+          
+            t
+          
+        
+        ∈
+        
+          
+            R
+          
+          
+            h
+          
+        
+      
+    
+    {\displaystyle c_{t}\in \mathbb {R} ^{h}}
+  
+ is not just one unit of one LSTM cell, but contains 
+  
+    
+      
+        h
+      
+    
+    {\displaystyle h}
+  
+ LSTM cell's units.
+
+
+=== LSTM with a forget gate (crucial) ===
+The compact forms of the equations for the forward pass of an LSTM cell with a forget gate are:
+
+  
+    
+      
+        
+          
+            
+              
+                
+                  f
+                  
+                    t
+                  
+                
+              
+              
+                
+                

@@ -1,0 +1,65 @@
+# Object detection
+
+Object detection is a computer technology related to computer vision and image processing that deals with detecting instances of semantic objects of a certain class (such as humans, buildings, or cars) in digital images and videos. Well-researched domains of object detection include face detection and pedestrian detection. Object detection has applications in many areas of computer vision, including image retrieval and video surveillance.
+
+
+
+Object detection is a computer technology related to computer vision and image processing that deals with detecting instances of semantic objects of a certain class (such as humans, buildings, or cars) in digital images and videos. Well-researched domains of object detection include face detection and pedestrian detection. Object detection has applications in many areas of computer vision, including image retrieval and video surveillance.
+
+
+== Uses ==
+It is widely used in computer vision tasks such as image annotation, vehicle counting, activity recognition, face detection, face recognition, video object co-segmentation. It is also used in tracking objects, for example tracking a ball during a football match, tracking movement of a cricket bat, or tracking a person in a video.
+Often, the test images are sampled from a different data distribution, making the object detection task significantly more difficult. To address the challenges caused by the domain gap between training and test data, many unsupervised domain adaptation approaches have been proposed. A simple and straightforward solution for reducing the domain gap is to apply an image-to-image translation approach, such as cycle-GAN. Among other uses, cross-domain object detection is applied in autonomous driving, where models can be trained on a vast amount of video game scenes, since the labels can be generated without manual labor.
+
+
+== Concept ==
+Every object class has its own special features that help in classifying the class – for example all circles are round.
+Object class detection uses these special features. For example, when looking for circles, objects that are at a particular distance from a point (i.e. the center) are sought. Similarly, when looking for squares, objects that are perpendicular at corners and have equal side lengths are needed.  A similar approach is used for face identification where eyes, nose, and lips can be found and features like skin color and distance between eyes can be found.
+
+
+== Benchmarks ==
+
+For object localization, true positive is often measured by the thresholded intersection over union. For example, if there is a traffic sign in the image, with a bounding box drawn by a human ("ground truth label"), then a neural network has detected the traffic sign (a true positive) at 0.5 threshold if it has drawn a bounding box whose IoU with the ground truth is above 0.5. Otherwise, the bounding box is a false positive.
+If there is only a single ground truth bounding box, but multiple predictions, then the IoU of each prediction is calculated. The prediction with the highest IoU is a true positive if it is above threshold, else it is a false positive. All other predicted bounding boxes are false positives. If there is no prediction with an IoU above the threshold, then the ground truth label has a false negative.
+For simultaneous object localization and classification, a true positive is one where the class label is correct, and the bounding box has an IoU exceeding the threshold.
+Simultaneous object localization and classification is benchmarked by the mean average precision (mAP). The average precision (AP) of the network for a class of objects is the area under the precision-recall curve as the confidence threshold is varied. The mAP is the average of AP over all classes.
+
+
+== Methods ==
+
+Methods for object detection generally fall into either neural network-based or non-neural approaches. For non-neural approaches, it becomes necessary to first define features using one of the methods below, then using a technique such as support vector machine (SVM) to do the classification. On the other hand, neural techniques are able to do end-to-end object detection without specifically defining features, and are typically based on convolutional neural networks (CNN).
+
+Non-neural approaches:
+Viola–Jones object detection framework based on Haar features
+Scale-invariant feature transform (SIFT)
+Histogram of oriented gradients (HOG) features
+Neural network approaches:
+OverFeat.
+Region Proposals (R-CNN, Fast R-CNN, Faster R-CNN, cascade R-CNN.)
+You Only Look Once (YOLO).
+Single Shot MultiBox Detector (SSD) 
+Single-Shot Refinement Neural Network for Object Detection (RefineDet) 
+Retina-Net 
+Deformable convolutional networks 
+Detection transformer (DETR), which uses vision transformers.
+
+
+== See also ==
+Feature detection (computer vision)
+Moving object detection
+Small object detection
+Outline of object recognition
+Teknomo–Fernandez algorithm
+
+
+== References ==
+
+
+== Further reading ==
+Zou, Zhengxia; Chen, Keyan; Shi, Zhenwei; Guo, Yuhong; Ye, Jieping (March 2023). "Object Detection in 20 Years: A Survey". Proceedings of the IEEE. 111 (3): 257–276. doi:10.1109/JPROC.2023.3238524. ISSN 0018-9219.
+
+
+== External links ==
+Joshi, Snehal (2023-10-24). "Top Object Detection Models". hitechbpo.com.
+Weng, Lilian (2017-10-29). "Object Detection for Dummies Part 1: Gradient Vector, HOG, and SS". lilianweng.github.io. Retrieved 2024-09-11.
+Wen

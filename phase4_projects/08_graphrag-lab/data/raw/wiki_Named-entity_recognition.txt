@@ -1,0 +1,47 @@
+# Named-entity recognition
+
+Named-entity recognition (NER) (also known as (named) entity identification, entity chunking, and entity extraction) is a subtask of information extraction that seeks to locate and classify named entities mentioned in unstructured text into pre-defined categories such as person names (PER), organizations (ORG), locations (LOC), geopolitical entities (GPE), vehicles (VEH), medical codes, time expressions, quantities, monetary values, percentages, etc.
+Most research on NER/NEE systems has been structured as taking an unannotated block of text, such as transducing:
+
+Jim bought 300 shares of Acme Corp. in 2006.
+into an annotated block of text that highlights the names of entities:
+
+[Jim]Person bought 300 shares of [Acme Corp.]Organization in [2006]Time.
+In this example, a person name consisting of one token, a two-token company name and a temporal expression have been detected and classified.
+
+
+
+Named-entity recognition (NER) (also known as (named) entity identification, entity chunking, and entity extraction) is a subtask of information extraction that seeks to locate and classify named entities mentioned in unstructured text into pre-defined categories such as person names (PER), organizations (ORG), locations (LOC), geopolitical entities (GPE), vehicles (VEH), medical codes, time expressions, quantities, monetary values, percentages, etc.
+Most research on NER/NEE systems has been structured as taking an unannotated block of text, such as transducing:
+
+Jim bought 300 shares of Acme Corp. in 2006.
+into an annotated block of text that highlights the names of entities:
+
+[Jim]Person bought 300 shares of [Acme Corp.]Organization in [2006]Time.
+In this example, a person name consisting of one token, a two-token company name and a temporal expression have been detected and classified.
+
+
+== Problem ==
+
+
+=== Definition ===
+In the expression named entity, the word named restricts the task to those entities for which one or many strings, such as words or phrases, stand (fairly) consistently for some referent. This is closely related to rigid designators, as defined by Saul Kripke, although in practice NER deals with many names and referents that are not philosophically "rigid". For instance, the automotive company created by Henry Ford in 1903 can be referred to as Ford or Ford Motor Company, although "Ford" can refer to many other entities as well (see Ford). Rigid designators include proper names as well as terms for certain biological species and substances, but exclude pronouns (such as "it"; see coreference resolution), descriptions that pick out a referent by its properties (see also De dicto and de re), and names for kinds of things as opposed to individuals (for example "Bank").
+Full named-entity recognition is often broken down, conceptually and possibly also in implementations, as two distinct problems: detection of names, and classification of the names by the type of entity they refer to (e.g. person, organization, or location).
+The first phase is typically simplified to a segmentation problem: names are defined to be contiguous spans of tokens, with no nesting, so that "Bank of America" is a single name, disregarding the fact that inside this name, the substring "America" is itself a name. This segmentation problem is formally similar to chunking. The second phase requires choosing an ontology by which to organize categories of things.
+Temporal expressions and some numerical expressions (e.g., money, percentages, etc.) may also be considered as named entities in the context of the NER task. While some instances of these types are good examples of rigid designators (e.g., the year 2001) there are also many invalid ones (e.g., I take my vacations in “June”). In the first case, the year 2001 refers to the 2001st year of the Gregorian calendar. In the second case, the month June may refer to the month of an undefined year (past June, next June, every June, etc.). It is arguable that the definition of named entity is loosened in such cases for practical reasons. The definition of the term named entity is therefore not strict and often has to be explained in the context in which it is used.
+Certain hierarchies of named entity types have been proposed in the literature. BBN categories, proposed in 2002, are used for question answering and consists of 29 types and 64 subtypes. Sekine's extended hierarchy, proposed in 2002, is made of 200 subtypes. More recently, in 2011 Ritter used a hierarchy based on common Freebase entity types in ground-breaking experiments on NER over social media text.
+
+
+=== Difficulties ===
+NER can have reference resolution ambiguities where the same name can refer to different entities of the same type. For example, "JFK" can refer to the former president or his son.
+The same name can refer to completely different types. "JFK" might refer to the airport in New York. "IRA" can refer to Individual Retirement Account, International Reading Association or Irish Republican Army.
+This can be caused by metonymy. For example, "The White House" can refer to an organization instead of a location.
+
+
+=== Formal evaluation ===
+To evaluate the quality of an NER system's output, several measures have been defined. The usual measures are called precision, recall, and F1 score. However, several issues remain in just how to calculate those values.
+These statistical measures work reasonably well for the obvious cases of finding or missing a real entity exactly; and for finding a non-entity. However, NER can fail in many other ways, many of which are arguably "partially correct", and should not be counted as complete success or failures. For example, identifying a real entity, but: 
+
+with fewer tokens than desired (for example, missing the last token of "John Smith, M.D.")
+with more tokens than desired (for example, including the first word of "The University of MD")
+partitioning adjacent entities

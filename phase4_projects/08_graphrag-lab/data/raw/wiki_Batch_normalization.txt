@@ -1,0 +1,140 @@
+# Batch normalization
+
+In artificial neural networks, batch normalization (also known as batch norm) is a normalization technique used to make training faster and more stable by adjusting the inputs to each layer—re-centering them around zero and re-scaling them to a standard size. It was introduced by Sergey Ioffe and Christian Szegedy in 2015.
+Experts still debate why batch normalization works so well. It was initially thought to tackle internal covariate shift, a problem where parameter initialization and changes in the distribution of the inputs of each layer affect the learning rate of the network. However, newer research suggests it doesn’t fix this shift but instead smooths the objective function—a mathematical guide the network follows to improve—enhancing performance. In very deep networks, batch normalization can initially cause a severe gradient explosion—where updates to the network grow uncontrollably large—but this is managed with shortcuts called skip connections in residual networks. Another theory is that batch normalization adjusts data by handling its size and path separately, speeding up training.
+
+In artificial neural networks, batch normalization (also known as batch norm) is a normalization technique used to make training faster and more stable by adjusting the inputs to each layer—re-centering them around zero and re-scaling them to a standard size. It was introduced by Sergey Ioffe and Christian Szegedy in 2015.
+Experts still debate why batch normalization works so well. It was initially thought to tackle internal covariate shift, a problem where parameter initialization and changes in the distribution of the inputs of each layer affect the learning rate of the network. However, newer research suggests it doesn’t fix this shift but instead smooths the objective function—a mathematical guide the network follows to improve—enhancing performance. In very deep networks, batch normalization can initially cause a severe gradient explosion—where updates to the network grow uncontrollably large—but this is managed with shortcuts called skip connections in residual networks. Another theory is that batch normalization adjusts data by handling its size and path separately, speeding up training.
+
+
+== Internal covariate shift ==
+Each layer in a neural network has inputs that follow a specific distribution, which shifts during training due to two main factors: the random starting values of the network’s settings (parameter initialization) and the natural variation in the input data. This shifting pattern affecting the inputs to the network’s inner layers is called internal covariate shift. While a strict definition isn’t fully agreed upon, experiments show that it involves changes in the means and variances of these inputs during training.
+Batch normalization was first developed to address internal covariate shift. During training, as the parameters of preceding layers adjust, the distribution of inputs to the current layer changes accordingly, such that the current layer needs to constantly readjust to new distributions. This issue is particularly severe in deep networks, because small changes in shallower hidden layers will be amplified as they propagate within the network, resulting in significant shift in deeper hidden layers. Batch normalization was proposed to reduced these unwanted shifts to speed up training and produce more reliable models.
+Beyond possibly tackling internal covariate shift, batch normalization offers several additional advantages. It allows the network to use a higher learning rate—a setting that controls how quickly the network learns—without causing problems like vanishing or exploding gradients, where updates become too small or too large. It also appears to have a regularizing effect, improving the network’s ability to generalize to new data, reducing the need for dropout, a technique used to prevent overfitting (when a model learns the training data too well and fails on new data). Additionally, networks using batch normalization are less sensitive to the choice of starting settings or learning rates, making them more robust and adaptable.
+
+
+== Procedures ==
+
+
+=== Transformation ===
+In a neural network, batch normalization is achieved through a normalization step that fixes the means and variances of each layer's inputs. Ideally, the normalization would be conducted over the entire training set, but to use this step jointly with stochastic optimization methods, it is impractical to use the global information. Thus, normalization is restrained to each mini-batch in the training process.
+Let us use B to denote a mini-batch of size m of the entire training set. The empirical mean and variance of B could thus be denoted as
+
+  
+    
+      
+        
+          μ
+          
+            B
+          
+        
+        =
+        
+          
+            1
+            m
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            m
+          
+        
+        
+          x
+          
+            i
+          
+        
+      
+    
+    {\displaystyle \mu _{B}={\frac {1}{m}}\sum _{i=1}^{m}x_{i}}
+  
+ and 
+  
+    
+      
+        
+          σ
+          
+            B
+          
+          
+            2
+          
+        
+        =
+        
+          
+            1
+            m
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            m
+          
+        
+        (
+        
+          x
+          
+            i
+          
+        
+        −
+        
+          μ
+          
+            B
+          
+        
+        
+          )
+          
+            2
+          
+        
+      
+    
+    {\displaystyle \sigma _{B}^{2}={\frac {1}{m}}\sum _{i=1}^{m}(x_{i}-\mu _{B})^{2}}
+  
+.
+For a layer of the network with d-dimensional input, 
+  
+    
+      
+        x
+        =
+        (
+        
+          x
+          
+            (
+            1
+            )
+          
+        
+        ,
+        .
+        .
+        .
+        ,
+        
+          x
+          
+            (
+           

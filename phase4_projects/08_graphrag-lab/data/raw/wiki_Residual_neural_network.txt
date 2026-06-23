@@ -1,0 +1,333 @@
+# Residual neural network
+
+A residual neural network (also referred to as a residual network or ResNet) is a deep learning architecture in which the layers learn residual functions with reference to the layer inputs. It was developed in 2015 for image recognition, and won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) of that year.
+As a point of terminology, "residual connection" refers to the specific architectural motif of 
+  
+    
+      
+        x
+        ↦
+        f
+        (
+        x
+        )
+        +
+        x
+      
+    
+    {\displaystyle x\mapsto f(x)+x}
+  
+, where 
+  
+    
+      
+        f
+      
+    
+    {\displaystyle f}
+  
+ is an arbitrary neural network module. The motif had been used previously (see §History for details). However, the publication of ResNet made it widely popular for feedforward networks, appearing in neural networks that are seemingly unrelated to ResNet.
+The residual connection stabilizes the training and convergence of deep neural networks with hundreds of layers, and is a common motif in deep neural networks, such as transformer models (e.g., BERT, and GPT models such as ChatGPT), the AlphaGo Zero system, the AlphaStar system, and the AlphaFold system.
+
+A residual neural network (also referred to as a residual network or ResNet) is a deep learning architecture in which the layers learn residual functions with reference to the layer inputs. It was developed in 2015 for image recognition, and won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) of that year.
+As a point of terminology, "residual connection" refers to the specific architectural motif of 
+  
+    
+      
+        x
+        ↦
+        f
+        (
+        x
+        )
+        +
+        x
+      
+    
+    {\displaystyle x\mapsto f(x)+x}
+  
+, where 
+  
+    
+      
+        f
+      
+    
+    {\displaystyle f}
+  
+ is an arbitrary neural network module. The motif had been used previously (see §History for details). However, the publication of ResNet made it widely popular for feedforward networks, appearing in neural networks that are seemingly unrelated to ResNet.
+The residual connection stabilizes the training and convergence of deep neural networks with hundreds of layers, and is a common motif in deep neural networks, such as transformer models (e.g., BERT, and GPT models such as ChatGPT), the AlphaGo Zero system, the AlphaStar system, and the AlphaFold system.
+
+
+== Mathematics ==
+
+
+=== Residual connection ===
+In a multilayer neural network model, consider a (non-residual) subnetwork with a certain number of stacked layers (e.g., 2 or 3). Let 
+  
+    
+      
+        H
+        (
+        x
+        ;
+        α
+        )
+      
+    
+    {\displaystyle H(x;\alpha )}
+  
+ denote the subnetwork. Suppose 
+  
+    
+      
+        
+          H
+          
+            ∗
+          
+        
+      
+    
+    {\displaystyle H^{*}}
+  
+ is the desired optimal output of this subnetwork. Residual learning simply adds 
+  
+    
+      
+        x
+      
+    
+    {\displaystyle x}
+  
+ directly to the output, such that the optimal learned output now becomes 
+  
+    
+      
+        
+          H
+          
+            ∗
+          
+        
+        −
+        x
+      
+    
+    {\displaystyle H^{*}-x}
+  
+, which is interpreted as a "residual" with respect to 
+  
+    
+      
+        x
+      
+    
+    {\displaystyle x}
+  
+.
+The operation of "adding 
+  
+    
+      
+        x
+      
+    
+    {\displaystyle x}
+  
+" is implemented via a "skip connection" that performs an identity mapping to connect the input of the subnetwork with its output. This connection is referred to as a "residual connection" in later work.
+Let 
+  
+    
+      
+        F
+        (
+        x
+        ;
+        α
+        )
+        =
+        H
+        (
+        x
+        ;
+        a
+        )
+        +
+        x
+      
+    
+    {\displaystyle F(x;\alpha )=H(x;a)+x}
+  
+. The function 
+  
+    
+      
+        F
+      
+    
+    {\displaystyle F}
+  
+ is often represented by matrix multiplication interlaced with activation functions and normalization operations (e.g., batch normalization or layer normalization). As a whole, one of these subnetworks is referred to as a "residual block". A deep residual network is constructed by simply stacking these blocks.
+Long short-term memory (LSTM) has a memory mechanism that serves as a residual connection. In an LSTM without a forget gate, an input 
+  
+    
+      
+        
+          x
+          
+            t
+          
+        
+      
+    
+    {\displaystyle x_{t}}
+  
+ is processed by a function 
+  
+    
+      
+        F
+      
+    
+    {\displaystyle F}
+  
+ and added to a memory cell 
+  
+    
+      
+        
+          c
+          
+            t
+          
+        
+      
+    
+    {\displaystyle c_{t}}
+  
+, resulting in 
+  
+    
+      
+        
+          c
+          
+            t
+            +
+            1
+          
+        
+        =
+        
+          c
+          
+            t
+          
+        
+        +
+        F
+        (
+        
+          x
+          
+            t
+          
+        
+        )
+      
+    
+    {\displaystyle c_{t+1}=c_{t}+F(x_{t})}
+  
+. An LSTM with a forget gate essentially functions as a highway network.
+To stabilize the variance of the layers' inputs, it is recommended to replace the residual connections 
+  
+    
+      
+        x
+        +
+        f
+        (
+        x
+        )
+      
+    
+    {\displaystyle x+f(x)}
+  
+ with 
+  
+    
+      
+        x
+        
+          /
+        
+        L
+        +
+        f
+        (
+        x
+        )
+      
+    
+    {\displaystyle x/L+f(x)}
+  
+, where 
+  
+    
+      
+        L
+      
+    
+    {\displaystyle L}
+  
+ is the total number of residual layers.
+
+
+=== Projection connection ===
+If the function 
+  
+    
+      
+        F
+      
+    
+    {\displaystyle F}
+  
+ is of type 
+  
+    
+      
+        F
+        :
+        
+          
+            R
+          
+          
+            n
+          
+        
+        →
+        
+          
+            R
+          
+          
+            m
+          
+        
+      
+    
+    {\displaystyle F:\mathbb {R} ^{n}\to \mathbb {R} ^{m}}
+  
+ where 
+  
+    
+      
+        n
+        ≠
+        m
+      
+    
+    {\displaystyle n\n

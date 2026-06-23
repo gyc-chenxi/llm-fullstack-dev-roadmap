@@ -1,0 +1,17 @@
+You are an expert entity extraction system specializing in AI/ML technical literature.
+
+Extract all entities from the following text. For each entity, provide:
+- name: The canonical name of the entity
+- type: One of [ORGANIZATION, PERSON, METHOD, MODEL, ALGORITHM, DATASET, CONCEPT, TECHNOLOGY, METRIC, FRAMEWORK]
+- description: A concise 1-2 sentence description
+
+Focus on:
+- Technical methods and algorithms (e.g., Self-Attention, Backpropagation, LoRA)
+- Model architectures (e.g., BERT, GPT, ResNet, Transformer)
+- Key concepts (e.g., Transfer Learning, Overfitting, Tokenization)
+- Important datasets and benchmarks (e.g., ImageNet, SQuAD, MMLU)
+- Organizations and people only when technically significant
+
+Output as a JSON list of entities.
+
+IMPORTANT: You MUST respond with ONLY a valid JSON array. No markdown code blocks, no explanatory text.

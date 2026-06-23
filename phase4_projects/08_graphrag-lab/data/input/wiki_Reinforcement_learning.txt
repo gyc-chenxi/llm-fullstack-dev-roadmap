@@ -1,0 +1,152 @@
+# Reinforcement learning
+
+In machine learning and optimal control, reinforcement learning (RL) is concerned with how an intelligent agent should take actions in a dynamic environment in order to maximize a reward signal. Reinforcement learning is one of the three basic machine learning paradigms, alongside supervised learning and unsupervised learning.
+While supervised learning and unsupervised learning algorithms respectively attempt to discover patterns in labeled and unlabeled data, reinforcement learning involves training an agent through interactions with its environment. To learn to maximize rewards from these interactions, the agent makes decisions between trying new actions to learn more about the environment (exploration), or using current knowledge of the environment to take the best action (exploitation). The search for the optimal balance between these two strategies is known as the exploration–exploitation dilemma.
+
+The environment is typically stated in the form of a Markov decision process, as many reinforcement learning algorithms use dynamic programming techniques. The main difference between classical dynamic programming methods and reinforcement learning algorithms is that the latter do not assume knowledge of an exact mathematical model of the Markov decision process, and they target large Markov decision processes where exact methods become infeasible.
+
+In machine learning and optimal control, reinforcement learning (RL) is concerned with how an intelligent agent should take actions in a dynamic environment in order to maximize a reward signal. Reinforcement learning is one of the three basic machine learning paradigms, alongside supervised learning and unsupervised learning.
+While supervised learning and unsupervised learning algorithms respectively attempt to discover patterns in labeled and unlabeled data, reinforcement learning involves training an agent through interactions with its environment. To learn to maximize rewards from these interactions, the agent makes decisions between trying new actions to learn more about the environment (exploration), or using current knowledge of the environment to take the best action (exploitation). The search for the optimal balance between these two strategies is known as the exploration–exploitation dilemma.
+
+The environment is typically stated in the form of a Markov decision process, as many reinforcement learning algorithms use dynamic programming techniques. The main difference between classical dynamic programming methods and reinforcement learning algorithms is that the latter do not assume knowledge of an exact mathematical model of the Markov decision process, and they target large Markov decision processes where exact methods become infeasible.
+
+== Principles ==
+Due to its generality, reinforcement learning is studied in many disciplines, such as game theory, control theory, operations research, information theory, simulation-based optimization, multi-agent systems, swarm intelligence, and statistics. In the operations research and control literature, RL is called approximate dynamic programming, or neuro-dynamic programming. The problems of interest in RL have also been studied in the theory of optimal control, which is concerned mostly with the existence and characterization of optimal solutions, and algorithms for their exact computation, and less with learning or approximation (particularly in the absence of a mathematical model of the environment).
+Basic reinforcement learning is modeled as a Markov decision process:
+
+A set of environment and agent states (the state space),
+
+S
+
+{\displaystyle {\mathcal {S}}}
+
+;
+A set of actions (the action space),
+
+A
+
+{\displaystyle {\mathcal {A}}}
+
+, of the agent;
+
+P
+
+a
+
+(
+s
+,
+
+s
+′
+
+)
+=
+Pr
+(
+
+S
+
+t
++
+1
+
+=
+
+s
+′
+
+∣
+
+S
+
+t
+
+=
+
+s
+,
+
+A
+
+t
+
+=
+
+a
+)
+
+{\displaystyle P_{a}(s,s')=\Pr(S_{t+1}{=}s'\mid S_{t}{=}s,A_{t}{=}a)}
+
+, the transition probability (at time
+
+t
+
+{\displaystyle t}
+
+) from state
+
+s
+
+{\displaystyle s}
+
+to state
+
+s
+′
+
+{\displaystyle s'}
+
+under action
+
+a
+
+{\displaystyle a}
+
+.
+
+R
+
+a
+
+(
+s
+,
+
+s
+′
+
+)
+
+{\displaystyle R_{a}(s,s')}
+
+, the immediate reward after transitioning from
+
+s
+
+{\displaystyle s}
+
+to
+
+s
+′
+
+{\displaystyle s'}
+
+under action
+
+a
+
+{\displaystyle a}
+
+.
+The purpose of reinforcement learning is for the agent to learn an optimal (or near-optimal) policy that maximizes the reward function or other user-provided reinforcement signal that accumulates from immediate rewards. This is similar to processes that appear to occur in animal psychology. For example, biological brains are hardwired to interpret signals such as pain and hunger as negative reinforcements, and interpret pleasure and food intake as positive reinforcements. In some circumstances, animals learn to adopt behaviors that optimize these rewards. This suggests that animals are capable of reinforcement learning.
+A basic reinforcement learning agent interacts with its environment in discrete time steps. At each time step t, the agent receives the current state
+
+S
+
+t
+
+{\displaystyle S_{t}}
+
+and reward

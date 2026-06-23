@@ -1,0 +1,198 @@
+# Neural machine translation
+
+Neural machine translation (NMT) is an approach to machine translation that uses an artificial neural network to predict the likelihood of a sequence of words, typically modeling entire sentences in a single integrated model.
+It is the dominant approach today and can produce translations that rival human translations when translating between high-resource languages under specific conditions. However, there still remain challenges, especially with languages that have less high-quality data available, and with domain shift between the data a system was trained on and the texts it is supposed to translate. NMT systems also tend to produce fairly literal translations.
+
+Neural machine translation (NMT) is an approach to machine translation that uses an artificial neural network to predict the likelihood of a sequence of words, typically modeling entire sentences in a single integrated model.
+It is the dominant approach today and can produce translations that rival human translations when translating between high-resource languages under specific conditions. However, there still remain challenges, especially with languages that have less high-quality data available, and with domain shift between the data a system was trained on and the texts it is supposed to translate. NMT systems also tend to produce fairly literal translations.
+
+
+== Overview ==
+In the translation task, a sentence 
+  
+    
+      
+        
+          x
+        
+        =
+        
+          x
+          
+            1
+            ,
+            I
+          
+        
+      
+    
+    {\displaystyle \mathbf {x} =x_{1,I}}
+  
+ (consisting of 
+  
+    
+      
+        I
+      
+    
+    {\displaystyle I}
+  
+ tokens 
+  
+    
+      
+        
+          x
+          
+            i
+          
+        
+      
+    
+    {\displaystyle x_{i}}
+  
+) in the source language is to be translated into a sentence 
+  
+    
+      
+        
+          y
+        
+        =
+        
+          x
+          
+            1
+            ,
+            J
+          
+        
+      
+    
+    {\displaystyle \mathbf {y} =x_{1,J}}
+  
+ (consisting of 
+  
+    
+      
+        J
+      
+    
+    {\displaystyle J}
+  
+ tokens 
+  
+    
+      
+        
+          x
+          
+            j
+          
+        
+      
+    
+    {\displaystyle x_{j}}
+  
+) in the target language. The source and target tokens (which in the simple event are used for each other in order for a particular game ] vectors, so they can be processed mathematically.
+NMT models assign a probability 
+  
+    
+      
+        P
+        (
+        y
+        
+          |
+        
+        x
+        )
+      
+    
+    {\displaystyle P(y|x)}
+  
+ to potential translations y and then search a subset of potential translations for the one with the highest probability. Most NMT models are auto-regressive: They model the probability of each target token as a function of the source sentence and the previously predicted target tokens. The probability of the whole translation then is the product of the probabilities of the individual predicted tokens:
+
+  
+    
+      
+        P
+        (
+        y
+        
+          |
+        
+        x
+        )
+        =
+        
+          ∏
+          
+            j
+            =
+            1
+          
+          
+            J
+          
+        
+        P
+        (
+        
+          y
+          
+            j
+          
+        
+        
+          |
+        
+        
+          y
+          
+            1
+            ,
+            i
+            −
+            1
+          
+        
+        ,
+        
+          x
+        
+        )
+      
+    
+    {\displaystyle P(y|x)=\prod _{j=1}^{J}P(y_{j}|y_{1,i-1},\mathbf {x} )}
+  
+
+NMT models differ in how exactly they model this function 
+  
+    
+      
+        P
+      
+    
+    {\displaystyle P}
+  
+, but most use some variation of the encoder-decoder architecture: They first use an encoder network to process 
+  
+    
+      
+        
+          x
+        
+      
+    
+    {\displaystyle \mathbf {x} }
+  
+ and encode it into a vector or matrix representation of the source sentence. Then they use a decoder network that usually produces one target word at a time, taking into account the source representation and the tokens it previously produced. As soon as the decoder produces a special end of sentence token, the decoding process is finished. Since the decoder refers to its own previous outputs during, this way of decoding is called auto-regressive.
+
+
+== History ==
+
+
+=== Early approaches ===
+In 1987, Robert B. Allen demonstrated the use of feed-forward neural networks for translating auto-generated English sentences with a limited vocabulary of 31 words into Spanish. In this experiment, the size of the network's input and output layers was chosen to be just large enough for the longest sentences in the source and target language, respectively, because the network did not have any mechanism to encode sequences of arbitrary length into a fixed-size representation. In his summary, Allen also already hinted at the possibility of using auto-associative models, one for encoding the source and one for decoding the target.
+Lonnie Chrisman built upon Allen's work in 1991 by training separate recursive auto-associative memory (RAAM) networks (developed by Jordan B. Pollack) for the source and the target language. Each of the RAAM networks is trained to encode an arbitrary-length sentence into a fixed-size hidden representation and to decode the original sentence again from that representation. Additionally, the two networks are also trained to share their hidden representation; this way, the source encoder can produce a representation that the target decoder

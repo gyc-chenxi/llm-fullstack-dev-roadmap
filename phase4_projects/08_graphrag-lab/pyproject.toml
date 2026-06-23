@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "graphrag-lab"
+version = "1.0.0"
+description = "P8: GraphRAG Knowledge Graph Retrieval — production-grade RAG evaluation platform"
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Chenxi", email = "gyc.chenxi@example.com"}]
+keywords = ["graphrag", "rag", "knowledge-graph", "llm", "vector-search"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

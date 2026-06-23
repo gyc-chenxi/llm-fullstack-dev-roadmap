@@ -1,0 +1,81 @@
+# BERT (language model)
+
+Bidirectional encoder representations from transformers (BERT) is a language model introduced in October 2018 by researchers at Google. It learns to represent text as a sequence of vectors using self-supervised learning. It uses the encoder-only transformer architecture. BERT dramatically improved the state of the art for large language models. As of 2020, BERT is a ubiquitous baseline in natural language processing (NLP) experiments. 
+BERT is trained by masked token prediction and next sentence prediction. With this training, BERT learns contextual, latent representations of tokens in their context, similar to ELMo and GPT-2. It found applications for many natural language processing tasks, such as coreference resolution and polysemy resolution. It improved on ELMo and spawned the study of "BERTology", which attempts to interpret what is learned by BERT.
+BERT was originally implemented in the English language at two model sizes, BERTBASE (110 million parameters) and BERTLARGE (340 million parameters). Both were trained on the Toronto BookCorpus (800M words) and English Wikipedia  (2,500M words). The weights were released on GitHub. On March 11, 2020, 24 smaller models were released, the smallest being BERTTINY with just 4 million parameters.
+
+Bidirectional encoder representations from transformers (BERT) is a language model introduced in October 2018 by researchers at Google. It learns to represent text as a sequence of vectors using self-supervised learning. It uses the encoder-only transformer architecture. BERT dramatically improved the state of the art for large language models. As of 2020, BERT is a ubiquitous baseline in natural language processing (NLP) experiments. 
+BERT is trained by masked token prediction and next sentence prediction. With this training, BERT learns contextual, latent representations of tokens in their context, similar to ELMo and GPT-2. It found applications for many natural language processing tasks, such as coreference resolution and polysemy resolution. It improved on ELMo and spawned the study of "BERTology", which attempts to interpret what is learned by BERT.
+BERT was originally implemented in the English language at two model sizes, BERTBASE (110 million parameters) and BERTLARGE (340 million parameters). Both were trained on the Toronto BookCorpus (800M words) and English Wikipedia  (2,500M words). The weights were released on GitHub. On March 11, 2020, 24 smaller models were released, the smallest being BERTTINY with just 4 million parameters.
+
+
+== Architecture ==
+
+BERT is an "encoder-only" transformer architecture. At a high level, BERT consists of 4 modules: 
+
+Tokenizer: This module converts a piece of English text into a sequence of integers ("tokens").
+Embedding: This module converts the sequence of tokens into an array of real-valued vectors representing the tokens. It represents the conversion of discrete token types into a lower-dimensional Euclidean space.
+Encoder: a stack of Transformer blocks with self-attention, but without causal masking.
+Task head: This module converts the final representation vectors into one-shot encoded tokens again by producing a predicted probability distribution over the token types. It can be viewed as a simple decoder, decoding the latent representation into token types, or as an "un-embedding layer".
+The task head is necessary for pre-training, but it is often unnecessary for so-called "downstream tasks," such as question answering or sentiment classification. Instead, one removes the task head and replaces it with a newly initialized module suited for the task, and finetune the new module. The latent vector representation of the model is directly fed into this new module, allowing for sample-efficient transfer learning.
+
+
+=== Embedding ===
+This section describes the embedding used by BERTBASE. The other one, BERTLARGE, is similar, just larger.
+The tokenizer of BERT is WordPiece, which is a sub-word strategy like byte-pair encoding. Its vocabulary size is 30,000, and any token not appearing in its vocabulary is replaced by [UNK] ("unknown"). 
+
+The first layer is the embedding layer, which contains three components: token type embeddings, position embeddings, and segment type embeddings. 
+
+Token type: The token type is a standard embedding layer, translating a one-hot vector into a dense vector based on its token type.
+Position: The position embeddings are based on a token's position in the sequence. BERT uses absolute position embeddings, where each position in a sequence is mapped to a real-valued vector. Each dimension of the vector consists of a sinusoidal function that takes the position in the sequence as input.
+Segment type: Using a vocabulary of just 0 or 1, this embedding layer produces a dense vector based on whether the token belongs to the first or second text segment in that input. In other words, type-1 tokens are all tokens that appear after the [SEP] special token. All prior tokens are type-0.
+The three embedding vectors are added together representing the initial token representation as a function of these three pieces of information. After embedding, the vector representation is normalized using a LayerNorm operation, outputting a 768-dimensional vector for each input token. After this, the representation vectors are passed forward through 12 Transformer encoder blocks, and are decoded back to 30,000-dimensional vocabulary space using a basic affine transformation layer.
+
+
+=== Architectural family ===
+The encoder stack of BERT has 2 free parameters: 
+  
+    
+      
+        L
+      
+    
+    {\displaystyle L}
+  
+, the number of layers, and 
+  
+    
+      
+        H
+      
+    
+    {\displaystyle H}
+  
+, the hidden size. There are always 
+  
+    
+      
+        H
+        
+          /
+        
+        64
+      
+    
+    {\displaystyle H/64}
+  
+ self-attention heads, and the feed-forward/filter size is always 
+  
+    
+      
+        4
+        H
+      
+    
+    {\displaystyle 4H}
+  
+. By varying these two numbers, one obtains an entire family of BERT models.
+For BERT:
+
+the feed-forward size and filter size are synonymous. Both of them denote the number of dimensions in the middle layer of the feed-forward network.
+the hidden size and embedding size are synon

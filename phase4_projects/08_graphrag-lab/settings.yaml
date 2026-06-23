@@ -1,0 +1,125 @@
+### P8 GraphRAG Lab — GraphRAG 3.1.0 Configuration
+### DeepSeek API + local BGE-M3 embeddings
+
+### LLM settings ###
+
+completion_models:
+  default_completion_model:
+    model_provider: openai
+    model: deepseek-chat
+    auth_method: api_key
+    api_key: ${GRAPHRAG_API_KEY}
+    api_base: https://api.deepseek.com/v1
+    retry:
+      type: exponential_backoff
+
+embedding_models:
+  default_embedding_model:
+    model_provider: openai
+    model: ${GRAPHRAG_EMBEDDING_MODEL}
+    auth_method: api_key
+    api_key: ${GRAPHRAG_EMBEDDING_API_KEY}
+    api_base: ${GRAPHRAG_EMBEDDING_API_BASE}
+    retry:
+      type: exponential_backoff
+
+### Document processing settings ###
+
+input:
+  type: text
+
+chunking:
+  type: tokens
+  size: 1200
+  overlap: 100
+  encoding_model: cl100k_base
+
+### Storage settings ###
+
+input_storage:
+  type: file
+  base_dir: "data/input"
+
+output_storage:
+  type: file
+  base_dir: "data/output"
+
+reporting:
+  type: file
+  base_dir: "logs"
+
+cache:
+  type: json
+  storage:
+    type: file
+    base_dir: "cache"
+
+vector_store:
+  type: lancedb
+  db_uri: data/output/lancedb
+
+### Workflow settings ###
+
+embed_text:
+  embedding_model_id: default_embedding_model
+
+extract_graph:
+  completion_model_id: default_completion_model
+  entity_types:
+    - ORGANIZATION
+    - PERSON
+    - GEO
+    - EVENT
+    - TECHNOLOGY
+    - METHOD
+    - DATASET
+    - MODEL
+    - ALGORITHM
+    - CONCEPT
+    - METRIC
+    - FRAMEWORK
+  max_gleanings: 1
+
+summarize_descriptions:
+  completion_model_id: default_completion_model
+  max_length: 500
+
+extract_graph_nlp:
+  text_analyzer:
+    extractor_type: regex_english
+
+cluster_graph:
+  max_cluster_size: 10
+
+extract_claims:
+  enabled: false
+  completion_model_id: default_completion_model
+  description: "Any claims or facts that could be relevant to information discovery."
+  max_gleanings: 1
+
+community_reports:
+  completion_model_id: default_completion_model
+  max_length: 2000
+  max_input_length: 8000
+
+snapshots:
+  graphml: true
+  embeddings: false
+
+### Query settings ###
+
+local_search:
+  completion_model_id: default_completion_model
+  embedding_model_id: default_embedding_model
+
+global_search:
+  completion_model_id: default_completion_model
+
+drift_search:
+  completion_model_id: default_completion_model
+  embedding_model_id: default_embedding_model
+
+basic_search:
+  completion_model_id: default_completion_model
+  embedding_model_id: default_embedding_model
+workflows: [generate_text_embeddings]

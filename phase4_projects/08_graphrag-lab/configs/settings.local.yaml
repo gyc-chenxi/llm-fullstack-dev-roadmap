@@ -1,0 +1,71 @@
+# Full local mode: llama.cpp + BGE-M3
+# Usage: cp configs/settings.local.yaml settings.yaml
+# Prerequisites: make run-embed (Terminal 1) + llama.cpp server (Terminal 2)
+
+encoding_model: cl100k_base
+
+llm:
+  api_key: local
+  type: openai_chat
+  model: local-model
+  api_base: http://127.0.0.1:8081/v1
+  model_supports_json: true
+  max_tokens: 4000
+  request_timeout: 300.0
+  concurrent_requests: 2
+
+parallelization:
+  stagger: 0.5
+  num_threads: 4
+
+embeddings:
+  async_mode: threaded
+  llm:
+    api_key: local
+    type: openai_embedding
+    model: bge-m3
+    api_base: http://127.0.0.1:19530/v1
+    concurrent_requests: 4
+
+chunks:
+  size: 1200
+  overlap: 100
+  group_by_columns: [id]
+
+input:
+  type: file
+  file_type: text
+  base_dir: "data/input"
+
+output:
+  type: file
+  base_dir: "data/output"
+
+reporting:
+  type: file
+  base_dir: "logs"
+
+entity_extraction:
+  entity_types:
+    - ORGANIZATION
+    - PERSON
+    - TECHNOLOGY
+    - METHOD
+    - DATASET
+    - MODEL
+    - ALGORITHM
+    - CONCEPT
+  max_gleanings: 1
+
+cluster_graph:
+  max_cluster_size: 10
+
+umap:
+  enabled: false
+
+embed_graph:
+  enabled: false
+
+snapshots:
+  graphml: true
+  raw_graph: true

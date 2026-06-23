@@ -1,0 +1,230 @@
+# Stochastic gradient descent
+
+Stochastic gradient descent (often abbreviated SGD) is an iterative method for optimizing an objective function with suitable smoothness properties (e.g. differentiable or subdifferentiable). It can be regarded as a stochastic approximation of gradient descent optimization, since it replaces the actual gradient (calculated from the entire data set) by an estimate thereof (calculated from a randomly selected subset of the data). Especially in high-dimensional optimization problems this reduces the very high computational burden, achieving faster iterations in exchange for a lower convergence rate.
+The basic idea behind stochastic approximation can be traced back to the Robbins–Monro algorithm of the 1950s. Today, stochastic gradient descent has become an important optimization method in machine learning.
+
+
+
+Stochastic gradient descent (often abbreviated SGD) is an iterative method for optimizing an objective function with suitable smoothness properties (e.g. differentiable or subdifferentiable). It can be regarded as a stochastic approximation of gradient descent optimization, since it replaces the actual gradient (calculated from the entire data set) by an estimate thereof (calculated from a randomly selected subset of the data). Especially in high-dimensional optimization problems this reduces the very high computational burden, achieving faster iterations in exchange for a lower convergence rate.
+The basic idea behind stochastic approximation can be traced back to the Robbins–Monro algorithm of the 1950s. Today, stochastic gradient descent has become an important optimization method in machine learning.
+
+
+== Background ==
+
+Both statistical estimation and machine learning consider the problem of minimizing an objective function that has the form of a sum:
+
+  
+    
+      
+        Q
+        (
+        w
+        )
+        =
+        
+          
+            1
+            n
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        
+          Q
+          
+            i
+          
+        
+        (
+        w
+        )
+        ,
+      
+    
+    {\displaystyle Q(w)={\frac {1}{n}}\sum _{i=1}^{n}Q_{i}(w),}
+  
+
+where the parameter 
+  
+    
+      
+        w
+      
+    
+    {\displaystyle w}
+  
+ that minimizes 
+  
+    
+      
+        Q
+        (
+        w
+        )
+      
+    
+    {\displaystyle Q(w)}
+  
+ is to be estimated. Each summand function 
+  
+    
+      
+        
+          Q
+          
+            i
+          
+        
+      
+    
+    {\displaystyle Q_{i}}
+  
+ is typically associated with the 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+-th observation in the data set (used for training).
+In classical statistics, sum-minimization problems arise in least squares and in maximum-likelihood estimation (for independent observations).  The general class of estimators that arise as minimizers of sums are called M-estimators. However, in statistics, it has been long recognized that requiring even local minimization is too restrictive for some problems of maximum-likelihood estimation. Therefore, contemporary statistical theorists often consider stationary points of the likelihood function (or zeros of its derivative, the score function, and other estimating equations).
+The sum-minimization problem also arises for empirical risk minimization. There, 
+  
+    
+      
+        
+          Q
+          
+            i
+          
+        
+        (
+        w
+        )
+      
+    
+    {\displaystyle Q_{i}(w)}
+  
+ is the value of the loss function at 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+-th example, and 
+  
+    
+      
+        Q
+        (
+        w
+        )
+      
+    
+    {\displaystyle Q(w)}
+  
+ is the empirical risk.
+When used to minimize the above function, a standard (or "batch") gradient descent method would perform the following iterations:
+
+  
+    
+      
+        w
+        :=
+        w
+        −
+        η
+        
+        ∇
+        Q
+        (
+        w
+        )
+        =
+        w
+        −
+        
+          
+            η
+            n
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        ∇
+        
+          Q
+          
+            i
+          
+        
+        (
+        w
+        )
+        .
+      
+    
+    {\displaystyle w:=w-\eta \,\nabla Q(w)=w-{\frac {\eta }{n}}\sum _{i=1}^{n}\nabla Q_{i}(w).}
+  
+
+The step size is denoted by 
+  
+    
+      
+        η
+      
+    
+    {\displaystyle \eta }
+  
+ (sometimes called the learning rate in machine learning) and here "
+  
+    
+      
+        :=
+      
+    
+    {\displaystyle :=}
+  
+" denotes the update of a variable in the algorithm.
+In many cases, the summand functions have a simple form that enables inexpensive evaluations of the sum-function and the sum gradient. For example, in statistics, one-parameter exponential families allow economical function-evaluations and gradient-evaluations.
+However, in other cases, evaluating the sum-gradient may require expensive evaluations of the gradients from all summand functions. When the training set is enormous and no simple formulas exist, evaluating the sums of gradients becomes very expensive, because evaluating the gradient requires evaluating all the summand functions' gradients. To economize on the computational cost at every iteration, stochastic gradient descent samples a subset of summand functions at every step. This is very effective in the case of large-scale machine learning problems.
+
+
+== Iterative method ==
+
+In stochastic (or "on-line") gradient descent, the true gradient of 
+  
+    
+      
+        Q
+        (
+        w
+        )
+      
+    
+    {\displaystyle Q(w)}
+  
+ is ap

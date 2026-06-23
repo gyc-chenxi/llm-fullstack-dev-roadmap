@@ -1,0 +1,37 @@
+# Secrets
+.env
+.history/
+*.key
+*.pem
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Models
+models/
+*.gguf
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# GraphRAG outputs
+data/output/
+data/vector_store/
+cache/
+logs/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Testing
+.pytest_cache/
+.ruff_cache/
+htmlcov/

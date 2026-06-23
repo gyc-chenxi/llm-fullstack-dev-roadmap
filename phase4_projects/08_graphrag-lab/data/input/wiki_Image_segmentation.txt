@@ -1,0 +1,55 @@
+# Image segmentation
+
+In digital image processing and computer vision, image segmentation is the process of partitioning a digital image into multiple image segments, also known as image regions or image objects (sets of pixels). The goal of segmentation is to simplify and/or change the representation of an image into something that is more meaningful and easier to analyze. Image segmentation is typically used to locate objects and boundaries (lines, curves, etc.) in images. More precisely, image segmentation is the process of assigning a label to every pixel in an image such that pixels with the same label share certain characteristics.
+The result of image segmentation is a set of segments that collectively cover the entire image, or a set of contours extracted from the image (see edge detection). Each of the pixels in a region are similar with respect to some characteristic or computed property, such as color, intensity, or texture. Adjacent regions are significantly different with respect to the same characteristic(s). When applied to a stack of images, typical in medical imaging, the resulting contours after image segmentation can be used to create 3D reconstructions with the help of geometry reconstruction algorithms like marching cubes.
+
+In digital image processing and computer vision, image segmentation is the process of partitioning a digital image into multiple image segments, also known as image regions or image objects (sets of pixels). The goal of segmentation is to simplify and/or change the representation of an image into something that is more meaningful and easier to analyze. Image segmentation is typically used to locate objects and boundaries (lines, curves, etc.) in images. More precisely, image segmentation is the process of assigning a label to every pixel in an image such that pixels with the same label share certain characteristics.
+The result of image segmentation is a set of segments that collectively cover the entire image, or a set of contours extracted from the image (see edge detection). Each of the pixels in a region are similar with respect to some characteristic or computed property, such as color, intensity, or texture. Adjacent regions are significantly different with respect to the same characteristic(s). When applied to a stack of images, typical in medical imaging, the resulting contours after image segmentation can be used to create 3D reconstructions with the help of geometry reconstruction algorithms like marching cubes.
+
+== Applications ==
+
+Some of the practical applications of image segmentation are:
+
+Content-based image retrieval
+Machine vision
+Medical imaging, and imaging studies in biomedical research, including volume rendered images from computed tomography, magnetic resonance imaging, as well as volume electron microscopy techniques such as FIB-SEM.
+Locate tumors and other pathologies
+Measure tissue volumes
+Diagnosis, study of anatomical structure
+Surgery planning
+Virtual surgery simulation
+Intra-surgery navigation
+Radiotherapy
+Digital Pathology and Histopathology. Nuclei instance segmentation in variously stained whole slide images (WSIs) refers to the automatic delineation of individual cells' nuclei borders. This task is a specialized subproblem of instance segmentation, with high practical importance in biomedical research and diagnostics (e.g. cell counting, morphometric feature extraction, tumor grading, prognostic biomarker extraction). The modern approach to the problem is the use of deep learning architectures developed to encompass the main challenges of separating overlapping or fused nuclei. The availability of few humanly-annotated datasets poses another challenge to the problem.
+Object detection
+Pedestrian detection
+Face detection
+Brake light detection
+Locate objects in satellite images (roads, forests, crops, etc.)
+Recognition Tasks
+Face recognition
+Fingerprint recognition
+Iris recognition
+Prohibited Item at Airport security checkpoints
+Traffic control systems
+Video surveillance
+Video object co-segmentation and action localization
+Several general-purpose algorithms and techniques have been developed for image segmentation. To be useful, these techniques must typically be combined with a domain's specific knowledge in order to effectively solve the domain's segmentation problems.
+
+== Classes of segmentation techniques ==
+There are two classes of segmentation techniques.
+
+Classical computer vision approaches
+AI based techniques
+
+== Groups of image segmentation ==
+Semantic segmentation is an approach detecting, for every pixel, the belonging class. For example, in a figure with many people, all the pixels belonging to persons will have the same class id and the pixels in the background will be classified as background.
+Instance segmentation is an approach that identifies, for every pixel, the specific belonging instance of the object. It detects each distinct object of interest in the image. For example, when each person in a figure is segmented as an individual object.
+Panoptic segmentation combines both semantic and instance segmentation. Like semantic segmentation, panoptic segmentation is an approach that identifies, for every pixel, the belonging class. Moreover, like in instance segmentation, panoptic segmentation distinguishes different instances of the same class.
+
+== Thresholding ==
+
+The simplest method of image segmentation is called the thresholding method. This method is based on a clip-level (or a threshold value) to turn a gray-scale image into a binary image.
+The key of this method is to select the threshold value (or values when multiple-levels are selected). Several popular methods are used in industry including the maximum entropy method, balanced histogram thresholding, Otsu's method (maximum variance), and k-means clustering.
+Recently, methods have been developed for thresholding computed tomography (CT) images. The key idea is that, unlike Otsu's method, the thresholds are derived from the radiographs instead of the (reconstructed) image.
+New methods suggest the use of multi-dimensional, fuzzy rule-based, non-linear thresholds. In these approaches, the decision regarding each pixel's membership in a segment is based on multi-dimensional rules derived from fuzzy l

@@ -1,0 +1,157 @@
+# Dropout (neural networks)
+
+Dropout is a regularization technique for reducing overfitting in artificial neural networks by preventing complex co-adaptations on training data. The technique consists of randomly setting the inputs and/or outputs of neurons to zero. It is performed during the training process of a neural network, not during inference.
+A related older technique is dilution, which randomly decreases weights towards zero.
+
+Dropout is a regularization technique for reducing overfitting in artificial neural networks by preventing complex co-adaptations on training data. The technique consists of randomly setting the inputs and/or outputs of neurons to zero. It is performed during the training process of a neural network, not during inference.
+A related older technique is dilution, which randomly decreases weights towards zero.
+
+== Dilution ==
+Dilution is usually split in weak dilution and strong dilution. Weak dilution describes the process in which the finite fraction of removed connections is small, and strong dilution refers to when this fraction is large. There is no clear distinction on where the limit between strong and weak dilution is, and often the distinction is dependent on the precedent of a specific use-case and has implications for how to solve for exact solutions.
+Sometimes dilution is used for adding damping noise to the inputs. In that case, weak dilution refers to adding a small amount of damping noise, while strong dilution refers to adding a greater amount of damping noise. Both can be rewritten as variants of weight dilution.
+These techniques are also sometimes referred to as random pruning of weights, but this is usually a non-recurring one-way operation. The network is pruned, and then kept if it is an improvement over the previous model. Dilution and dropout both refer to an iterative process. The pruning of weights typically does not imply that the network continues learning, while in dilution/dropout, the network continues to learn after the technique is applied.
+
+=== Generalized linear network ===
+Output from a layer of linear nodes, in an artificial neural net can be described as
+
+y
+
+i
+
+{\displaystyle y_{i}}
+
+– output from node
+
+i
+
+{\displaystyle i}
+
+w
+
+i
+j
+
+{\displaystyle w_{ij}}
+
+– real weight before dilution, also called the Hebb connection strength
+
+x
+
+j
+
+{\displaystyle x_{j}}
+
+– input from node
+
+j
+
+{\displaystyle j}
+
+This can be written in vector notation as
+
+y
+
+{\displaystyle \mathbf {y} }
+
+– output vector
+
+W
+
+{\displaystyle \mathbf {W} }
+
+– weight matrix
+
+x
+
+{\displaystyle \mathbf {x} }
+
+– input vector
+Equations (1) and (2) are used in the subsequent sections.
+
+=== Weak dilution ===
+During weak dilution, the finite fraction of removed connections (the weights) is small, giving rise to a tiny uncertainty. This edge-case can be solved exactly with mean field theory. In weak dilution the impact on the weights can be described as
+
+w
+^
+
+i
+j
+
+{\displaystyle {\hat {w}}_{ij}}
+
+– diluted weight
+
+w
+
+i
+j
+
+{\displaystyle w_{ij}}
+
+– real weight before dilution
+
+P
+(
+c
+)
+
+{\displaystyle P(c)}
+
+– the probability of
+
+c
+
+{\displaystyle c}
+
+, the probability of keeping a weight
+The interpretation of probability
+
+P
+(
+c
+)
+
+{\displaystyle P(c)}
+
+can also be changed from keeping a weight into pruning a weight.
+In vector notation this can be written as
+
+where the function
+
+g
+⁡
+(
+⋅
+)
+
+{\displaystyle \operatorname {g} (\cdot )}
+
+imposes the previous dilution.
+In weak dilution only a small and fixed fraction of the weights are diluted. When the number of terms in the sum goes to infinite (the weights for each node) it is still infinite (the fraction is fixed), thus mean field theory can be applied. In the notation from Hertz et al. this would be written as
+
+⟨
+
+h
+
+i
+
+⟩
+
+{\displaystyle \left\langle h_{i}\right\rangle }
+
+the mean field temperature
+
+c
+
+{\displaystyle c}
+
+– a scaling factor for the temperature from the probability of keeping the weight
+
+w
+
+i
+j
+
+{\displaystyle w_{ij}}
+
+– real weight before dilution, also called the Hebb connection

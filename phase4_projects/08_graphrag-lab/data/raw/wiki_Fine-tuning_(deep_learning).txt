@@ -1,0 +1,41 @@
+# Fine-tuning (deep learning)
+
+In deep learning, fine-tuning is the process of adapting a computational model trained for one task (the upstream task) to perform a different, usually more specific, task (the downstream task). It is considered a form of transfer learning, as it reuses knowledge learned from the original training objective.
+Fine-tuning involves applying additional training (e.g., on new data) to the parameters of a neural network that have been pre-trained. Many variants exist.  The additional training can be applied to the entire neural network, or to only a subset of its layers, in which case the layers that are not being fine-tuned are "frozen" (i.e., not changed during backpropagation). A model may also be augmented with "adapters"—lightweight modules inserted into the model's architecture that nudge the embedding space for domain adaptation. These contain far fewer parameters than the original model and can be fine-tuned in a parameter-efficient way by tuning only their weights and leaving the rest of the model's weights frozen.
+For some architectures, such as convolutional neural networks, it is common to keep the earlier layers (those closest to the input layer) frozen, as they capture lower-level features, while later layers often discern high-level features that can be more related to the task that the model is trained on.
+Models that are pre-trained on large, general corpora are usually fine-tuned by reusing their parameters as a starting point and adding a task-specific layer trained from scratch. Fine-tuning the full model is also common and often yields better results, but is more computationally expensive.
+Fine-tuning is typically accomplished via supervised learning, but there are also techniques to fine-tune a model using weak supervision. Fine-tuning can be combined with a reinforcement learning from human feedback-based objective to produce language models such as ChatGPT (a fine-tuned version of GPT models) and Sparrow.
+
+In deep learning, fine-tuning is the process of adapting a computational model trained for one task (the upstream task) to perform a different, usually more specific, task (the downstream task). It is considered a form of transfer learning, as it reuses knowledge learned from the original training objective.
+Fine-tuning involves applying additional training (e.g., on new data) to the parameters of a neural network that have been pre-trained. Many variants exist.  The additional training can be applied to the entire neural network, or to only a subset of its layers, in which case the layers that are not being fine-tuned are "frozen" (i.e., not changed during backpropagation). A model may also be augmented with "adapters"—lightweight modules inserted into the model's architecture that nudge the embedding space for domain adaptation. These contain far fewer parameters than the original model and can be fine-tuned in a parameter-efficient way by tuning only their weights and leaving the rest of the model's weights frozen.
+For some architectures, such as convolutional neural networks, it is common to keep the earlier layers (those closest to the input layer) frozen, as they capture lower-level features, while later layers often discern high-level features that can be more related to the task that the model is trained on.
+Models that are pre-trained on large, general corpora are usually fine-tuned by reusing their parameters as a starting point and adding a task-specific layer trained from scratch. Fine-tuning the full model is also common and often yields better results, but is more computationally expensive.
+Fine-tuning is typically accomplished via supervised learning, but there are also techniques to fine-tune a model using weak supervision. Fine-tuning can be combined with a reinforcement learning from human feedback-based objective to produce language models such as ChatGPT (a fine-tuned version of GPT models) and Sparrow.
+
+
+== Robustness ==
+Fine-tuning can degrade a model's robustness to distribution shifts. One mitigation is to linearly interpolate a fine-tuned model's weights with the weights of the original model, which can greatly increase out-of-distribution performance while largely retaining the in-distribution performance of the fine-tuned model.
+
+
+== Variants ==
+
+
+=== Low-rank adaptation ===
+Low-rank adaptation (LoRA) is an adapter-based technique for efficiently fine-tuning models. The basic idea is to design a low-rank matrix that is then added to the original matrix. An adapter, in this context, is a collection of low-rank matrices which, when added to a base model, produces a fine-tuned model. It allows for performance that approaches full-model fine-tuning with lower space requirements. A language model with billions of parameters may be LoRA fine-tuned with only several millions of parameters.
+LoRA-based fine-tuning has become popular in the Stable Diffusion community. Support for LoRA was integrated into the diffusers library from Hugging Face. Support for LoRA and similar techniques is also available for a wide range of other models through Hugging Face's parameter-efficient fine-tuning (PEFT) package.
+
+
+=== Representation fine-tuning ===
+Representation fine-tuning (ReFT) is a technique developed by researchers at Stanford University aimed at fine-tuning large language models (LLMs) by modifying less than 1% of their representations. Unlike parameter-efficient fine-tuning (PEFT) methods, which mainly focus on updating weights, ReFT targets representations. ReFT methods operate on a frozen base model and learn task-specific interventions on hidden representations and train interventions that manipulate a small fraction of model representations to steer model behaviors towards solving downstream tasks at inference time. One specific method within the ReFT family is low-rank linear subspace ReFT (LoReFT), which intervenes on hidden representations in the linear subspace spanned by a low-rank projection matrix. LoReFT can be seen as the representation-based equivalent of low-rank adaptation (LoRA).
+
+
+== Applications ==
+
+
+=== Natural language processing ===
+Fine-tuning is common in natural language processing (NLP), especially in the domain of language modeling. Large language models like OpenAI's series of GPT foundation models can be fine-tuned on data for specific downstream NLP tasks (tasks that use a pre-trained model) to improve performance over the unmodified pre-trained model.
+Platforms such as Semrush's AI Visibility Toolkit and Enterprise AIO exemplify how fine-tuned models are being used for entity-level monitoring; tracking how named entities are referenced and represented within responses generated by large-language-model-based answer engines. 
+
+
+== Commercial models ==
+Commercially-offered large language models can sometimes be fine-tuned if the provider offers a fine-tuning API. As of June 19, 2023, language model fine-tuning APIs are offered by OpenAI and Microsoft Azure's Azure

@@ -1,0 +1,211 @@
+# Okapi BM25
+
+In information retrieval, Okapi BM25 (BM is an abbreviation of best matching) is a ranking function used by search engines to estimate the relevance of documents to a given search query. It is based on the probabilistic retrieval framework developed in the 1970s and 1980s by Stephen E. Robertson, Karen Spärck Jones, and others.
+The name of the actual ranking function is BM25. The fuller name, Okapi BM25, includes the name of the first system to use it, which was the Okapi information retrieval system, implemented at London's City University in the 1980s and 1990s. BM25 and its newer variants, e.g. BM25F (a version of BM25 that can take document structure and anchor text into account), represent TF-IDF-like retrieval functions used in document retrieval.
+
+In information retrieval, Okapi BM25 (BM is an abbreviation of best matching) is a ranking function used by search engines to estimate the relevance of documents to a given search query. It is based on the probabilistic retrieval framework developed in the 1970s and 1980s by Stephen E. Robertson, Karen Spärck Jones, and others.
+The name of the actual ranking function is BM25. The fuller name, Okapi BM25, includes the name of the first system to use it, which was the Okapi information retrieval system, implemented at London's City University in the 1980s and 1990s. BM25 and its newer variants, e.g. BM25F (a version of BM25 that can take document structure and anchor text into account), represent TF-IDF-like retrieval functions used in document retrieval.
+
+== The ranking function ==
+BM25 is a bag-of-words retrieval function that ranks a set of documents based on the query terms appearing in each document, regardless of their proximity within the document. It is a family of scoring functions with slightly different components and parameters. One of the most prominent instantiations of the function is as follows.
+Given a query Q, containing keywords
+
+q
+
+1
+
+,
+.
+.
+.
+,
+
+q
+
+n
+
+{\displaystyle q_{1},...,q_{n}}
+
+, the BM25 score of a document D is:
+
+score
+
+(
+D
+,
+Q
+)
+=
+
+∑
+
+i
+=
+1
+
+n
+
+IDF
+
+(
+
+q
+
+i
+
+)
+⋅
+
+f
+(
+
+q
+
+i
+
+,
+D
+)
+⋅
+(
+
+k
+
+1
+
++
+1
+)
+
+f
+(
+
+q
+
+i
+
+,
+D
+)
++
+
+k
+
+1
+
+⋅
+
+(
+
+1
+−
+b
++
+b
+⋅
+
+|
+
+D
+
+|
+
+avgdl
+
+)
+
+{\displaystyle {\text{score}}(D,Q)=\sum _{i=1}^{n}{\text{IDF}}(q_{i})\cdot {\frac {f(q_{i},D)\cdot (k_{1}+1)}{f(q_{i},D)+k_{1}\cdot \left(1-b+b\cdot {\frac {|D|}{\text{avgdl}}}\right)}}}
+
+where
+
+f
+(
+
+q
+
+i
+
+,
+D
+)
+
+{\displaystyle f(q_{i},D)}
+
+is the number of times that the keyword
+
+q
+
+i
+
+{\displaystyle q_{i}}
+
+occurs in the document D,
+
+|
+
+D
+
+|
+
+{\displaystyle |D|}
+
+is the length of the document D in words, and avgdl is the average document length in the text collection from which documents are drawn.
+
+k
+
+1
+
+{\displaystyle k_{1}}
+
+and b are free parameters, usually chosen, in absence of an advanced optimization, as
+
+k
+
+1
+
+∈
+[
+1.2
+,
+2.0
+]
+
+{\displaystyle k_{1}\in [1.2,2.0]}
+
+and
+
+b
+=
+0.75
+
+{\displaystyle b=0.75}
+
+.
+
+IDF
+
+(
+
+q
+
+i
+
+)
+
+{\displaystyle {\text{IDF}}(q_{i})}
+
+is the IDF (inverse document frequency) weight of the query term
+
+q
+
+i
+
+{\displaystyle q_{i}}
+
+. It is usually computed as:
+
+IDF
+
+(
+
+q

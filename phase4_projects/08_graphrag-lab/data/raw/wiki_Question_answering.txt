@@ -1,0 +1,32 @@
+# Question answering
+
+Question answering (QA) is a computer science discipline within the fields of information retrieval and natural language processing (NLP) that is concerned with building systems that automatically answer questions that are posed by humans in a natural language.
+A question-answering implementation, usually a computer program, may construct its answers by querying a structured database of knowledge or information, usually a knowledge base. More commonly, question-answering systems can pull answers from an unstructured collection of natural language documents.
+Some examples of natural language document collections used for question answering systems include reference texts, compiled newswire reports, Wikipedia pages and other World Wide Web pages.
+
+Question answering (QA) is a computer science discipline within the fields of information retrieval and natural language processing (NLP) that is concerned with building systems that automatically answer questions that are posed by humans in a natural language.
+A question-answering implementation, usually a computer program, may construct its answers by querying a structured database of knowledge or information, usually a knowledge base. More commonly, question-answering systems can pull answers from an unstructured collection of natural language documents.
+Some examples of natural language document collections used for question answering systems include reference texts, compiled newswire reports, Wikipedia pages and other World Wide Web pages.
+
+
+== History ==
+Two early question answering systems were BASEBALL and LUNAR. BASEBALL answered questions about Major League Baseball over a period of one year. LUNAR answered questions about the geological analysis of rocks returned by the Apollo Moon missions. Both question answering systems were very effective in their chosen domains.  LUNAR was demonstrated at a lunar science convention in 1971 and it was able to answer 90% of the questions in its domain that were posed by people untrained on the system.  
+Further restricted-domain question answering systems were developed in the following years. The common feature of all these systems is that they had a core database or knowledge system that was hand-written by experts of the chosen domain. The language abilities of BASEBALL and LUNAR used techniques similar to ELIZA and DOCTOR, the first chatterbot programs.
+SHRDLU was a successful question-answering program developed by Terry Winograd in the late 1960s and early 1970s. It simulated the operation of a robot in a toy world (the "blocks world"), and it offered the possibility of asking the robot questions about the state of the world. The strength of this system was the choice of a very specific domain and a very simple world with rules of physics that were easy to encode in a computer program.
+In the 1970s, knowledge bases were developed that targeted narrower domains of knowledge. The question answering systems developed to interface with these expert systems produced more repeatable and valid responses to questions within an area of knowledge. These expert systems closely resembled modern question answering systems except in their internal architecture. Expert systems rely heavily on expert-constructed and organized knowledge bases, whereas many modern question answering systems rely on statistical processing of a large, unstructured, natural language text corpus.
+The 1970s and 1980s saw the development of comprehensive theories in computational linguistics, which led to the development of ambitious projects in text comprehension and question answering. One example was the Unix Consultant (UC), developed by Robert Wilensky at U.C. Berkeley in the late 1980s. The system answered questions pertaining to the Unix operating system. It had a comprehensive, hand-crafted knowledge base of its domain, and it aimed at phrasing the answer to accommodate various types of users. Another project was LILOG, a text-understanding system that operated on the domain of tourism information in a German city. The systems developed in the UC and LILOG projects never went past the stage of simple demonstrations, but they helped the development of theories on computational linguistics and reasoning.
+Specialized natural-language question answering systems have been developed, such as EAGLi for health and life scientists.
+Question answering systems have been extended in recent years to encompass additional domains of knowledge For example, systems have been developed to automatically answer temporal and geospatial questions, questions of definition and terminology, biographical questions, multilingual questions, and questions about the content of audio, images, and video. Current question answering research topics include:
+
+interactivity—clarification of questions or answers
+answer reuse or caching
+semantic parsing
+answer presentation
+knowledge representation and semantic entailment
+social media analysis with question answering systems
+sentiment analysis
+utilization of thematic roles
+Image captioning for visual question answering
+Embodied question answering
+In 2011, Watson, a question answering computer system developed by IBM, competed in two exhibition matches of Jeopardy! against Brad Rutter and Ken Jennings, winning by a significant margin. Facebook Research made their DrQA system available under an open source license. This system uses Wikipedia as knowledge source. The open source framework Haystack by deepset combines open-domain question answering with generative question answering and supports the domain adaptation of the underlying language models for industry use cases.
+Large Language Models (LLMs)[36] like GPT-4[37], Gemini[38] are examples of successful QA systems that are

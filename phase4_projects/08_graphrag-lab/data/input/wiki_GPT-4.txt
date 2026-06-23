@@ -1,0 +1,36 @@
+# GPT-4
+
+Generative Pre-trained Transformer 4 (GPT-4) is a large language model developed by OpenAI and the fourth in its series of GPT foundation models.
+GPT-4 is preceded by GPT-3.5 and followed by its successor GPT-5. GPT-4V is a version of GPT-4 that can process images in addition to text. OpenAI has not revealed technical details and statistics about GPT-4, such as the precise size of the model.
+An early version of GPT-4 was integrated by Microsoft into Bing Chat, launched in February 2023. GPT-4 was released in ChatGPT in March 2023, and removed in 2025. GPT-4 is still available in OpenAI's API.
+
+Generative Pre-trained Transformer 4 (GPT-4) is a large language model developed by OpenAI and the fourth in its series of GPT foundation models.
+GPT-4 is preceded by GPT-3.5 and followed by its successor GPT-5. GPT-4V is a version of GPT-4 that can process images in addition to text. OpenAI has not revealed technical details and statistics about GPT-4, such as the precise size of the model.
+An early version of GPT-4 was integrated by Microsoft into Bing Chat, launched in February 2023. GPT-4 was released in ChatGPT in March 2023, and removed in 2025. GPT-4 is still available in OpenAI's API.
+
+== Background ==
+
+OpenAI introduced the first GPT model (GPT-1) in 2018, publishing a paper called "Improving Language Understanding by Generative Pre-Training", which was based on the transformer architecture and trained on a large corpus of books. The next year, they introduced GPT-2, a larger model that could generate coherent text.  In 2020, they introduced GPT-3, a model with over 100 times as many parameters as GPT-2. GPT-3 was further improved into GPT-3.5, which was used to create the chatbot product ChatGPT.
+
+== Capabilities ==
+GPT-4 was released on March 14, 2023. The default version had a 8K context window, with a special version in the API supporting up to 32K tokens. Unlike its predecessors, GPT-4 is a multimodal model: it can take images as well as text as input. It can now interact with users through spoken words and respond to images, allowing the ability to provide suggestions or answers based on photo uploads.
+GPT-4 can be prompted to interact with external interfaces. For example, the model could be told to enclose a query within <search></search> tags to perform a web search, the result of which would be inserted into the model's prompt to allow it to form a response. This allows the model to perform tasks beyond its normal text-prediction capabilities, such as using APIs, generating images, and accessing and summarizing webpages.
+A 2023 article in Nature stated programmers have found GPT-4 useful for assisting in coding tasks (despite its propensity for error), such as finding errors in existing code and suggesting optimizations to improve performance. The article quoted a biophysicist who found that the time he required to port one of his programs from MATLAB to Python went down from days to "an hour or so". On a test of 89 security scenarios, GPT-4 produced code vulnerable to SQL injection attacks 5% of the time, an improvement over GitHub Copilot from the year 2021, which produced vulnerabilities 40% of the time.
+In November 2023, OpenAI announced the GPT-4 Turbo and GPT-4 Turbo with Vision model, which features a 128K context window and significantly cheaper pricing.
+
+=== Aptitude on standardized tests ===
+Studies have disputed the reliability of running chatbots through standardized tests. In the Torrance Tests of Creative Thinking, GPT-4 scored within the top 1% for originality and fluency, while its flexibility scores ranged from the 93rd to the 99th percentile.
+
+=== Medical applications ===
+
+Researchers from Microsoft tested GPT-4 on medical problems and found "that GPT-4, without any specialized prompt crafting, exceeds the passing score on USMLE by over 20 points and outperforms earlier general-purpose models (GPT-3.5) as well as models specifically fine-tuned on medical knowledge (Med-PaLM, a prompt-tuned version of Flan-PaLM 540B). Despite GPT-4's strong performance on tests, the report warns of "significant risks" of using LLMs in medical applications, as they may provide inaccurate recommendations and hallucinate major factual errors.
+In April 2023, Microsoft and Epic Systems announced that they will provide healthcare providers with GPT-4-powered systems for assisting in responding to questions from patients and analysing medical records.
+
+=== GPT-4o ===
+
+On May 13, 2024, OpenAI introduced GPT-4o ("o" for "omni"), a successor to GPT-4 that marks a significant advancement by processing and generating outputs across text, audio, and image modalities in real time. GPT-4o exhibits rapid response times comparable to human reaction in conversations, substantially improved performance on non-English languages, and enhanced understanding of vision and audio. It was also available to free-tier users, unlike GPT-4.
+
+== Limitations ==
+Like its predecessors, GPT-4 has been known to hallucinate, meaning that the outputs may include information not in the training data or that contradicts the user's prompt.
+GPT-4 also lacks transparency in its decision-making processes. If requested, the model is able to provide an explanation as to how and why it makes its decisions but these explanations are formed post-hoc; it's impossible to verify if those explanations truly reflect the actual process. In many cases, when asked to explain its logic, GPT-4 will give explanations that directly contradict its previous statements.
+In 2023, researchers tested GPT-4 against a new benchmark called Concep

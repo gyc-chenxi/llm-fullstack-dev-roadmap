@@ -1,0 +1,90 @@
+# Vision transformer
+
+A vision transformer (ViT) is a transformer designed for computer vision. A ViT decomposes an input image into a series of patches (rather than text into tokens), serializes each patch into a vector, and maps it to a smaller dimension with a single matrix multiplication. These vector embeddings are then processed by a transformer encoder as if they were token embeddings.
+ViTs were designed as alternatives to convolutional neural networks (CNNs) in computer vision applications. They have different inductive biases, training stability, and data efficiency. Compared to CNNs, ViTs are less data efficient, but have higher capacity. Some of the largest modern computer vision models are ViTs, such as one with 22B parameters.
+Subsequent to its publication, many variants were proposed, with hybrid architectures with both features of ViTs and CNNs. ViTs have found application in image recognition, image segmentation, weather prediction, and autonomous driving.
+
+
+
+A vision transformer (ViT) is a transformer designed for computer vision. A ViT decomposes an input image into a series of patches (rather than text into tokens), serializes each patch into a vector, and maps it to a smaller dimension with a single matrix multiplication. These vector embeddings are then processed by a transformer encoder as if they were token embeddings.
+ViTs were designed as alternatives to convolutional neural networks (CNNs) in computer vision applications. They have different inductive biases, training stability, and data efficiency. Compared to CNNs, ViTs are less data efficient, but have higher capacity. Some of the largest modern computer vision models are ViTs, such as one with 22B parameters.
+Subsequent to its publication, many variants were proposed, with hybrid architectures with both features of ViTs and CNNs. ViTs have found application in image recognition, image segmentation, weather prediction, and autonomous driving.
+
+
+== History ==
+Transformers were introduced in Attention Is All You Need (2017), and have found widespread use in natural language processing. A 2019 paper applied ideas from the Transformer to computer vision. Specifically, they started with a ResNet, a standard convolutional neural network used for computer vision, and replaced all convolutional kernels by the self-attention mechanism found in a Transformer. It resulted in superior performance. However, it is not a Vision Transformer.
+In 2020, an encoder-only transformer was adapted for computer vision, yielding the ViT, which reached state of the art in image classification, overcoming the previous dominance of CNN. The masked autoencoder (2022) extended ViT to work with unsupervised training. The vision transformer and the masked autoencoder, in turn, stimulated new developments in convolutional neural networks.
+Subsequently, there was cross-fertilization between the previous CNN approach and the ViT approach.
+In 2021, some important variants of the Vision Transformers were proposed. These variants are mainly intended to be more efficient, more accurate or better suited to a specific domain. Two studies  improved efficiency and robustness of ViT by adding a CNN as a preprocessor. The Swin Transformer achieved state-of-the-art results on some object detection datasets such as COCO, by using convolution-like sliding windows of attention mechanism, and the pyramid process in classical computer vision.
+
+
+== Overview ==
+
+The basic architecture, used by the original 2020 paper, is as follows. In summary, it is a BERT-like encoder-only Transformer.
+The input image is of type 
+  
+    
+      
+        
+          
+            R
+          
+          
+            H
+            ×
+            W
+            ×
+            C
+          
+        
+      
+    
+    {\displaystyle \mathbb {R} ^{H\times W\times C}}
+  
+, where 
+  
+    
+      
+        H
+        ,
+        W
+        ,
+        C
+      
+    
+    {\displaystyle H,W,C}
+  
+ are height, width, channel (RGB). It is then split into square-shaped patches of type 
+  
+    
+      
+        
+          
+            R
+          
+          
+            P
+            ×
+            P
+            ×
+            C
+          
+        
+      
+    
+    {\displaystyle \mathbb {R} ^{P\times P\times C}}
+  
+.
+For each patch, the patch is pushed through a linear operator, to obtain a vector ("patch embedding"). The position of the patch is also transformed into a vector by "position encoding" (the paper tried no embedding, 1D embedding, 2D embedding, and relative embedding: 1D was adopted). The two vectors are added, then pushed through several Transformer encoders.
+The attention mechanism in a ViT repeatedly transforms representation vectors of image patches, incorporating more and more semantic relations between image patches in an image. This is analogous to how in natural language processing, as representation vectors flow through a transformer, they incorporate more and more semantic relations between words, from syntax to semantics.
+The above architecture turns an image into a sequence of vector representations. To use these for downstream applications, an additional head needs to be trained to interpret them.
+For example, to use it for classification, one can add a shallow MLP on top of it that outputs a probability distribution over classes. The original paper uses a linear-GeLU-linear-softmax network.
+
+
+== Variants ==
+
+
+=== Original ViT ===
+
+The original ViT was an encoder-only Transformer supervise-trained to predict the image label from the patches of the image. As in the case of BERT, it uses a special token <CLS> in the input side, and the corresponding output vector is used as the only input of the final output MLP head. The special token is an architectural hack to allow the model to compress all information relevant for predicting the image label into one vector.
+Transformers found their initial applications in natural language processing tasks, as demonstrated by language models s

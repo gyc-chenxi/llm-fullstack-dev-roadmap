@@ -1,0 +1,170 @@
+# Contrastive Language–Image Pre-training
+
+Contrastive Language–Image Pre-training (CLIP) is a technique for training a pair of neural network models, one for image understanding and one for text understanding, using a contrastive objective.
+This method has enabled broad applications across multiple domains, including cross-modal retrieval, text-to-image generation, and aesthetic ranking.
+
+Contrastive Language–Image Pre-training (CLIP) is a technique for training a pair of neural network models, one for image understanding and one for text understanding, using a contrastive objective.
+This method has enabled broad applications across multiple domains, including cross-modal retrieval, text-to-image generation, and aesthetic ranking.
+
+== Algorithm ==
+
+The CLIP method trains a pair of models contrastively. One model takes in a piece of text as input and outputs a single vector representing its semantic content. The other model takes in an image and similarly outputs a single vector representing its visual content. The models are trained so that the vectors corresponding to semantically similar text-image pairs are close together in the shared vector space, while those corresponding to dissimilar pairs are far apart.
+To train a pair of CLIP models, one would start by preparing a large dataset of image-caption pairs. During training, the models are presented with batches of
+
+N
+
+{\displaystyle N}
+
+image-caption pairs. Let the outputs from the text and image models be respectively
+
+v
+
+1
+
+,
+.
+.
+.
+,
+
+v
+
+N
+
+,
+
+w
+
+1
+
+,
+.
+.
+.
+,
+
+w
+
+N
+
+{\displaystyle v_{1},...,v_{N},w_{1},...,w_{N}}
+
+. Two vectors are considered "similar" if their dot product is large.
+For each image, the similarity scores with the
+
+N
+
+{\displaystyle N}
+
+texts are converted by a softmax into a probability distribution over which text is the matching one. Cross-entropy is then computed against the one-hot target that assigns probability 1 to the correct text; the same calculation is also performed in the text-to-image direction.
+The loss incurred on this batch is the multi-class N-pair loss, which is a symmetric cross-entropy loss over similarity scores:
+
+−
+
+1
+N
+
+∑
+
+i
+
+ln
+⁡
+
+e
+
+v
+
+i
+
+⋅
+
+w
+
+i
+
+/
+
+T
+
+∑
+
+j
+
+e
+
+v
+
+i
+
+⋅
+
+w
+
+j
+
+/
+
+T
+
+−
+
+1
+N
+
+∑
+
+j
+
+ln
+⁡
+
+e
+
+v
+
+j
+
+⋅
+
+w
+
+j
+
+/
+
+T
+
+∑
+
+i
+
+e
+
+v
+
+i
+
+⋅
+
+w
+
+j
+
+/
+
+T
+
+{\displaystyle -{\frac {1}{N}}\sum _{i}\ln {\frac {e^{v_{i}\cdot w_{i}/T}}{\sum _{j}e^{v_{i}\cdot w_{j}/T}}}-{\frac {1}{N}}\sum _{j}\ln {\frac {e^{v_{j}\cdot w_{j}/T}}{\sum _{i}e^{v_{i}\cdot w_{j}/T}}}}
+
+In essence, this loss function encourages the dot product between matching image and text vectors (
+
+v
+
+i
+
+⋅
+
+w
+
+i
