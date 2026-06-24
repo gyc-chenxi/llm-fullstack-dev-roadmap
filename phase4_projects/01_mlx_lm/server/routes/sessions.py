@@ -2,6 +2,13 @@
 会话 CRUD RESTful API
 ---------------------
 提供会话的创建、查询、删除，以及消息历史的查询。
+
+数据流向：
+  GET    /api/sessions                   → SessionResponse[]     （全部会话，按updated_at倒序）
+  POST   /api/sessions                   → SessionResponse       （创建新会话）
+  GET    /api/sessions/{id}              → SessionResponse       （单个会话详情）
+  DELETE /api/sessions/{id}              → 204 No Content         （级联删除会话+消息）
+  GET    /api/sessions/{id}/messages     → MessageResponse[]      （会话的完整消息历史）
 """
 
 import uuid
@@ -23,15 +30,15 @@ router = APIRouter(prefix="/api/sessions", tags=["sessions"])
 @router.get("", response_model=list[SessionResponse])
 def list_sessions(db: DBSession = Depends(get_db)):
     """
-    返回所有会话，最新的排在最前面。
-    同时附带每个会话的消息数量。
+    返回所有会话，按 updated_at 倒序（最近更新的排最前）。
+    附带每个会话的消息数量（COUNT 子查询，避免全量加载消息到内存）。
     """
     statement = select(ChatSession).order_by(ChatSession.updated_at.desc())
     sessions = db.exec(statement).all()
 
     result = []
     for s in sessions:
-        # 使用 COUNT(*) 查询消息数量（避免加载全部消息到内存）
+        # 使用 func.count() 执行 COUNT(*)，不加载完整消息列表
         count_stmt = select(func.count()).select_from(Message).where(Message.session_id == s.id)
         msg_count = db.exec(count_stmt).one()
 
@@ -55,7 +62,7 @@ def list_sessions(db: DBSession = Depends(get_db)):
 def create_session(body: SessionCreate, db: DBSession = Depends(get_db)):
     """
     创建一个新的空会话。
-    可选传入 title 和 system_prompt。
+    标题和 system_prompt 可选，不传则使用 "新对话" 默认标题。
     """
     now = datetime.now(timezone.utc)
     new_session = ChatSession(
@@ -86,6 +93,7 @@ def create_session(body: SessionCreate, db: DBSession = Depends(get_db)):
 def get_session(session_id: str, db: DBSession = Depends(get_db)):
     """
     返回指定会话的元信息（含消息数量）。
+    会话不存在返回 404。
     """
     session = db.get(ChatSession, session_id)
     if not session:
@@ -111,12 +119,14 @@ def get_session(session_id: str, db: DBSession = Depends(get_db)):
 def delete_session(session_id: str, db: DBSession = Depends(get_db)):
     """
     删除指定会话，级联删除其所有消息。
+    先显式 delete(Message) 再 delete(ChatSession) — ORM cascade 保底，显式删除更安全。
+    会话不存在返回 404。
     """
     session = db.get(ChatSession, session_id)
     if not session:
         raise HTTPException(status_code=404, detail="会话不存在")
 
-    # 先删除关联的消息（SQLAlchemy 的 cascade 应自动处理，但显式删除更安全）
+    # 显式删除关联消息（ORM cascade 应自动处理，但显式操作更可靠）
     db.exec(delete(Message).where(Message.session_id == session_id))
     db.delete(session)
     db.commit()
@@ -129,14 +139,16 @@ def delete_session(session_id: str, db: DBSession = Depends(get_db)):
 @router.get("/{session_id}/messages", response_model=list[MessageResponse])
 def get_messages(session_id: str, db: DBSession = Depends(get_db)):
     """
-    返回指定会话的所有消息，按时间正序排列。
+    返回指定会话的所有消息，按 created_at 正序排列（最早的在前）。
+    前端据此顺序渲染对话气泡。
+    会话不存在返回 404。
     """
     # 验证会话存在
     session = db.get(ChatSession, session_id)
     if not session:
         raise HTTPException(status_code=404, detail="会话不存在")
 
-    # 按创建时间正序返回
+    # 按创建时间正序查询
     statement = (
         select(Message)
         .where(Message.session_id == session_id)
