@@ -1,0 +1,38 @@
+# ============================================================
+# SWE Agent 配置
+# ============================================================
+#
+# 配置段说明：
+#   llm:     LLM 提供商和超参数
+#   agent:   Agent 主循环控制参数
+#   tools:   工具启用开关
+#   evaluation: Patch 评估阈值
+#
+# 关键参数：
+#   llm.temperature=0.2: 代码修复需要低温度确保输出确定性
+#                        （0.0 可能过于僵化，0.2 保留微小灵活性）
+#   agent.max_iterations=15: Think-Act-Observe 循环上限
+#   agent.max_tool_retries=3: 工具调用失败时的重试次数
+#   evaluation.max_patch_lines=20: 超过此行数的 patch 被视为不够最小化
+# ============================================================
+
+llm:
+  provider: "openai"
+  model: "gpt-4o"
+  temperature: 0.2
+  max_tokens: 4096
+
+agent:
+  max_iterations: 15
+  max_tool_retries: 3
+
+tools:
+  search_enabled: true
+  open_file_enabled: true
+  edit_file_enabled: true
+  run_tests_enabled: true
+  git_diff_enabled: true
+
+evaluation:
+  max_patch_lines: 20
+  timeout_per_test: 60
