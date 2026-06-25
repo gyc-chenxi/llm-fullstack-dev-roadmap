@@ -1,3 +1,20 @@
+# ============================================================
+# Qwen2.5-VL-3B-Instruct 模型配置
+# ============================================================
+# 主力 VLM 模型（Qwen2.5 系列，3B 参数），适合 Apple Silicon 32GB 统一内存
+#
+# 参数说明：
+#   model_id:     HuggingFace 模型 ID
+#   local_path:   本地下载后存放的目录路径
+#   backend:      引擎中使用的模型类 — "qwen2_5_vl" 加载 Qwen2_5_VLForConditionalGeneration
+#   device:       "auto" 由代码自动选择 MPS > CUDA > CPU
+#   torch_dtype:  float16 在 Apple Silicon MPS 上可节省一半统一内存
+#   max_new_tokens: 生成 token 上限（512 对中文 OCR/描述通常足够）
+#   max_pixels:   图片最大像素数 786432 ≈ 1024×768，控制 VLM 输入分辨率
+#   min_pixels:   图片最小像素数 3136 ≈ 56×56，小于此值的图片会被放大
+#   temperature:   0.0 = 贪婪解码，确保相同输入输出一致
+# ============================================================
+
 model_id: "Qwen/Qwen2.5-VL-3B-Instruct"
 local_path: "models/Qwen2.5-VL-3B-Instruct"
 backend: "qwen2_5_vl"

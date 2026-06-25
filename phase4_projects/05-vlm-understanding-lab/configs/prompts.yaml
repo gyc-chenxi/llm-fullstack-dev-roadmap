@@ -1,3 +1,16 @@
+# ============================================================
+# Prompt 模板库
+# ============================================================
+# 五大 VLM 下游任务的预定义中文 prompt：
+#   ocr          — 文字提取（中英文双版本）
+#   table_to_markdown — 表格转 Markdown 结构化输出
+#   chart_qa     — 图表数据分析和业务解读
+#   image_caption — 场景描述（主体/背景/光线/构图/氛围）
+#   reverse_prompt — Stable Diffusion 反推 prompt（Positive / Negative / Style tags）
+#
+# 使用方式：python 中加载此 YAML，选择 prompt key + language 后缀
+#   例: prompts["ocr"]["zh"] → OCR 中文 prompt
+
 ocr:
   zh: "请提取图片中的所有文字，尽量保持原始换行、层级和表格结构。"
   en: "Extract all visible text from the image while preserving layout."
@@ -11,6 +24,8 @@ chart_qa:
 image_caption:
   zh: "请用 3-5 句中文描述图片中的主体、背景、颜色、光线、构图和氛围。"
 
+# 反向 Prompt — 从真实图片反推 Stable Diffusion 生成 prompt
+# 输出格式固定为三行：Positive / Negative / Style tags
 reverse_prompt:
   zh: |
     请分析这张图片，并输出适合 Stable Diffusion / SDXL / Flux 生成用的提示词。

@@ -1,3 +1,24 @@
+# ============================================================
+# LLaVA-OneVision 0.5B 模型配置
+# ============================================================
+# 轻量级对照模型（仅 0.5B），用于架构对比和快速验证。
+#
+# 与 Qwen-VL 的关键区别：
+#   1. 架构不同：Vision Encoder → Projector → LLM 三段式
+#      Qwen-VL 是视觉编码内建的单塔架构
+#   2. LLaVA 不支持 min_pixels/max_pixels（固定输入尺寸）
+#   3. max_new_tokens 设为 256（模型更小，生成长度更保守）
+#   4. temperature 0.0 同样确保确定性输出
+#
+# 参数说明：
+#   model_id:     HuggingFace 模型 ID
+#   local_path:   本地模型目录
+#   backend:      "llava_onevision" 加载 LlavaOnevisionForConditionalGeneration
+#   device/torch_dtype: 同上 Qwen 配置
+#   max_new_tokens: 生成 token 上限
+#   temperature:   0.0 贪婪解码
+# ============================================================
+
 model_id: "llava-hf/llava-onevision-qwen2-0.5b-si-hf"
 local_path: "models/llava-onevision-qwen2-0.5b-si-hf"
 backend: "llava_onevision"
