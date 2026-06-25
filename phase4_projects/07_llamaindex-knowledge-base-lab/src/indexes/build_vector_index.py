@@ -1,5 +1,29 @@
-#!/usr/bin/env python3
-"""VectorStoreIndex 构建器：语义向量索引."""
+"""
+VectorStoreIndex 构建器
+=========================
+
+构建 LlamaIndex VectorStoreIndex + ChromaDB 持久化向量存储。
+
+数据流：
+  configs/settings.yaml → Config.load()
+    ↓
+  data/raw/*.{md,txt,pdf} → load_local_documents() → List[Document]
+    ↓
+  document → IngestionPipeline(分块+嵌入) → Nodes (含 BGE 512维向量)
+    ↓
+  Nodes → ChromaVectorStore → ChromaDB PersistentClient
+    ↓
+  VectorStoreIndex.from_documents(docs, storage_context, embed_batch_size=32)
+    ↓
+  index.storage_context.persist() → storage/（LlamaIndex 元数据）
+  ChromaDB 数据 → data/vector_store/（向量存储）
+
+两层存储：
+  - storage/: LlamaIndex 索引元数据（docstore.json, index_store.json 等）
+  - data/vector_store/: ChromaDB 原始向量 + 文档（chroma.sqlite3）
+
+用法：PYTHONPATH=src python src/indexes/build_vector_index.py
+"""
 
 import sys
 from pathlib import Path
@@ -34,6 +58,7 @@ def main():
     config = Config.load("configs/settings.yaml")
     device = detect_device()
 
+    # Embedding 模型：BGE-Small-ZH（本地，无需联网）
     Settings.embed_model = HuggingFaceEmbedding(
         model_name=config.get("embedding.model_name", "BAAI/bge-small-zh-v1.5"),
         device=device,
@@ -49,6 +74,7 @@ def main():
     stats = get_document_stats(documents)
     console.print(f"[blue]📊 文档统计: {stats['total_docs']} 个, {stats['total_chars']:,} 字符[/blue]")
 
+    # ChromaDB 持久化客户端
     ensure_dir(config.get("vector_store.persist_dir", "data/vector_store"))
     chroma_client = chromadb.PersistentClient(
         path=config.get("vector_store.persist_dir", "data/vector_store")

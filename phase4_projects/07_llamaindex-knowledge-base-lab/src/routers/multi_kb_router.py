@@ -1,5 +1,22 @@
-#!/usr/bin/env python3
-"""RouterQueryEngine 多知识库自动路由 — 本地 Ollama 驱动."""
+"""
+RouterQueryEngine 多知识库自动路由
+==================================
+
+使用 LLMSingleSelector 自动选择最合适的知识库回答用户问题。
+
+数据流：
+  用户问题 → LLMSingleSelector
+    ├── 适合 tech_notes → 路由到 notes 知识库
+    └── 适合 academic_papers → 路由到 papers 知识库
+    → VectorStoreIndex.as_query_engine() → 生成答案
+
+两个知识库：
+  - tech_notes: 学习笔记（Transformer/Attention/KV Cache/RoPE/MoE/LoRA/RLHF）
+  - academic_papers: 学术论文（Attention is All You Need/LoRA/DPO）
+
+路由原理：LLMSingleSelector 根据 ToolMetadata.description 匹配查询意图，
+会选择语义最接近的知识库。verbose=True 可查看路由决策过程。
+"""
 
 import sys
 from pathlib import Path
@@ -29,7 +46,17 @@ def create_knowledge_base(
     name: str,
     description: str,
 ) -> QueryEngineTool:
-    """创建单个知识库并包装为 QueryEngineTool。"""
+    """创建单个知识库并包装为 QueryEngineTool。
+
+    Args:
+        config: 全局配置对象
+        data_subdir: data/raw/ 下的子目录名
+        name: 知识库唯一标识名
+        description: 知识库描述（LLMSingleSelector 据此做路由决策）
+
+    Returns:
+        可被 RouterQueryEngine 使用的 QueryEngineTool
+    """
     raw_dir = f"{config.get('data.raw_dir', 'data/raw')}/{data_subdir}"
     documents = load_local_documents(input_dir=raw_dir)
 

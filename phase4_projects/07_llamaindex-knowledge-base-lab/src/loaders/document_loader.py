@@ -1,4 +1,15 @@
-"""多源文档加载器：支持本地 Markdown/PDF/TXT 目录递归加载."""
+"""
+多源文档加载器
+================
+
+基于 LlamaIndex SimpleDirectoryReader 的本地文档递归加载。
+
+数据流：
+  data/raw/{notes,papers}/*.{md,txt,pdf,rst,html} → SimpleDirectoryReader
+    → [{text: str, metadata: {file_name, ...}}] → List[Document]
+
+支持格式：.md, .txt, .pdf, .rst, .html
+"""
 
 from pathlib import Path
 from typing import List, Optional
@@ -21,11 +32,14 @@ def load_local_documents(
     Args:
         input_dir: 文档目录路径（相对于项目根目录或绝对路径）
         recursive: 是否递归子目录
-        required_exts: 限定文件扩展名，默认 [".md", ".txt", ".pdf", ".rst"]
+        required_exts: 限定文件扩展名，默认 [".md", ".txt", ".pdf", ".rst", ".html"]
         exclude_hidden: 是否排除隐藏文件
 
     Returns:
-        Document 对象列表
+        Document 对象列表，每个 Document 含 text + metadata
+
+    Raises:
+        FileNotFoundError: 文档目录不存在
     """
     if required_exts is None:
         required_exts = [".md", ".txt", ".pdf", ".rst", ".html"]
@@ -66,7 +80,7 @@ def get_document_stats(documents: List[Document]) -> dict:
     """统计文档基本信息。
 
     Returns:
-        {"total_docs": int, "total_chars": int, "extensions": dict}
+        {"total_docs": int, "total_chars": int, "extensions": {".md": 3, ".pdf": 1, ...}}
     """
     total_chars = sum(len(doc.text) for doc in documents)
     exts = {}

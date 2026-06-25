@@ -1,12 +1,27 @@
-"""Apple Silicon MPS 设备检测与内存监控."""
+"""
+Apple Silicon MPS 设备检测与内存监控
+======================================
 
-import torch
+设备选择策略（Apple Silicon 优先）：
+  MPS (Metal Performance Shaders) > CUDA > CPU
+
+内存监控（仅 macOS）：
+  通过 vm_stat 获取统一内存页使用情况，计算压力等级：
+    - normal (<50%): 正常
+    - warning (50-75%): 建议减少 batch_size
+    - critical (>75%): 内存紧张，可能触发 swap
+
+Apple Silicon 页大小：16KB（统一内存架构特有）
+"""
+
 import platform
 import subprocess
 
+import torch
+
 
 def detect_device() -> str:
-    """检测最优可用设备，优先 MPS。
+    """按 MPS > CUDA > CPU 优先级返回可用计算设备。
 
     Returns:
         "mps" / "cuda" / "cpu"
@@ -21,8 +36,8 @@ def detect_device() -> str:
 def get_memory_info() -> dict:
     """获取统一内存使用情况（仅 macOS）。
 
-    Returns:
-        {"total_gb": float, "used_gb": float, "pressure": str}
+    通过解析 vm_stat 输出计算内存压力。
+    非 macOS 平台返回 unknown。
     """
     if platform.system() != "Darwin":
         return {"total_gb": 0, "used_gb": 0, "pressure": "unknown"}
@@ -67,7 +82,7 @@ def get_memory_info() -> dict:
 
 
 def print_device_info():
-    """打印设备信息摘要。"""
+    """打印设备信息摘要（用于构建/查询脚本启动时）。"""
     device = detect_device()
     print(f"Compute Device : {device.upper()}")
 

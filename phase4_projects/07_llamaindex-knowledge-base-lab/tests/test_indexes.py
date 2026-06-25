@@ -1,4 +1,10 @@
-"""索引构建单元测试."""
+"""
+索引构建单元测试
+==================
+
+验证 VectorStoreIndex 和 SummaryIndex 的基本构建和查询功能。
+使用 BGE-Small-ZH 轻量模型，device=cpu 避免依赖 GPU。
+"""
 
 import sys
 from pathlib import Path
@@ -11,11 +17,11 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 
 class TestIndexBuilders:
-    """测试索引构建逻辑。"""
+    """索引构建和查询的核心测试。"""
 
     @pytest.fixture(autouse=True)
     def setup_embed_model(self):
-        """注入轻量嵌入模型（避免测试中下载模型）。"""
+        """注入轻量嵌入模型（避免测试中下载模型，使用 CPU 确保 CI 兼容）。"""
         Settings.embed_model = HuggingFaceEmbedding(
             model_name="BAAI/bge-small-zh-v1.5",
             device="cpu",
@@ -23,6 +29,7 @@ class TestIndexBuilders:
 
     @pytest.fixture
     def sample_docs(self):
+        """3 个中文技术文档片段，覆盖核心概念。"""
         return [
             Document(text="Transformer 的核心是 Self-Attention 机制。"),
             Document(text="KV Cache 用于加速自回归生成。"),
@@ -30,12 +37,12 @@ class TestIndexBuilders:
         ]
 
     def test_vector_index_build(self, sample_docs):
-        """测试 VectorStoreIndex 构建成功。"""
+        """VectorStoreIndex 能从 Document 列表成功构建。"""
         index = VectorStoreIndex.from_documents(sample_docs)
         assert index is not None
 
     def test_vector_index_query(self, sample_docs):
-        """测试 VectorStoreIndex 基本查询。"""
+        """VectorStoreIndex 基本查询能返回非空结果。"""
         index = VectorStoreIndex.from_documents(sample_docs)
         engine = index.as_query_engine(similarity_top_k=2)
         response = engine.query("什么是 Self-Attention？")
@@ -43,12 +50,12 @@ class TestIndexBuilders:
         assert len(str(response)) > 0
 
     def test_summary_index_build(self, sample_docs):
-        """测试 SummaryIndex 构建成功。"""
+        """SummaryIndex 能从 Document 列表成功构建。"""
         index = SummaryIndex.from_documents(sample_docs)
         assert index is not None
 
     def test_summary_index_query(self, sample_docs):
-        """测试 SummaryIndex 总结查询。"""
+        """SummaryIndex tree_summarize 查询能返回非空结果。"""
         index = SummaryIndex.from_documents(sample_docs)
         engine = index.as_query_engine(response_mode="tree_summarize")
         response = engine.query("总结这些内容")

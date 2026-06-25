@@ -1,5 +1,24 @@
-#!/usr/bin/env python3
-"""SummaryIndex 构建器：全文总结索引."""
+"""
+SummaryIndex 构建器
+=====================
+
+构建 LlamaIndex SummaryIndex 用于全文总结类查询。
+
+与 VectorStoreIndex 的区别：
+  - VectorStoreIndex: 语义向量检索，适合精确问答
+  - SummaryIndex: 全文档遍历总结，适合"概括全文内容"类查询
+  - SummaryIndex 不存储向量索引，而是按 doc_id 顺序遍历所有 Node
+
+数据流：
+  Documents → SummaryIndex.from_documents(docs, show_progress=True)
+    → 遍历全部 Node → Tree Summarize → 生成总结
+
+使用场景：
+  "总结知识库中有哪些关键技术"
+  "概括所有文档的主要观点"
+
+注意：SummaryIndex 不适合精确事实性查询，因为需要遍历全部文档。
+"""
 
 import sys
 from pathlib import Path

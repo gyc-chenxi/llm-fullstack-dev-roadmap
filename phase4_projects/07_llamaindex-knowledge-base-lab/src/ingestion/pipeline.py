@@ -1,8 +1,23 @@
-"""文档摄取管道：分块 → 元数据抽取 → 嵌入.
+"""
+文档摄取管道
+===============
 
-LLM 相关提取器（TitleExtractor / QuestionsAnsweredExtractor）为可选组件：
-- 若设置了 OPENAI_API_KEY 且 llm 可用 → 自动启用
-- 若无 API Key → 自动跳过，仅执行分块 + 嵌入
+基于 LlamaIndex IngestionPipeline 的文档处理管线。
+
+数据流：
+  Document → SentenceSplitter(chunk_size=500, overlap=50)
+    → [可选] TitleExtractor (LLM 提取标题)
+    → [可选] QuestionsAnsweredExtractor (LLM 生成 QA 对)
+    → HuggingFaceEmbedding (BGE-Small-ZH, dim=512)
+    → List[BaseNode] → ChromaDB VectorStore
+
+LLM 元数据抽取的可选性：
+  - 若设置了 DEEPSEEK_API_KEY 或 OPENAI_API_KEY → 启用 TitleExtractor + QuestionsAnsweredExtractor
+  - 若未设置 API Key → 自动跳过 LLM 抽取，仅执行分块 + 嵌入
+
+缓存机制：
+  通过文档内容 SHA256 hash 判断是否需要重新摄取，
+  缓存文件保存在 data/processed/nodes_{hash}.json。
 """
 
 import hashlib
@@ -38,11 +53,16 @@ def build_ingestion_pipeline(
 ) -> IngestionPipeline:
     """构建文档摄取管道。
 
-    Pipeline 顺序：
-        1. SentenceSplitter          — 按语义边界分块（必需）
+    Pipeline 顺序（transformations 列表）：
+        1. SentenceSplitter          — 按语义边界分块（必需，始终启用）
         2. TitleExtractor            — LLM 提取标题（可选，需 API Key）
-        3. QuestionsAnsweredExtractor — LLM 生成问题（可选，需 API Key）
-        4. HuggingFaceEmbedding      — 向量嵌入（必需）
+        3. QuestionsAnsweredExtractor — LLM 生成 QA 对（可选，需 API Key）
+        4. HuggingFaceEmbedding      — BGE 向量嵌入（必需，始终启用）
+
+    参数选择：
+      chunk_size=500: 中文约 250-350 字，BGE-small-zh 的 max_length=512 不会截断
+      chunk_overlap=50: 10% 重叠，确保跨边界实体连接性
+      paragraph_separator="\\n\\n": 在段落边界处优先断开
     """
     chunk_size = config.get("index.chunk_size", 500)
     chunk_overlap = config.get("index.chunk_overlap", 50)
@@ -56,7 +76,6 @@ def build_ingestion_pipeline(
 
     llm_available = _check_llm_available()
 
-    # 核心转换：分块 + 嵌入（始终启用）
     transformations = [
         SentenceSplitter(
             chunk_size=chunk_size,
@@ -65,7 +84,6 @@ def build_ingestion_pipeline(
         ),
     ]
 
-    # LLM 相关提取器：仅在 API Key 可用时启用
     if llm_available:
         transformations.append(
             TitleExtractor(
@@ -105,7 +123,14 @@ def run_ingestion(
     config: Optional[Config] = None,
     cache_dir: str = "data/processed",
 ) -> List[BaseNode]:
-    """执行文档摄取，生成 Nodes。"""
+    """执行文档摄取，生成 Nodes（含缓存检查）。
+
+    缓存策略：通过文档内容 hash 判断是否需要重新摄取。
+    若缓存命中则跳过 pipeline 执行，直接提示。
+
+    Returns:
+        生成的 BaseNode 列表（每个 Node 含 embedding、text、metadata）
+    """
     if config is None:
         config = Config.load("configs/settings.yaml")
 
@@ -146,7 +171,10 @@ def run_ingestion(
 
 
 def _compute_docs_hash(documents: List[Document]) -> str:
-    """计算文档列表的内容哈希。"""
+    """计算文档列表的内容哈希（用于摄取缓存判断）。
+
+    按 doc_id 排序确保确定性：相同文档集总能生成相同 hash。
+    """
     hasher = hashlib.sha256()
     for doc in sorted(documents, key=lambda d: d.doc_id or ""):
         hasher.update((doc.doc_id or "").encode())

@@ -1,4 +1,15 @@
-"""查询引擎基类：定义统一的查询接口."""
+"""
+查询引擎基类
+===============
+
+定义统一的查询接口抽象和来源格式化工具。
+
+子类实现层次：
+  BaseQueryEngine (ABC)
+    ├── VectorQueryEngine (VectorStoreIndex.as_query_engine)
+    ├── SummaryQueryEngine (SummaryIndex.as_query_engine)
+    └── RouterQueryEngine (LLMSingleSelector 多知识库路由)
+"""
 
 from abc import ABC, abstractmethod
 from typing import List, Optional
@@ -20,7 +31,13 @@ class BaseQueryEngine(ABC):
 
 
 def format_sources(source_nodes: List[NodeWithScore]) -> str:
-    """格式化引用来源为可读文本。"""
+    """格式化检索来源为可读文本。
+
+    输出格式：
+      📎 引用来源:
+        [1] [0.95] file_name.md | text preview...
+        [2] [0.87] file_name.pdf | text preview...
+    """
     lines = ["\n📎 引用来源:"]
     for i, node in enumerate(source_nodes, 1):
         score = node.score or 0.0

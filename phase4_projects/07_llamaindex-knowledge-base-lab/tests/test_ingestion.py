@@ -1,4 +1,9 @@
-"""摄取管道单元测试."""
+"""
+摄取管道单元测试
+==================
+
+验证 IngestionPipeline 创建和缓存哈希的确定性。
+"""
 
 import sys
 from pathlib import Path
@@ -12,7 +17,7 @@ from src.utils.config import Config
 
 
 class TestIngestionPipeline:
-    """测试 IngestionPipeline 核心逻辑。"""
+    """摄取管道的核心逻辑测试。"""
 
     @pytest.fixture
     def config(self):
@@ -26,19 +31,19 @@ class TestIngestionPipeline:
         ]
 
     def test_pipeline_creation(self, config):
-        """测试管道创建不报错。"""
+        """管道创建不报错，至少包含 2 个转换器。"""
         pipeline = build_ingestion_pipeline(config)
         assert pipeline is not None
         assert len(pipeline.transformations) >= 2
 
     def test_docs_hash_deterministic(self, sample_docs):
-        """测试文档哈希的确定性。"""
+        """相同文档应生成相同 hash（确定性）。"""
         h1 = _compute_docs_hash(sample_docs)
         h2 = _compute_docs_hash(sample_docs)
         assert h1 == h2
 
     def test_docs_hash_changes_with_content(self, sample_docs):
-        """测试内容变化导致哈希变化。"""
+        """内容变化应导致 hash 改变（避免缓存过期不更新）。"""
         h1 = _compute_docs_hash(sample_docs)
         sample_docs[0].text = "不同的内容"
         h2 = _compute_docs_hash(sample_docs)

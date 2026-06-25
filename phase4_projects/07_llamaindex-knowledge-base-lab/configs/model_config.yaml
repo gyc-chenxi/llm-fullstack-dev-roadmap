@@ -1,20 +1,31 @@
 # ============================================================
-# P7 LlamaIndex Lab — 模型参数配置
+# P7 LlamaIndex Lab — 模型参数配置（参考文档）
+# ============================================================
+#
+# 本文件记录可用模型的参数，实际使用通过 settings.yaml 指定模型
+#
+# BGE-Small-ZH-v1.5:
+#   - 专为中文检索优化的轻量 Embedding 模型
+#   - 512 维输出 → ChromaDB 存储紧凑
+#   - mean pooling: 所有 token 向量取平均（适合语义检索）
+#   - 130MB: Apple Silicon 32GB 上加载无压力
+#
+# GPT-4o-mini (如有 API Key):
+#   - 性价比最优的 LLM，适合元数据抽取
+#   - context_window=128K 可处理超长文档
 # ============================================================
 
-# BGE Small Chinese v1.5 — 专为中文优化的轻量 Embedding 模型
 bge_small_zh:
   model_name: "BAAI/bge-small-zh-v1.5"
-  dim: 512                    # 输出向量维度
+  dim: 512
   max_seq_length: 512
-  size_mb: 130                # 模型文件大小
-  pooling: "mean"             # 池化策略：mean pooling
+  size_mb: 130
+  pooling: "mean"
   instruction_prefix: "为这个句子生成表示以用于检索相关文章："
 
-# GPT-4o-mini — 性价比最优的问答 LLM
 gpt4o_mini:
   model_name: "gpt-4o-mini"
   context_window: 128000
   max_output_tokens: 16384
-  cost_per_1k_input: 0.00015  # USD
-  cost_per_1k_output: 0.0006  # USD
+  cost_per_1k_input: 0.00015
+  cost_per_1k_output: 0.0006

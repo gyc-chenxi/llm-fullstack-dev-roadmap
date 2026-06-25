@@ -1,17 +1,30 @@
-"""YAML 配置加载器，支持嵌套键访问."""
+"""
+YAML 配置加载器
+=================
+
+支持点号路径访问嵌套配置键（如 "embedding.model_name"）。
+
+配置层次（优先级从高到低）：
+  环境变量 (DEEPSEEK_API_KEY 等) > configs/settings.yaml > 代码硬编码默认值
+
+用法：
+    config = Config.load("configs/settings.yaml")
+    model_name = config.get("embedding.model_name", "BAAI/bge-small-zh-v1.5")
+"""
 
 import os
-import yaml
 from pathlib import Path
 from typing import Any
+
+import yaml
 
 
 class Config:
     """配置管理器，支持点号路径访问嵌套键。
 
-    用法：
+    例：
         cfg = Config.load("configs/settings.yaml")
-        model = cfg.get("embedding.model_name")
+        model = cfg.get("embedding.model_name")  # 等价于 cfg["embedding"]["model_name"]
     """
 
     def __init__(self, data: dict):
@@ -19,7 +32,11 @@ class Config:
 
     @classmethod
     def load(cls, path: str) -> "Config":
-        """从 YAML 文件加载配置。"""
+        """从 YAML 文件加载配置。
+
+        Raises:
+            ValueError: 配置文件为空
+        """
         with open(path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
         if data is None:
@@ -34,7 +51,7 @@ class Config:
             default: 默认值
 
         Returns:
-            配置值
+            配置值，路径中任一中间层不存在时返回 default
         """
         keys = key_path.split(".")
         value = self._data
@@ -53,12 +70,12 @@ class Config:
 
 
 def get_project_root() -> Path:
-    """获取项目根目录绝对路径。"""
+    """获取项目根目录绝对路径（utils/config.py 向上三级）。"""
     return Path(__file__).resolve().parent.parent.parent
 
 
 def ensure_dir(path: str) -> Path:
-    """确保目录存在，不存在则创建。
+    """确保目录存在，不存在则递归创建。
 
     Args:
         path: 相对于项目根目录的路径

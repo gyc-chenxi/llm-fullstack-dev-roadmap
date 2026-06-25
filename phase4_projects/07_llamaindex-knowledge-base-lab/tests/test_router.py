@@ -1,4 +1,9 @@
-"""多知识库路由单元测试."""
+"""
+多知识库路由单元测试
+=======================
+
+验证 RouterQueryEngine 的创建和路由元数据正确性。
+"""
 
 import sys
 from pathlib import Path
@@ -14,7 +19,7 @@ from llama_index.core.schema import Document
 
 
 class TestRouter:
-    """测试 RouterQueryEngine 路由决策。"""
+    """RouterQueryEngine 的路由逻辑测试。"""
 
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -24,7 +29,7 @@ class TestRouter:
         )
 
     def test_router_creation(self):
-        """测试路由器创建。"""
+        """路由器能带 2 个知识库工具创建成功。"""
         tool_a = QueryEngineTool(
             query_engine=VectorStoreIndex.from_documents(
                 [Document(text="内容 A")]

@@ -1,5 +1,23 @@
-#!/usr/bin/env python3
-"""SummaryIndex 查询引擎：全文总结模式 — 本地 Ollama 驱动."""
+"""
+SummaryIndex 查询引擎
+========================
+
+summary_index.as_query_engine(response_mode="tree_summarize")
+以 Tree Summarize 模式逐级聚合全部文档内容。
+
+与 VectorStoreIndex 查询的区别：
+  - VectorStoreIndex: 仅检索 top-K 相关片段（高效但可能遗漏全局信息）
+  - SummaryIndex: 遍历所有 Node（全局覆盖但速度慢，随文档量线性增长）
+  - 适合"总结全文"、"概括所有文档"的宏观问题
+
+Tree Summarize 策略：
+  1. 将所有 Node 分组（每组 ~5 个）
+  2. LLM 对每组进行局部总结
+  3. 将所有局部总结再次分组总结
+  4. 重复直到只剩一个总结 → 最终答案
+
+全本地运行：BGE-Small-ZH + Ollama Qwen2.5:7b
+"""
 
 import sys
 from pathlib import Path
