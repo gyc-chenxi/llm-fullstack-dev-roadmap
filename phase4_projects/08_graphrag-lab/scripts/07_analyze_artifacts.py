@@ -1,12 +1,21 @@
-#!/usr/bin/env python3
-"""Analyze GraphRAG index artifacts from data/output/*.parquet.
+"""
+GraphRAG 索引产物分析
+=======================
 
-Prints statistics on entities, relationships, communities, and community reports.
-Helps verify index quality before running queries.
+分析 data/output/*.parquet 中的索引产物，打印统计信息：
 
-Usage:
-    PYTHONPATH=. python scripts/07_analyze_artifacts.py
-    or: make analyze
+  - entities: 实体数量 + 类型分布条形图
+  - relationships: 关系数量 + 样本（source→target+description）
+  - communities: 社区数量
+  - community_reports: 社区报告样本标题
+  - text_units: 文本块数量
+  - documents: 原始文档数量
+
+质量指标：
+  - Relationship-to-Entity ratio: 0.3-2.0 为健康范围
+  - Unique entity types: <3 表明 entity_types 配置过窄
+
+用法：PYTHONPATH=. python scripts/07_analyze_artifacts.py
 """
 
 import os
@@ -16,7 +25,7 @@ import pandas as pd
 
 
 def find_parquet(output_dir: Path, pattern: str) -> Path | None:
-    """Find a parquet file matching a pattern (case-insensitive)."""
+    """按模式（不区分大小写）查找 parquet 文件。"""
     pattern_lower = pattern.lower()
     for f in output_dir.glob("*.parquet"):
         if pattern_lower in f.name.lower():
@@ -45,7 +54,6 @@ def main():
     print(f"Parquet files: {len(parquet_files)}")
     print()
 
-    # Map artifact names to actual files
     artifact_map = {}
     for key in ["entities", "relationships", "communities", "community_reports",
                  "text_units", "documents"]:
@@ -53,7 +61,6 @@ def main():
         if fpath:
             artifact_map[key] = fpath
 
-    # Load all found artifacts
     dataframes = {}
     for name, fpath in artifact_map.items():
         try:
@@ -68,7 +75,7 @@ def main():
 
     print()
 
-    # --- Entity analysis ---
+    # 实体分析
     entities = dataframes.get("entities")
     if entities is not None:
         print("─" * 65)
@@ -85,10 +92,8 @@ def main():
             print("\n  Sample entities (by title):")
             for _, row in entities.head(8).iterrows():
                 print(f"    • {row.get('title', row.get('name', 'N/A'))}")
-        else:
-            print(f"  Columns: {', '.join(entities.columns.tolist())}")
 
-    # --- Relationship analysis ---
+    # 关系分析
     rels = dataframes.get("relationships")
     if rels is not None:
         print("\n" + "─" * 65)
@@ -102,17 +107,8 @@ def main():
                 print(f"    {src} → {tgt}")
                 if desc:
                     print(f"      {desc}")
-        else:
-            print(f"  Columns: {', '.join(rels.columns.tolist())}")
 
-    # --- Community analysis ---
-    communities = dataframes.get("communities")
-    if communities is not None:
-        print("\n" + "─" * 65)
-        print(f"COMMUNITIES: {len(communities):,} total")
-        print(f"  Columns: {', '.join(communities.columns.tolist())}")
-
-    # --- Community reports ---
+    # 社区报告
     reports = dataframes.get("community_reports")
     if reports is not None:
         print("\n" + "─" * 65)
@@ -122,19 +118,18 @@ def main():
             for t in reports["title"].head(6):
                 print(f"    • {str(t)[:80]}")
 
-    # --- Text units ---
-    text_units = dataframes.get("text_units")
-    if text_units is not None:
+    # 文本块 + 文档
+    tu = dataframes.get("text_units")
+    if tu is not None:
         print("\n" + "─" * 65)
-        print(f"TEXT UNITS: {len(text_units):,} total (chunks)")
+        print(f"TEXT UNITS: {len(tu):,} total (chunks)")
 
-    # --- Documents ---
-    documents = dataframes.get("documents")
-    if documents is not None:
+    docs = dataframes.get("documents")
+    if docs is not None:
         print("\n" + "─" * 65)
-        print(f"DOCUMENTS: {len(documents):,} total (source files)")
+        print(f"DOCUMENTS: {len(docs):,} total (source files)")
 
-    # --- Summary statistics ---
+    # 质量指标
     print("\n" + "=" * 65)
     print("INDEX QUALITY METRICS")
     print("=" * 65)
@@ -143,8 +138,7 @@ def main():
         ratio = len(rels) / len(entities) if len(entities) > 0 else 0
         print(f"  Relationship-to-Entity ratio : {ratio:.2f}")
         if ratio < 0.3:
-            print(f"    ⚠ Low ratio — LLM may not be extracting enough relationships.")
-            print(f"      Check prompts/entity_extraction.txt and entity_types in settings.yaml")
+            print(f"    ⚠ Low ratio — LLM may not extract enough relationships.")
         elif ratio > 2.0:
             print(f"    ⚠ High ratio — may indicate noisy extractions.")
         else:
@@ -156,10 +150,9 @@ def main():
         if type_count < 3:
             print(f"    ⚠ Very few types — entity_types in settings.yaml may be too narrow")
 
+    communities = dataframes.get("communities")
     if communities is not None:
         print(f"  Communities detected          : {len(communities)}")
-        if len(communities) < 5 and len(entities) > 100 if entities is not None else False:
-            print(f"    ⚠ Few communities for {len(entities)} entities — check cluster_graph config")
 
     print()
     print("[Analyze] ✓ Analysis complete.")

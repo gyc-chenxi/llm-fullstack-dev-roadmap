@@ -1,17 +1,21 @@
-#!/usr/bin/env python3
-"""GraphRAG Query Demo — Global Search + Local Search.
+"""
+GraphRAG 查询演示
+===================
 
-Supports:
-- Interactive single query (--method global|local)
-- Batch evaluation against a curated test set (--batch)
+GraphRAG Global Search（社区级摘要）和 Local Search（实体中心遍历）的交互式和批量查询演示。
 
-Usage:
-    # Single query
-    PYTHONPATH=. python scripts/04_query_demo.py --method global --query "What themes are covered?"
-    PYTHONPATH=. python scripts/04_query_demo.py --method local --query "How are BERT and GPT related?"
+数据流：
+  query → graphrag query --method local|global → subprocess
+    → stdout(answer) → print formatted output
 
-    # Batch evaluation (8 curated queries)
-    PYTHONPATH=. python scripts/04_query_demo.py --batch
+测试查询集（8 条）：
+  factual(2): 单事实检索 — Vector RAG 更快
+  multi_hop(3): 跨实体关系推理 — GraphRAG 更全面
+  global/summary(3): 全文总结 — GraphRAG 社区报告更丰富
+
+用法：
+  PYTHONPATH=. python scripts/04_query_demo.py --method local --query "What is LoRA?"
+  PYTHONPATH=. python scripts/04_query_demo.py --batch
 """
 
 import os
@@ -21,9 +25,6 @@ import argparse
 import subprocess
 from pathlib import Path
 
-# ---------------------------------------------------------------------------
-# Curated test queries covering different RAG strengths
-# ---------------------------------------------------------------------------
 TEST_QUERIES = [
     {
         "query": "What is the Transformer architecture and how does self-attention work?",
@@ -69,7 +70,11 @@ TEST_QUERIES = [
 
 
 def run_search(root: str, method: str, query: str) -> tuple:
-    """Execute a single graphrag query and return (answer, elapsed_seconds)."""
+    """执行一次 graphrag 查询。
+
+    Returns:
+        (answer_text, elapsed_seconds)
+    """
     cmd = [
         sys.executable, "-m", "graphrag", "query",
         "--root", root,
@@ -103,7 +108,6 @@ def main():
 
     root = str(Path(args.root).resolve())
 
-    # Verify index exists
     output_dir = Path(root) / "data" / "output"
     if not output_dir.exists() or not list(output_dir.glob("*.parquet")):
         print("[query] WARNING: No parquet files in data/output/")
@@ -111,18 +115,14 @@ def main():
         print("[query] Run: make run-index")
         print()
 
-    # --- Batch mode ---
+    # 批量评估
     if args.batch:
         print("=" * 70)
         print(f"P8 GraphRAG Batch Evaluation — {len(TEST_QUERIES)} queries")
         print("=" * 70)
 
         for i, tq in enumerate(TEST_QUERIES):
-            # Choose method based on query type
-            if tq["type"] in ("multi_hop", "factual"):
-                method = "local"
-            else:
-                method = "global"
+            method = "local" if tq["type"] in ("multi_hop", "factual") else "global"
 
             answer, elapsed = run_search(root, method, tq["query"])
             border = "-" * 70
@@ -136,7 +136,7 @@ def main():
         print("\n[query] Batch evaluation complete.")
         return 0
 
-    # --- Single-query mode ---
+    # 单查询模式
     query = args.query
     if not query:
         try:

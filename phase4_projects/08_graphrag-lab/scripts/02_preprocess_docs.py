@@ -1,17 +1,22 @@
-#!/usr/bin/env python3
-"""Document preprocessing for GraphRAG ingestion.
+"""
+文档预处理（GraphRAG 摄入）
+=============================
 
-Reads raw .txt files from data/raw/, applies:
-- Null-byte striping
-- CRLF → LF normalization
-- Excessive blank line collapsing
-- Trailing whitespace cleanup
-- Minimum character filter
+将 data/raw/ 中的语料清洗后输出到 data/input/ 供 GraphRAG 索引使用。
 
-Writes cleaned .txt to data/input/ for GraphRAG indexing.
+处理步骤：
+  - null-byte 剥离：\x00 去除（BERT tokenizer 无法处理）
+  - CRLF→LF：统一换行符
+  - 多余空行折叠：3+ 空行 → 1 空行
+  - 行尾空白清理
+  - 最小字符过滤（--min-chars，默认 200 字符）
 
-Usage:
-    PYTHONPATH=. python scripts/02_preprocess_docs.py --input data/raw --output data/input
+Token 估算：
+  - 优先使用 tiktoken cl100k_base（GraphRAG 默认 tokenizer）
+  - 回退为 1.3× 词数启发式（英文）
+
+用法：
+  PYTHONPATH=. python scripts/02_preprocess_docs.py --input data/raw --output data/input
 """
 
 import os
@@ -22,14 +27,11 @@ from pathlib import Path
 
 
 def clean_text(text: str) -> str:
-    """Normalize text for GraphRAG ingestion."""
-    # Strip null bytes
+    """标准化文本以便 GraphRAG 摄入。"""
     text = text.replace("\x00", "")
-    # Normalize line endings
     text = text.replace("\r\n", "\n").replace("\r", "\n")
-    # Collapse 3+ blank lines into 2
     text = re.sub(r"\n{3,}", "\n\n", text)
-    # Per-line: strip trailing spaces, preserve paragraph breaks
+
     lines = []
     for line in text.split("\n"):
         stripped = line.strip()
@@ -37,20 +39,18 @@ def clean_text(text: str) -> str:
             lines.append(stripped)
         elif lines and lines[-1] != "":
             lines.append("")
-    # Drop trailing empty lines
     while lines and lines[-1] == "":
         lines.pop()
     return "\n".join(lines)
 
 
 def estimate_tokens(text: str) -> int:
-    """Estimate token count using cl100k_base (matches GraphRAG default)."""
+    """使用 cl100k_base 估算 token 数（与 GraphRAG 默认编码器匹配）。"""
     try:
         import tiktoken
         enc = tiktoken.get_encoding("cl100k_base")
         return len(enc.encode(text))
     except ImportError:
-        # Fallback: rough heuristic (~1.3 tokens per word for English)
         return int(len(text.split()) * 1.3)
 
 
@@ -75,19 +75,16 @@ def main():
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Clear previous output
     for f in output_dir.glob("*.txt"):
         f.unlink()
         print(f"[preprocess] removed stale: {f.name}")
 
-    # Gather input files
     files = sorted(
         list(input_dir.glob("*.txt")) +
         list(input_dir.glob("*.md"))
     )
     if not files:
         print(f"[preprocess] ERROR: no .txt or .md files found in {input_dir}")
-        print("[preprocess] Run download-corpus first: bash scripts/01_download_corpus.sh")
         sys.exit(1)
 
     print(f"[preprocess] Processing {len(files)} raw files...")

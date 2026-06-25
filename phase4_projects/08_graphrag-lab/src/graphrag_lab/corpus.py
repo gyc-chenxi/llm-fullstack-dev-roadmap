@@ -1,16 +1,24 @@
-#!/usr/bin/env python3
-"""Corpus acquisition utilities for GraphRAG Lab.
+"""
+语料构建工具
+=============
 
-Supports:
-- Wikipedia article fetching via `wikipedia` library
-- arXiv abstract fetching via `arxiv` library
-- Programmatic corpus building with rate limiting
+从 Wikipedia 和 arXiv 获取 AI/ML 领域文档，构建本地语料库。
 
-Usage (standalone):
-    PYTHONPATH=. python src/graphrag_lab/corpus.py \
-        --output data/raw \
-        --topics "Transformer,BERT,GPT" \
-        --arxiv-ids "1706.03762,1810.04805"
+数据流：
+  DEFAULT_WIKI_TOPICS (52 个) → wikipedia.search + wikipedia.page
+    → 提取 summary + content (截断 max_chars=5000)
+    → data/raw/wiki_{title}.txt
+
+  DEFAULT_ARXIV_IDS (15 篇) → arxiv.Search + paper.summary
+    → 提取 title, authors, abstract
+    → data/raw/arxiv_{label}.txt
+
+速率限制：
+  - Wikipedia: random sleep 0.3-0.8s（避免被封 IP）
+  - arXiv: random sleep 0.5-1.0s
+
+用法：
+  PYTHONPATH=. python src/graphrag_lab/corpus.py --output data/raw
 """
 
 import os
@@ -24,9 +32,6 @@ from typing import List, Optional
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# Default AI/ML corpus topics
-# ---------------------------------------------------------------------------
 DEFAULT_WIKI_TOPICS = [
     "Transformer (deep learning architecture)",
     "Attention (machine learning)",
@@ -98,7 +103,11 @@ DEFAULT_ARXIV_IDS = [
 
 
 def fetch_wikipedia_article(topic: str, max_chars: int = 5000) -> Optional[str]:
-    """Fetch a Wikipedia article. Returns formatted text or None."""
+    """从 Wikipedia 获取单篇文章。
+
+    Returns:
+        Markdown 格式文本 (# title + summary)，或 None（获取失败）
+    """
     try:
         import wikipedia
     except ImportError:
@@ -126,7 +135,11 @@ def fetch_wikipedia_article(topic: str, max_chars: int = 5000) -> Optional[str]:
 
 
 def fetch_arxiv_abstract(arxiv_id: str) -> Optional[str]:
-    """Fetch an arXiv abstract. Returns formatted text or None."""
+    """从 arXiv 获取单篇论文摘要。
+
+    Returns:
+        Markdown 格式文本 (# title + authors + abstract)，或 None
+    """
     try:
         import arxiv
     except ImportError:
@@ -154,7 +167,11 @@ def build_corpus(
     arxiv_ids: List[tuple] | None = None,
     max_chars_per_article: int = 5000,
 ) -> int:
-    """Download Wikipedia + arXiv articles to output_dir. Returns count."""
+    """下载 Wikipedia + arXiv 文章到输出目录。
+
+    Returns:
+        成功写入的文件数
+    """
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
 
@@ -163,7 +180,6 @@ def build_corpus(
 
     count = 0
 
-    # Wikipedia
     logger.info("Fetching %d Wikipedia articles...", len(topics))
     for i, topic in enumerate(topics):
         content = fetch_wikipedia_article(topic, max_chars=max_chars_per_article)
@@ -180,7 +196,6 @@ def build_corpus(
     logger.info("Wikipedia: %d articles", count)
     wiki_count = count
 
-    # arXiv
     logger.info("Fetching %d arXiv abstracts...", len(arxiv_ids))
     for arxiv_id, label in arxiv_ids:
         content = fetch_arxiv_abstract(arxiv_id)
@@ -196,9 +211,6 @@ def build_corpus(
     return count
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(
         description="Download AI/ML corpus (Wikipedia + arXiv)"

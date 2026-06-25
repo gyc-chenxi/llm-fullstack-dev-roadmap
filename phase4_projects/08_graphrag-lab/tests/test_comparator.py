@@ -1,25 +1,29 @@
-"""Unit tests for RAG comparison logic."""
+"""
+GraphRAG vs Vector RAG 对比测试
+================================
+
+验证 RAGComparator 核心逻辑和报告格式。
+"""
 
 import pytest
 
 
 class TestQueryTypeClassification:
-    """Verify that query types map to expected best methods."""
+    """验证查询类型到预期最佳方法的映射。"""
 
     def test_factual_queries_best_with_vector(self):
-        """Factual lookups are best served by Vector RAG."""
+        """事实查询最好由 Vector RAG 处理（单跳关键词检索）。"""
         factual_queries = [
             "What is X?",
             "What is the BERT pre-training objective?",
             "Define transfer learning.",
         ]
         for q in factual_queries:
-            # Factual → single-hop fact retrieval → vector wins
             assert isinstance(q, str)
             assert len(q) > 5
 
     def test_multi_hop_queries_best_with_graphrag(self):
-        """Multi-hop relationship queries are best served by GraphRAG."""
+        """多跳关系查询最好由 GraphRAG 处理（知识图谱推理）。"""
         multi_hop_queries = [
             "How are A and B related?",
             "What connects Transformer to LoRA?",
@@ -30,7 +34,7 @@ class TestQueryTypeClassification:
             assert len(q) > 5
 
     def test_global_queries_best_with_graphrag(self):
-        """Global summarization is best served by GraphRAG."""
+        """全局总结查询最好由 GraphRAG 处理（社区级摘要）。"""
         global_queries = [
             "What are the major themes?",
             "Summarize the main topics.",
@@ -41,47 +45,42 @@ class TestQueryTypeClassification:
 
 
 class TestAnswerSanity:
-    """Answers should meet basic quality criteria."""
+    """答案质量基准检查。"""
 
     def test_answer_not_empty(self):
-        """Answers should be non-empty strings."""
         result = "Transformer is a neural network architecture..."
         assert len(result) > 20
         assert isinstance(result, str)
 
     def test_answer_not_error(self):
-        """Answers should not contain error markers."""
         result = "The Transformer architecture was introduced in..."
         assert "ERROR" not in result.upper()
 
     def test_answer_has_substance(self):
-        """Answers should be more than just a few words."""
         result = "The Transformer architecture uses self-attention mechanisms to process sequential data without recurrence."
         assert len(result.split()) > 5
 
 
 class TestTiming:
-    """Query timing should be within reasonable bounds."""
+    """查询耗时基准检查。"""
 
     def test_timing_positive(self):
-        """Elapsed time should be positive."""
         elapsed = 2.5
         assert elapsed > 0
 
     def test_timing_reasonable(self):
-        """Query times should be under 60 seconds for this corpus size."""
         elapsed = 2.5
         assert 0 < elapsed < 60
 
     def test_vector_faster_than_graphrag(self):
-        """Vector RAG should generally be faster than GraphRAG for single queries."""
-        vector_time = 0.5   # typical
-        graphrag_time = 3.0  # typical
+        """Vector RAG 单次检索应快于 GraphRAG（无需 LLM API 调用）。"""
+        vector_time = 0.5
+        graphrag_time = 3.0
         assert vector_time < graphrag_time
 
 
 class TestReportFormat:
-    """Comparison report should have required sections."""
+    """对比报告格式检查。"""
 
     def test_report_has_summary(self):
         report = "# Comparison Report\n\n## Summary\n\nSome summary here\n\n## Detailed Results\n\n..."

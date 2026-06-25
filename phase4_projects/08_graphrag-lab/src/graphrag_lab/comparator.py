@@ -1,15 +1,22 @@
-#!/usr/bin/env python3
-"""RAG Comparison Engine — GraphRAG vs Vector RAG.
+"""
+Compare GraphRAG vs Vector RAG
+=================================
 
-Provides a programmatic API for running the same query set against
-both GraphRAG and Vector RAG, collecting timing and answer data,
-and generating a comparison report.
+两种 RAG 方法的定量对比引擎。
 
-Usage:
-    from graphrag_lab.comparator import RAGComparator
-    comp = RAGComparator(graphrag_root=".", vector_store="data/vector_store")
-    report = comp.run_comparison()
-    comp.save_report(report, "docs/comparison_report.md")
+测试查询集（8 条，涵盖 3 类）：
+  factual (2): 单事实检索 — Vector RAG 应更快
+  multi_hop (3): 多跳关系推理 — GraphRAG 应收录更多上下文
+  global/summary (3): 全文总结 — GraphRAG 应更全面
+
+数据流：
+  DEFAULT_QUERIES → [GraphRAG(local/global) via subprocess] + [Vector RAG(BGE-M3 + Chroma)]
+    → [{query, type, expected_best, graphrag_result, vector_result}]
+    → generate_report() → Markdown (comparison_report.md)
+
+评估维度：
+  - 速度：GraphRAG (LLM API 延迟) vs Vector RAG (本地向量检索)
+  - 适用场景：factual→Vector, multi_hop→GraphRAG, global→GraphRAG
 """
 
 import time
@@ -22,9 +29,7 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# Default test queries
-# ---------------------------------------------------------------------------
+# 三类查询预期最优方法
 DEFAULT_QUERIES = [
     {"query": "What is the Transformer architecture?", "type": "factual", "expected_best": "vector"},
     {"query": "How are Transformer, BERT, GPT, and LoRA related?", "type": "multi_hop", "expected_best": "graphrag"},
@@ -38,7 +43,13 @@ DEFAULT_QUERIES = [
 
 
 class RAGComparator:
-    """Run side-by-side GraphRAG vs Vector RAG comparison."""
+    """GraphRAG vs Vector RAG 的并行对比引擎。
+
+    对比策略：
+      - GraphRAG: 通过 subprocess 调用 graphrag CLI (local/global)
+      - Vector RAG: BGE-M3 + ChromaDB 本地向量检索
+      - 自动选择方法：factual/multi_hop→local, global/summary→global
+    """
 
     def __init__(
         self,
@@ -54,7 +65,6 @@ class RAGComparator:
         self.embedding_model = embedding_model
         self.device = device
 
-        # Lazy-loaded
         self._model = None
         self._collection = None
 
@@ -76,7 +86,11 @@ class RAGComparator:
         return self._collection
 
     def query_graphrag(self, query: str, query_type: str = "factual") -> dict:
-        """Run a GraphRAG query. Returns dict with answer, time, method."""
+        """GraphRAG 查询（subprocess）。
+
+        factual/multi_hop → local method (实体中心遍历)
+        global/summary → global method (社区级摘要)
+        """
         import subprocess
 
         method = "local" if query_type in ("multi_hop", "factual") else "global"
@@ -107,7 +121,11 @@ class RAGComparator:
         }
 
     def query_vector_rag(self, query: str, top_k: int = 5) -> dict:
-        """Run a Vector RAG query. Returns dict with context, time."""
+        """Vector RAG 查询（BGE-M3 encode + ChromaDB query）。
+
+        返回 context chunks（不含 LLM 生成步骤，仅检索部分）。
+        cosine_distance → similarity: score = 1.0 - distance
+        """
         t0 = time.time()
         q_emb = self.model.encode([query], normalize_embeddings=True)
         results = self.collection.query(
@@ -130,7 +148,7 @@ class RAGComparator:
         }
 
     def run_comparison(self, queries: list | None = None) -> list:
-        """Run all queries against both systems. Returns list of result dicts."""
+        """对所有查询执行双方法对比。"""
         queries = queries or DEFAULT_QUERIES
         results = []
 
@@ -152,7 +170,10 @@ class RAGComparator:
         return results
 
     def generate_report(self, results: list) -> str:
-        """Generate a Markdown comparison report."""
+        """根据对比结果生成 Markdown 报告。
+
+        报告结构：Summary Table → Avg Timing → Per-query Details
+        """
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
         dim = self.model.get_sentence_embedding_dimension()
 
@@ -199,16 +220,12 @@ class RAGComparator:
         return "".join(lines)
 
     def save_report(self, report: str, output_path: str):
-        """Write the comparison report to disk."""
         out = Path(output_path)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(report, encoding="utf-8")
         logger.info("Report saved to %s", out)
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
 def main():
     import argparse
 
@@ -243,7 +260,6 @@ def main():
     report = comparator.generate_report(results)
     comparator.save_report(report, args.output)
 
-    # Print quick summary
     print("\n" + "=" * 60)
     print("QUICK SUMMARY")
     print("=" * 60)

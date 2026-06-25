@@ -1,12 +1,14 @@
-#!/usr/bin/env python3
-"""Wrapper to suppress harmless LiteLLM AWS warnings before running graphrag commands.
+"""
+GraphRAG CLI 抑制警告的包装器
+================================
 
-Usage:
+在导入 graphrag 之前抑制 LiteLLM AWS 相关的无害警告日志。
+
+用法：
   python scripts/run_graphrag.py index --root .
   python scripts/run_graphrag.py query --root . --method local "What is LoRA?"
 """
 
-# MUST be before any litellm/graphrag import
 import logging
 logging.basicConfig(level=logging.WARNING)
 

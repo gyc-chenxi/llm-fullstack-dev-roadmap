@@ -1,14 +1,18 @@
-#!/usr/bin/env python3
-"""GraphRAG query wrapper with error handling and result formatting.
+"""
+GraphRAG CLI Wrapper
+======================
 
-Encapsulates the `graphrag query` CLI behind a clean Python API,
-with automatic method selection (global vs local) based on query type.
+封装 `graphrag query` CLI 命令，提供干净的 Python API。
 
-Usage:
-    from graphrag_lab.querier import GraphRAGQuerier
-    q = GraphRAGQuerier(root=".")
-    answer = q.query("What is a Transformer?", method="local")
-    print(answer)
+数据流：
+  query(str) → graphrag CLI (subprocess)
+    → local search: entity-centric traversal (多跳/事实性查询)
+    → global search: community-level summary (总结/全局性查询)
+    → stdout(answer) + stderr(diagnostics)
+
+自动方法选择：
+  - factual/multi_hop → local search (实体遍历检索)
+  - global/summary → global search (社区级摘要)
 """
 
 import subprocess
@@ -22,14 +26,17 @@ logger = logging.getLogger(__name__)
 
 
 class GraphRAGQuerier:
-    """Thin wrapper around the `graphrag query` CLI."""
+    """graphrag query CLI 的轻量 Python 封装。
+
+    通过 _verify_index() 提前检查索引状态（data/output/*.parquet）。
+    """
 
     def __init__(self, root: str = "."):
         self.root = str(Path(root).resolve())
         self._verify_index()
 
     def _verify_index(self):
-        """Check that index artifacts exist."""
+        """检查 data/output/ 中是否存在 parquet 索引文件。"""
         output = Path(self.root) / "data" / "output"
         if not output.exists():
             logger.warning("data/output/ not found. Index may not have been built.")
@@ -41,14 +48,18 @@ class GraphRAGQuerier:
             logger.info("Index found: %d parquet files", len(parquets))
 
     def query(self, query: str, method: str = "local") -> tuple[str, float]:
-        """Execute a GraphRAG query.
+        """执行 GraphRAG 查询。
 
         Args:
-            query: Natural language query string.
-            method: 'global' (community-level) or 'local' (entity-centric).
+            query: 自然语言查询
+            method: 'global' (社区级摘要) 或 'local' (实体中心遍历)
 
         Returns:
             (answer_text, elapsed_seconds)
+
+        Raises:
+            ValueError: method 参数不合法
+            RuntimeError: graphrag CLI 返回非零退出码
         """
         if method not in ("global", "local"):
             raise ValueError(f"method must be 'global' or 'local', got '{method}'")
@@ -73,18 +84,18 @@ class GraphRAGQuerier:
         return result.stdout.strip(), elapsed
 
     def global_search(self, query: str) -> tuple[str, float]:
-        """Community-level summary search."""
+        """社区级摘要搜索（适合总结/全局性问题）。"""
         return self.query(query, method="global")
 
     def local_search(self, query: str) -> tuple[str, float]:
-        """Entity-centric traversal search."""
+        """实体中心遍历搜索（适合多跳/事实性问题）。"""
         return self.query(query, method="local")
 
     def auto_query(self, query: str, query_type: str = "factual") -> tuple[str, float]:
-        """Auto-select method based on query type.
+        """根据查询类型自动选择搜索方法。
 
-        factual/multi_hop → local search
-        global/summary → global search
+        factual/multi_hop → local search (实体级别)
+        global/summary → global search (社区级别)
         """
         if query_type in ("multi_hop", "factual"):
             return self.local_search(query)

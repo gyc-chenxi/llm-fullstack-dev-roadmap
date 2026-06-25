@@ -1,19 +1,30 @@
-#!/usr/bin/env python3
-"""Local BGE-M3 Embedding Service (OpenAI-compatible API).
+"""
+BGE-M3 本地 Embedding 服务
+=============================
 
-Provides a lightweight FastAPI server that exposes a /v1/embeddings endpoint
-compatible with GraphRAG's embedding configuration. Uses BGE-M3 on MPS for
-zero-cost, low-latency text vectorization during the index pipeline.
+提供 OpenAI-compatible /v1/embeddings 端点的 FastAPI 微服务。
 
-Usage:
-    PYTHONPATH=. python src/graphrag_lab/serve_embedding.py \
-        --host 127.0.0.1 --port 19530 --model BAAI/bge-m3 --device mps
+为什么需要这个服务：
+  GraphRAG 的索引管线需要大量调用 embedding API（每个 chunk 一次）。
+  - 使用远程 API (OpenAI/DeepSeek) → 海量 tokens 成本 + 网络延迟
+  - 使用本地 BGE-M3 → 免费 + 低延迟 + 无 token 限制
 
-Verification:
-    curl -s http://127.0.0.1:19530/health | python -m json.tool
-    curl -s http://127.0.0.1:19530/v1/embeddings \
-        -H "Content-Type: application/json" \
-        -d '{"input": ["Hello world"], "model": "bge-m3"}'
+GraphRAG 配置集成：
+  在 settings.yaml 中设置 embedding 端点为 http://127.0.0.1:19530/v1，
+  GraphRAG 索引时会自动调用本地 BGE-M3 服务，替代收费 API。
+
+数据流：
+  POST /v1/embeddings {"input": ["text1", "text2"], "model": "bge-m3"}
+    → MODEL.encode(inputs, batch_size=16, normalize_embeddings=True)
+    → [{embedding: [1024] float, index: i}] → EmbeddingResponse
+
+性能参数：
+  - BGE-M3: 1024 维 dense vector, max_seq_length=8192
+  - batch_size=16: MPS 上的安全批大小（32GB 统一内存）
+  - normalize_embeddings=True: 输出 L2 归一化向量（适合 cosine 相似度）
+
+用法：
+  PYTHONPATH=. python src/graphrag_lab/serve_embedding.py --host 127.0.0.1 --port 19530
 """
 
 import os
@@ -29,9 +40,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
 logging.basicConfig(
     level=logging.INFO,
     format="[EmbeddingServer] %(asctime)s | %(levelname)s | %(message)s",
@@ -41,9 +49,8 @@ logger = logging.getLogger("embedding_server")
 
 MODEL = None
 
-# ---------------------------------------------------------------------------
-# Pydantic models (OpenAI-compatible shapes)
-# ---------------------------------------------------------------------------
+
+# OpenAI-compatible Pydantic schemas
 class EmbeddingRequest(BaseModel):
     input: Union[str, List[str]]
     model: str = "bge-m3"
@@ -62,11 +69,9 @@ class EmbeddingResponse(BaseModel):
     usage: dict
 
 
-# ---------------------------------------------------------------------------
-# FastAPI lifespan — load model once at startup
-# ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """启动时加载 BGE-M3 到指定设备（MPS/cpu/cuda）。"""
     global MODEL
     model_name = os.environ.get("EMBED_MODEL", "BAAI/bge-m3")
     device = os.environ.get("EMBED_DEVICE", "mps")
@@ -74,7 +79,6 @@ async def lifespan(app: FastAPI):
     logger.info("Loading %s on %s ...", model_name, device)
     from sentence_transformers import SentenceTransformer
 
-    # BGE-M3 on MPS: limit batch to avoid Metal memory fragmentation
     MODEL = SentenceTransformer(model_name, device=device)
     dim = MODEL.get_sentence_embedding_dimension()
     max_len = MODEL.max_seq_length
@@ -88,9 +92,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="BGE-M3 Embedding Service", version="1.0.0", lifespan=lifespan)
 
 
-# ---------------------------------------------------------------------------
-# Endpoints
-# ---------------------------------------------------------------------------
 @app.get("/health")
 def health():
     if MODEL is None:
@@ -110,6 +111,11 @@ def root():
 
 @app.post("/v1/embeddings", response_model=EmbeddingResponse)
 def embeddings(req: EmbeddingRequest):
+    """OpenAI-compatible embedding 端点。
+
+    数据流：texts → BGE-M3.encode(batch=16, normalize=True)
+      → [{1024-dim vector}] → EmbeddingResponse
+    """
     if MODEL is None:
         raise HTTPException(status_code=503, detail="Model not loaded yet")
 
@@ -117,7 +123,6 @@ def embeddings(req: EmbeddingRequest):
     if not inputs:
         raise HTTPException(status_code=400, detail="Empty input")
 
-    # Conservative batch size for M5 32GB — prevent MPS OOM on long texts
     safe_batch = min(len(inputs), 16)
 
     t0 = time.time()
@@ -150,9 +155,6 @@ def embeddings(req: EmbeddingRequest):
     )
 
 
-# ---------------------------------------------------------------------------
-# CLI entry point
-# ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(
         description="BGE-M3 Local Embedding Service (OpenAI-compatible)"
