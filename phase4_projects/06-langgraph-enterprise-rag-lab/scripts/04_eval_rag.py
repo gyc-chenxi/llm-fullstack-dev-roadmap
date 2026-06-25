@@ -1,4 +1,27 @@
-"""RAG evaluation script — recall, MRR, faithfulness, fallback accuracy."""
+"""
+RAG 评估脚本
+==============
+
+离线评估 RAG 管线质量，每次评估包含：
+
+数据流：
+  golden_set.jsonl → load → for each item:
+    → POST /v1/rag/invoke → answer + citations + debug
+    → keyword recall (预期关键词命中率)
+    → fallback accuracy (应拒绝时是否确实拒绝)
+    → latency (端到端耗时)
+
+指标聚合：
+  - Avg Keyword Recall: 所有查询的平均关键词召回率
+  - Fallback Accuracy: 应拒绝回答的查询是否正确触发 fallback
+  - Avg Latency / P95 Latency: 端到端延迟
+
+输出：Markdown 格式评估报告（docs/eval_report.md）
+
+用法：
+  python scripts/04_eval_rag.py
+  python scripts/04_eval_rag.py --golden data/eval/custom_golden.jsonl
+"""
 
 from __future__ import annotations
 
@@ -9,7 +32,6 @@ import sys
 import time
 from pathlib import Path
 
-# Ensure the project package is importable.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 
@@ -45,7 +67,7 @@ def load_golden_set(path: str) -> list[dict]:
 
 
 def call_rag(api_base: str, query: str, thread_id: str) -> dict | None:
-    """Call the RAG invoke endpoint and return the JSON response."""
+    """调用 RAG invoke 端点进行单次评估查询。"""
     import urllib.request
 
     url = f"{api_base}/v1/rag/invoke"
@@ -70,7 +92,7 @@ def call_rag(api_base: str, query: str, thread_id: str) -> dict | None:
 
 
 def compute_keyword_recall(answer: str, expected_keywords: list[str]) -> float:
-    """Simple keyword-based recall."""
+    """预期关键词在答案中的命中率。"""
     if not expected_keywords:
         return 1.0
     hits = sum(1 for kw in expected_keywords if kw.lower() in answer.lower())
@@ -78,7 +100,7 @@ def compute_keyword_recall(answer: str, expected_keywords: list[str]) -> float:
 
 
 def check_fallback(answer: str) -> bool:
-    """Check if the answer is a fallback / refusal response."""
+    """检查答案是否包含 fallback 拒绝标记。"""
     fallback_markers = [
         "知识库中未找到足够证据",
         "未找到足够证据",
@@ -127,18 +149,18 @@ def main() -> None:
         citations = resp.get("citations", [])
         status = resp.get("status", "unknown")
 
-        # Keyword recall
+        # 关键词召回
         expected_keywords = item.get("expected_keywords", [])
         kw_recall = compute_keyword_recall(answer, expected_keywords)
         metrics["keyword_recall"].append(kw_recall)
 
-        # Fallback accuracy
+        # Fallback 准确性
         expected_behavior = item.get("expected_behavior", "")
         if expected_behavior == "fallback":
             correct = 1.0 if check_fallback(answer) else 0.0
             metrics["fallback_correct"].append(correct)
 
-        # Latency
+        # 延迟
         metrics["latency_sec"].append(elapsed)
 
         results.append(
@@ -152,7 +174,7 @@ def main() -> None:
             }
         )
 
-    # ── Aggregate ─────────────────────────────────────────────────────
+    # ── 聚合 ──
     avg_recall = (
         sum(metrics["keyword_recall"]) / len(metrics["keyword_recall"])
         if metrics["keyword_recall"]
@@ -172,7 +194,7 @@ def main() -> None:
     sorted_lat = sorted(metrics["latency_sec"])
     p95_latency = sorted_lat[int(len(sorted_lat) * 0.95)] if sorted_lat else 0.0
 
-    # ── Report ────────────────────────────────────────────────────────
+    # ── 报告 ──
     report = [
         "# RAG Evaluation Report",
         "",
@@ -213,7 +235,7 @@ def main() -> None:
 
 
 def _create_minimal_golden(path: str) -> None:
-    """Bootstrap a minimal golden set for first-time evaluation."""
+    """首次运行时创建最小黄金数据集。"""
     items = [
         {
             "query": "RAG 是什么？",

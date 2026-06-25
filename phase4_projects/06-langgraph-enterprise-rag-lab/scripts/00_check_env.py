@@ -1,3 +1,16 @@
+"""
+环境检查脚本
+==============
+
+验证项目运行环境是否完整：
+  1. Python 3.11+（conda env: cxllm）
+  2. 构建工具链（cmake, ninja, hf）
+  3. Torch MPS 可用性（Apple Silicon）
+  4. 核心 Python 包可导入性
+
+用法：PYTHONPATH=src python scripts/00_check_env.py
+"""
+
 from __future__ import annotations
 
 import os

@@ -1,4 +1,14 @@
-"""Centralised logging setup using loguru (falls back to standard logging)."""
+"""
+日志系统（loguru / logging fallback）
+======================================
+
+统一日志格式：
+  [时间] [级别] [模块名] 消息
+
+双后端策略：
+  - loguru 可用时：colorized 格式，更好的人类可读性
+  - loguru 不可用时：标准 logging.basicConfig，兼容性最佳
+"""
 
 from __future__ import annotations
 
@@ -6,9 +16,9 @@ import sys
 
 
 def setup_logging(level: str = "INFO") -> None:
-    """Configure loguru with a sensible default format.
+    """配置 loguru 或回退到标准 logging。
 
-    If loguru is not installed, falls back to standard logging.
+    日志输出到 stderr（不干扰 stdout 的数据流如 JSON/SSE）。
     """
     try:
         from loguru import logger

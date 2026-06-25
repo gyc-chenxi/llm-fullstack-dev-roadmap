@@ -1,4 +1,16 @@
-"""Golden set loader — reads JSONL evaluation data."""
+"""
+Golden Set 加载器
+====================
+
+评估黄金数据集 — JSONL 格式，每行一个测试用例：
+  - query: 用户问题
+  - expected_keywords: 答案中应出现的关键词列表
+  - expected_sources: 应引用到的文档来源（可选）
+  - expected_behavior: "fallback"（应拒绝回答）或 "answer"（应有答案）
+
+数据流：data/eval/golden_set.jsonl → JSONL 逐行解析 → [golden_item]
+如果 JSONL 不存在，回退到内置最小数据集（3 个测试用例）。
+"""
 
 from __future__ import annotations
 
@@ -10,16 +22,13 @@ DEFAULT_GOLDEN_PATH = "data/eval/golden_set.jsonl"
 
 
 def load_golden_set(path: str | None = None) -> list[dict]:
-    """Load the evaluation golden set from a JSONL file.
+    """加载评估黄金数据集。
 
-    Each line should be a JSON object with at least:
-      - query (str)
-      - expected_keywords (list[str])
-      - expected_sources (list[str], optional)
-      - expected_behavior (str, optional: "fallback" or "answer")
+    Args:
+        path: JSONL 文件路径，默认 data/eval/golden_set.jsonl
 
     Returns:
-        List of golden items.
+        黄金测试用例列表。文件不存在时返回内置默认集合。
     """
     target = Path(path or DEFAULT_GOLDEN_PATH)
 
@@ -41,7 +50,7 @@ def load_golden_set(path: str | None = None) -> list[dict]:
 
 
 def _default_golden_set() -> list[dict]:
-    """Return a built-in minimal golden set for bootstrapping."""
+    """内置最小黄金数据集（无需外部 JSONL 即可运行评估）。"""
     return [
         {
             "query": "RAG 是什么？",

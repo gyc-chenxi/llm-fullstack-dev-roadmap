@@ -1,27 +1,41 @@
-"""Custom exception classes for the RAG pipeline."""
+"""
+异常层级体系
+==============
+
+RAG 管线的自定义异常树，按 pipeline 阶段分类：
+
+  RAGError (基类)
+  ├── RetrievalError  — 检索阶段失败
+  ├── LLMError       — LLM 调用失败或超时
+  ├── CheckpointError — 状态持久化失败
+  ├── EmbeddingError  — Embedding 生成失败
+  └── ChromaError    — ChromaDB 操作失败
+
+用于上层 try/except 中按异常类型区分处理策略（重试/降级/告警）。
+"""
 
 from __future__ import annotations
 
 
 class RAGError(Exception):
-    """Base exception for all RAG pipeline errors."""
+    """All RAG pipeline errors."""
 
 
 class RetrievalError(RAGError):
-    """Raised when the retrieval stage fails."""
+    """Retrieval stage failures (ChromaDB / BM25)."""
 
 
 class LLMError(RAGError):
-    """Raised when the LLM call fails or times out."""
+    """LLM call failures or timeouts."""
 
 
 class CheckpointError(RAGError):
-    """Raised when checkpoint operations fail."""
+    """Checkpoint persistence failures."""
 
 
 class EmbeddingError(RAGError):
-    """Raised when embedding generation fails."""
+    """Embedding generation failures."""
 
 
 class ChromaError(RAGError):
-    """Raised when Chroma operations fail."""
+    """ChromaDB operation failures."""

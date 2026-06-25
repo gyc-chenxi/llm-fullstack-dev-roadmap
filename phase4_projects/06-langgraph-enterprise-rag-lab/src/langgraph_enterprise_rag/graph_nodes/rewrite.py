@@ -1,3 +1,23 @@
+"""
+查询改写节点
+===============
+
+通过 LLM 将原始用户问题改写成 3 个适合知识库检索的查询变体：
+  1. 关键词变体：蒸馏为关键术语组合
+  2. 语义变体：用不同措辞表达相同语义
+  3. 中文完整问句：保持自然语言风格
+
+为什么要改写：
+  - 用户查询往往是自然语言，不适合直接做关键词检索
+  - 多角度改写增加召回率（dense + BM25 各用不同查询）
+  - 中英文混合表达可能导致召回偏差
+
+LLM 输出格式：JSON 数组 ["查询1", "查询2", "查询3"]
+解析回退：JSON 解析失败 → 正则提取 [ ... ] → 保留原始查询
+
+数据流：query → LLM → rewritten_queries (3+1 变体) → 写入 state
+"""
+
 from __future__ import annotations
 
 import json
@@ -10,6 +30,11 @@ from langgraph_enterprise_rag.llm.openai_compatible import build_llm
 
 
 def rewrite_node(state: RAGState) -> dict:
+    """使用 LLM 将用户问题改写成 3 个检索友好的变体。
+
+    每次调用都会递增 retrieve_retry_count（用于 judge 的路由判断）。
+    改写失败时回退为原始查询。
+    """
     query = state["query"]
     retry_count = int(state.get("retrieve_retry_count", 0))
 
@@ -47,7 +72,7 @@ def rewrite_node(state: RAGState) -> dict:
         rewritten = [query]
 
     if query not in rewritten:
-        rewritten.insert(0, query)
+        rewritten.insert(0, query)  # 保留原始查询放在第一位
 
     return {
         "rewritten_queries": rewritten[:4],
@@ -63,6 +88,12 @@ def rewrite_node(state: RAGState) -> dict:
 
 
 def extract_json_array(text: str) -> list[str]:
+    """从 LLM 输出中提取 JSON 数组。
+
+    两层回退：
+      1. 直接 json.loads (理想情况)
+      2. 正则匹配第一个 [... ] 块（容错 LLM 多输出括号外文本）
+    """
     text = text.strip()
 
     try:

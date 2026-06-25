@@ -1,3 +1,26 @@
+"""
+FastAPI 应用入口
+===================
+
+LangGraph Enterprise RAG 的主要 API 服务（端口 8006）。
+
+三层架构：
+  Client → FastAPI (8006) → LangGraph StateGraph → llama.cpp (8080)
+
+三个核心端点：
+  - POST /v1/rag/invoke — 非流式 RAG 查询
+  - POST /v1/rag/stream  — SSE 流式 RAG 查询（逐节点推送事件）
+  - GET  /v1/rag/state/{thread_id} — 查询 checkpoint 状态
+
+生命周期（AsyncSqliteSaver）：
+  lifespan 中创建 AsyncSqliteSaver → 编译图 → 注入 app.state.graph
+  退出时自动关闭数据库连接
+
+为什么不使用模块顶层的 checkpointer：
+  AsyncSqliteSaver 必须在 async context manager 内部保持连接，
+  放在模块顶层会在 uvicorn import 时创建，导致不可预测的连接生命周期。
+"""
+
 from __future__ import annotations
 
 import os
@@ -44,7 +67,6 @@ async def lifespan(app: FastAPI):
         try:
             await checkpointer.setup()
         except Exception:
-            # 某些版本会自动 setup；这里兼容不同版本。
             pass
 
         app.state.graph = build_graph(checkpointer=checkpointer)
@@ -73,6 +95,13 @@ def health():
 
 @app.post("/v1/rag/invoke")
 async def invoke_rag(req: RAGRequest, request: Request):
+    """非流式 RAG 查询。
+
+    数据流：
+      RAGRequest JSON → graph.ainvoke(initial_state, config)
+        → 8 节点全流程执行
+        → RAGResp 结构化 JSON
+    """
     graph = request.app.state.graph
     config = {"configurable": {"thread_id": req.thread_id}}
 
@@ -109,6 +138,15 @@ async def invoke_rag(req: RAGRequest, request: Request):
 
 @app.post("/v1/rag/stream")
 async def stream_rag(req: RAGRequest, request: Request):
+    """SSE 流式 RAG 查询。
+
+    数据流：
+      graph.astream_events(inputs, version="v2")
+        → 每个节点 on_chain_start 时推送 "node_start" SSE
+        → 每个节点 on_chain_end 时推送 "node_end" SSE（含节点输出）
+        → 所有节点完成后推送 "final" SSE（含完整答案和引用）
+        → 异常时推送 "error" SSE
+    """
     graph = request.app.state.graph
     config = {"configurable": {"thread_id": req.thread_id}}
 
@@ -212,6 +250,10 @@ async def stream_rag(req: RAGRequest, request: Request):
 
 @app.get("/v1/rag/state/{thread_id}")
 async def get_state(thread_id: str, request: Request):
+    """查询指定 thread_id 的 checkpoint 状态。
+
+    用于调试和审计：验证某个对话的完整 graph 执行路径。
+    """
     graph = request.app.state.graph
     config = {"configurable": {"thread_id": thread_id}}
     state = await graph.aget_state(config)

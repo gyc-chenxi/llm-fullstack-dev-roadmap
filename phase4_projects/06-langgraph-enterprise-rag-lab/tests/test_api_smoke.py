@@ -1,4 +1,9 @@
-"""Smoke tests for FastAPI endpoints using TestClient (no LLM required)."""
+"""
+API 冒烟测试
+===============
+
+使用 FastAPI TestClient 验证路由注册和请求验证（不需要 LLM/Chroma 运行时）。
+"""
 
 from __future__ import annotations
 
@@ -16,6 +21,7 @@ client = TestClient(app)
 
 
 def test_health_endpoint() -> None:
+    """health 端点返回 200 + status=ok。"""
     resp = client.get("/health")
     assert resp.status_code == 200
     data = resp.json()
@@ -23,12 +29,10 @@ def test_health_endpoint() -> None:
 
 
 def test_rag_invoke_schema_validation() -> None:
-    """Verify request validation rejects bad input."""
-    # Missing required fields.
+    """Pydantic 验证：缺失字段和空字段均应返回 422。"""
     resp = client.post("/v1/rag/invoke", json={})
-    assert resp.status_code == 422  # pydantic validation error
+    assert resp.status_code == 422
 
-    # Empty query string.
     resp = client.post(
         "/v1/rag/invoke",
         json={"query": "", "thread_id": "t1"},
@@ -37,7 +41,7 @@ def test_rag_invoke_schema_validation() -> None:
 
 
 def test_rag_invoke_minimal() -> None:
-    """Invoke RAG without docs / LLM — should still return a structured response."""
+    """最小请求应返回 200/500/503（取决于 Chroma 是否就绪）。"""
     resp = client.post(
         "/v1/rag/invoke",
         json={
@@ -46,14 +50,11 @@ def test_rag_invoke_minimal() -> None:
             "max_retries": 1,
         },
     )
-    # Even without LLM / Chroma, the endpoint should respond (may 500 if
-    # Chroma is missing, which is expected in CI; we are mainly checking
-    # the schema path is wired correctly).
     assert resp.status_code in (200, 500, 503)
 
 
 def test_rag_stream_endpoint() -> None:
-    """Stream endpoint should return text/event-stream content type."""
+    """流式端点存在并可调用。"""
     resp = client.post(
         "/v1/rag/stream",
         json={
@@ -61,12 +62,11 @@ def test_rag_stream_endpoint() -> None:
             "thread_id": "stream-test-001",
         },
     )
-    # If it fails internally, we still want to verify the endpoint exists.
     assert resp.status_code in (200, 500, 503)
 
 
 def test_get_state_not_found() -> None:
-    """Querying a non-existent thread returns a clean response."""
+    """查询不存在的 thread_id 返回 checkpoint_exists=False。"""
     resp = client.get("/v1/rag/state/nonexistent-thread-999")
     assert resp.status_code == 200
     data = resp.json()

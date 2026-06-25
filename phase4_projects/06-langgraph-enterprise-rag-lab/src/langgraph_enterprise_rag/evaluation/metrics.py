@@ -1,4 +1,14 @@
-"""RAG evaluation metrics — recall, MRR, faithfulness, citation accuracy."""
+"""
+评估指标
+==========
+
+RAG 管线离线评估的 4 个标准指标：
+
+  - Recall@K: top-K 结果中包含的相关文档比例
+  - MRR: 第一个相关文档的倒数排名的平均值
+  - Citation Coverage: 引用出现在答案中的比例（启发性检查 LLM 是否真的用了引用）
+  - NDCG: 归一化折损累积增益（综合评分和排名的指标）
+"""
 
 from __future__ import annotations
 
@@ -10,7 +20,10 @@ def recall_at_k(
     relevant_ids: set[str],
     k: int = 5,
 ) -> float:
-    """Compute Recall@K — fraction of relevant docs in top-K results."""
+    """Recall@K — 相关文档在 top-K 中被检索到的比例。
+
+    recall@K = |retrieved[:k] ∩ relevant| / |relevant|
+    """
     if not relevant_ids:
         return 1.0
     top_k = set(retrieved_ids[:k])
@@ -22,7 +35,11 @@ def mean_reciprocal_rank(
     queries_retrieved: list[list[str]],
     queries_relevant: list[set[str]],
 ) -> float:
-    """Compute MRR across multiple queries."""
+    """MRR — 多查询平均的倒数排名。
+
+    MRR = (1/|Q|) * Σ rank_first_relevant
+    第一个相关文档排第 1 得 1.0，排第 n 得 1/n。
+    """
     if not queries_retrieved:
         return 0.0
 
@@ -43,7 +60,10 @@ def mean_reciprocal_rank(
 
 
 def citation_coverage(answer: str, citations: list[dict]) -> float:
-    """Heuristic: fraction of citations that appear to be referenced in the answer."""
+    """引用覆盖度 — 评估 LLM 是否确实使用了引用标记。
+
+    检查 citation label 或 quote 前 40 字符是否出现在答案中。
+    """
     if not citations:
         return 0.0
 
@@ -51,7 +71,6 @@ def citation_coverage(answer: str, citations: list[dict]) -> float:
     for cite in citations:
         label = cite.get("label", "")
         quote = cite.get("quote", "")
-        # Check if citation label or a substring of the quote appears in answer.
         if label and label in answer:
             matched += 1
         elif quote and len(quote) >= 10 and quote[:40] in answer:
@@ -61,7 +80,11 @@ def citation_coverage(answer: str, citations: list[dict]) -> float:
 
 
 def ndcg(scores: list[float], k: int | None = None) -> float:
-    """Normalized Discounted Cumulative Gain."""
+    """NDCG — 归一化折损累积增益。
+
+    DCG = Σ score_i / log2(i+2)
+    NDCG = DCG / IDCG，其中 IDCG 是最理想排序下的 DCG。
+    """
     if not scores:
         return 0.0
 

@@ -1,3 +1,23 @@
+"""
+BM25 关键词检索
+=================
+
+基于 jieba 中文分词 + rank_bm25 的稀疏检索实现。
+
+数据流：
+  Corpus → jieba 分词 → 去停用词/单字 → corpus_tokens: list[list[str]]
+    → BM25Okapi.fit(corpus_tokens)
+  Query  → jieba 分词 → 去停用词/单字
+    → BM25Okapi.get_scores(query_tokens) → sorted by score desc → top-K docs
+
+分词策略：
+  - 中文：jieba.cut 精确模式（不采用全模式，避免词粒度过细）
+  - 英文：re.findall([A-Za-z0-9_]+) 按单词切分
+  - 过滤：停用词 + 单字符 token（中文"我/的"、英文"a/i"等）
+
+BM25Okapi 的 k1 默认 1.5, b 默认 0.75（标准 Okapi BM25 参数）。
+"""
+
 from __future__ import annotations
 
 import re
@@ -33,6 +53,10 @@ STOPWORDS = {
 
 
 def tokenize(text: str) -> list[str]:
+    """中英文混合分词，过滤停用词和单字 token。
+
+    Returns: 过滤后的 token 列表（去重，均为小写）
+    """
     chinese_tokens = list(jieba.cut(text))
     english_tokens = re.findall(r"[A-Za-z0-9_]+", text.lower())
 
@@ -52,6 +76,11 @@ def tokenize(text: str) -> list[str]:
 
 @dataclass
 class BM25Index:
+    """BM25 稀疏检索索引。
+
+    初始化时对全量文档语料分词并构建 BM25Okapi 模型。
+    """
+
     docs: list[dict]
 
     def __post_init__(self) -> None:
@@ -59,6 +88,7 @@ class BM25Index:
         self.model = BM25Okapi(self.corpus_tokens) if self.docs else None
 
     def search(self, query: str, top_k: int = 8) -> list[dict]:
+        """BM25 检索，返回 top-K 文档（只返回 score > 0 的结果）。"""
         if not self.docs or self.model is None:
             return []
 

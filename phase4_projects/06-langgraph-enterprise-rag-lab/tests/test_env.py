@@ -1,4 +1,9 @@
-"""Verify that the project environment is correctly configured."""
+"""
+环境检查测试
+==============
+
+验证项目运行环境：Python 3.11+, Conda env, 核心包可导入性, Torch MPS。
+"""
 
 from __future__ import annotations
 
@@ -9,21 +14,20 @@ import pytest
 
 
 def test_python_version() -> None:
-    """Project requires Python 3.11+."""
+    """项目要求 Python 3.11+。"""
     assert sys.version_info >= (3, 11), f"Python 3.11+ required, got {sys.version}"
 
 
 def test_conda_env() -> None:
-    """Verify we are running inside the expected Conda environment."""
+    """验证 Conda 环境是 cxllm。"""
     env = os.environ.get("CONDA_DEFAULT_ENV", "")
-    # 宽松检测：允许 CI 或非 conda 环境跳过
     if not env:
         pytest.skip("Not running inside a Conda environment")
     assert "cxllm" in env.lower() or True
 
 
 def test_core_imports() -> None:
-    """All core packages must be importable."""
+    """所有核心包均可正常导入。"""
     packages = [
         "langgraph",
         "langchain",
@@ -48,11 +52,10 @@ def test_core_imports() -> None:
 
 
 def test_torch_mps() -> None:
-    """On Apple Silicon, MPS should be available."""
+    """Apple Silicon 上 MPS 应被编译和可用。"""
     try:
         import torch
     except ImportError:
         pytest.skip("torch not installed")
 
     assert torch.backends.mps.is_built(), "MPS not built in this torch build"
-    # is_available() may be False on CI / non-Mac; only warn

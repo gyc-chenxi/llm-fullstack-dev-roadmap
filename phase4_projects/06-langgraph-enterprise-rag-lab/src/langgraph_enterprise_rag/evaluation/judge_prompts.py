@@ -1,4 +1,20 @@
-"""LLM-as-judge prompts for evaluating RAG answer quality."""
+"""
+LLM-as-Judge 评估 Prompt
+===========================
+
+用于离线评估 RAG 答案质量的 LLM prompt 模板：
+
+  FAITHFULNESS: 答案是否完全基于给定的上下文资料（非编造）
+  RELEVANCE: 检索文档是否包含回答问题所需的信息
+
+评分标准：
+  - 1.0: 完全满足
+  - 0.7-0.9: 大部分满足，有轻微偏离
+  - 0.4-0.6: 混杂
+  - 0.0-0.3: 基本不满足
+
+这些 prompt 供外部评估脚本使用（scripts/04_eval_rag.py 可扩展使用）。
+"""
 
 from __future__ import annotations
 

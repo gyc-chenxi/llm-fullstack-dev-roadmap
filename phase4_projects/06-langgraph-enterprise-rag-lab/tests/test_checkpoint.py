@@ -1,4 +1,9 @@
-"""Unit tests for LangGraph checkpoint (offline, no API server needed)."""
+"""
+单元测试：LangGraph Checkpoint (离线，无需 API 服务器)
+========================================================
+
+验证 SQLite checkpoint 的持久化、状态恢复和线程隔离。
+"""
 
 from __future__ import annotations
 
@@ -17,7 +22,7 @@ from langgraph_enterprise_rag.graph.state import RAGState
 
 @pytest.fixture()
 def temp_checkpoint_db() -> str:
-    """Create a temporary SQLite database for checkpoint tests."""
+    """创建临时 SQLite 数据库用于 checkpoint 测试，测试后自动清理。"""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = os.path.join(tmpdir, "test.sqlite")
         old_db = os.environ.get("CHECKPOINT_DB")
@@ -32,13 +37,14 @@ def temp_checkpoint_db() -> str:
 
 
 def test_build_checkpointer_creates_db(temp_checkpoint_db: str) -> None:
+    """构建 checkpointer 后 SQLite DB 文件应被创建。"""
     checkpointer = build_sqlite_checkpointer()
     assert checkpointer is not None
     assert os.path.exists(temp_checkpoint_db)
 
 
 def test_graph_invoke_with_checkpoint(temp_checkpoint_db: str) -> None:
-    """Invoke the graph with a checkpointer and verify state is saved."""
+    """graph.invoke() 执行后状态应被保存到 checkpoint。"""
     checkpointer = build_sqlite_checkpointer()
     graph = build_graph(checkpointer=checkpointer)
 
@@ -59,14 +65,13 @@ def test_graph_invoke_with_checkpoint(temp_checkpoint_db: str) -> None:
 
     assert "query" in result or "final_answer" in result or "generated_answer" in result
 
-    # Retrieve checkpoint state.
     state = graph.get_state(config)
     assert state is not None
     assert state.values is not None
 
 
 def test_different_threads_isolated(temp_checkpoint_db: str) -> None:
-    """Each thread_id should have its own checkpoint."""
+    """不同 thread_id 的 checkpoint 应相互隔离。"""
     checkpointer = build_sqlite_checkpointer()
     graph = build_graph(checkpointer=checkpointer)
 
@@ -104,5 +109,4 @@ def test_different_threads_isolated(temp_checkpoint_db: str) -> None:
 
     assert s1 is not None
     assert s2 is not None
-    # Different threads → different state snapshots.
     assert s1.values.get("query") != s2.values.get("query")  # type: ignore[union-attr]

@@ -1,3 +1,25 @@
+"""
+文档摄入脚本
+==============
+
+完整的数据摄入管线：
+
+数据流：
+  data/raw/*.{pdf,md,txt,html} → load_documents()
+    → [{source, title, text}]
+    → chunk_text(text, 700, 120)
+    → [{id, content, metadata}]
+    → 过滤 < 30 字符
+    → 保存到 data/processed/chunks.jsonl（可审计）
+    → BGE-M3.encode(contents, batch=16)
+    → ChromaDB.upsert(ids, documents, metadatas, embeddings)
+
+用法：
+  python scripts/02_ingest_docs.py                     # 增量入库
+  python scripts/02_ingest_docs.py --reset             # 清空重建
+  python scripts/02_ingest_docs.py --input data/custom --collection my_corpus
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -81,6 +103,7 @@ def main() -> None:
         print("[warn] no valid chunks generated.")
         return
 
+    # 保存 chunks.jsonl 用于审计和调试
     chunk_jsonl = processed_dir / "chunks.jsonl"
     with chunk_jsonl.open("w", encoding="utf-8") as f:
         for row in chunks:
@@ -88,12 +111,14 @@ def main() -> None:
 
     print(f"[processed] chunks saved: {chunk_jsonl}")
 
+    # BGE-M3 编码
     embedder = build_embedding_model()
     print(f"[embedding] model: {embedder.model_name}")
 
     texts = [x["content"] for x in chunks]
     embeddings = embedder.encode(texts)
 
+    # ChromaDB 持久化
     client = chromadb.PersistentClient(path=str(chroma_dir))
 
     if args.reset:
