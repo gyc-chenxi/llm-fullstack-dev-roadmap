@@ -1,0 +1,1 @@
+"""Namespace package root — allows src namespace to be a regular package directory."""
