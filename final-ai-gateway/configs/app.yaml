@@ -1,0 +1,20 @@
+# Application Configuration
+app:
+  name: ai-gateway
+  version: "1.0.0"
+  debug: true
+  host: "0.0.0.0"
+  port: 8000
+  log_level: DEBUG
+
+rate_limit:
+  per_minute: 60
+  burst: 10
+
+sse:
+  heartbeat_interval_sec: 15
+  stream_max_length: 10000
+
+request:
+  default_max_tokens: 2048
+  max_context_tokens: 8192

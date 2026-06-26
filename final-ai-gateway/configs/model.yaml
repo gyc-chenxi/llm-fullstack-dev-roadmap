@@ -1,0 +1,30 @@
+# Model Configuration
+models:
+  - name: qwen2.5:7b
+    backend: ollama
+    url: http://127.0.0.1:11434
+    context_length: 8192
+    max_slots: 2
+    num_layers: 28
+    num_kv_heads: 4
+    head_dim: 128
+    dtype_bytes: 2
+    cache_prompt: true
+    description: "Qwen 2.5 7B Instruct via Ollama"
+
+  - name: ollama-qwen2.5
+    backend: ollama
+    url: http://127.0.0.1:11434
+    context_length: 8192
+    max_slots: 2
+    num_layers: 28
+    num_kv_heads: 4
+    head_dim: 128
+    dtype_bytes: 2
+    description: "Qwen 2.5 via Ollama"
+
+model_selection:
+  default: qwen2.5:7b
+  chat: qwen2.5:7b
+  rag: qwen2.5:7b
+  agent: qwen2.5:7b

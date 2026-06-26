@@ -1,0 +1,47 @@
+# RAG Configuration
+retrieval:
+  default_top_k: 5
+  rerank_top_k: 3
+  min_retrieval_score: 0.3
+  min_rerank_score: 0.5
+
+chunking:
+  chunk_size: 512
+  chunk_overlap: 50
+  separators:
+    - "\n\n"
+    - "\n"
+    - ". "
+    - " "
+
+embedding:
+  provider: local
+  model: all-MiniLM-L6-v2
+  dimension: 384
+
+vector_store:
+  type: chroma
+  persist_dir: ./runtime/chroma_db
+
+bm25:
+  enabled: true
+  k1: 1.5
+  b: 0.75
+
+reranker:
+  type: rule_based
+  score_threshold: 0.5
+
+citation:
+  require: true
+  min_citations: 1
+  max_citations: 10
+  min_relevance_score: 0.3
+
+evaluation:
+  gold_set_path: ./tests/data/rag_gold_set.jsonl
+  metrics:
+    - recall_at_k
+    - mrr
+    - citation_accuracy
+    - faithfulness
