@@ -395,12 +395,13 @@ llm-fullstack-dev-roadmap/              # 📦 仓库根目录
 ├── phase4_projects/                 # 🔥 Phase 4 — 11 大项目 (Day 46-75)
 │   ├── 01_mlx_lm/                   #   MLX LM — Apple Silicon 推理与微调
 │   ├── 02_llama_cpp/                #   llama.cpp — GGUF Serving+Gateway
-│   ├── 03_diffusers.md              #   Diffusers — 图像生成
-│   ├── 04_sam2.md                   #   SAM 2 — 视觉分割
-│   ├── 05_qwen_vl_llava.md          #   Qwen-VL/LLaVA — 多模态理解
-│   ├── 06_langgraph_rag.md          #   LangGraph RAG — 企业级实战
-│   ├── 07_llamaindex.md             #   LlamaIndex — 知识库框架
-│   ├── 09_swe-agent-lab/            #   SWE-agent — AI 代码修复实战 lab
+│   ├── 03_diffusers-vision-lab/     #   Diffusers — 文生图/图生图/Inpaint
+│   ├── 04_sam2-vision-segmentation-lab/ # SAM 2 — 图像/视频分割
+│   ├── 05-vlm-understanding-lab/    #   Qwen-VL/LLaVA — 多模态理解与 OCR
+│   ├── 06-langgraph-enterprise-rag-lab/ # LangGraph — 企业级 RAG 状态机
+│   ├── 07_llamaindex-knowledge-base-lab/ # LlamaIndex — 知识库框架
+│   ├── 08_graphrag-lab/             #   GraphRAG — 图谱检索增强
+│   ├── 09_swe-agent-lab/            #   SWE-agent — AI 代码修复
 │   ├── PROJECTS_SUMMARY.md          #   项目矩阵总结
 │   ├── learning-issues.md
 │   └── README.md
