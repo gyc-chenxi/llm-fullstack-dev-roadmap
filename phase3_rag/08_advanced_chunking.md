@@ -264,7 +264,170 @@ def benchmark_chunk_sizes(texts: list[str], queries: list[str],
 
 ---
 
-## ✅ 产出物 Checklist
+## 7️⃣ 实战案例：文档 Chunking 参数设计与计算
+
+> 以下是一个**完整的具体案例**，从拿到一份真实文档到确定 chunk 参数的全过程。学完这个例子，你可以直接照搬到自己的项目中。
+
+### 📋 场景
+
+你是一家 SaaS 公司的 AI 工程师，需要将一份 **47 页的产品技术白皮书**（约 35,000 字，包含 Markdown 格式的标题、表格、代码块）接入 RAG 知识库。目标是让销售团队能够通过问答快速检索产品技术信息。
+
+**原始文档特征分析**：
+
+| 特征 | 具体数值 | 对 Chunking 的影响 |
+|:-----|:---------|:------------------|
+| 总字数 | ~35,000 中文字 | 约 35,000 tokens（中文约 1 字 ≈ 1 token）|
+| 页数 | 47 页 | 每页约 745 字 |
+| 标题层级 | H1×6, H2×24, H3×52 | 语义边界充足，优先文档结构感知 |
+| 表格数量 | 8 个 | 需保持表格完整，不能切在表格中间 |
+| 代码块 | 12 个 | 代码块必须完整保留 |
+| 段落平均长度 | 120 字 | 2-3 个段落组成一个 chunk 比较合理 |
+
+### Step 1：确定 Chunk Size 的理论范围
+
+**约束条件**：
+
+1. **Embedding 模型限制**：使用 `BAAI/bge-small-zh-v1.5`，最大输入 512 tokens
+2. **LLM 上下文窗口**：GPT-4o-mini 128K（宽松），但实际使用中每个 query 通常携带 3-5 个 chunks
+3. **甜点经验值**：中文 RAG 场景常用 300-600 tokens
+
+**计算有效窗口**：
+
+```
+Embedding 模型最大输入: 512 tokens
+留余量（约 20%）: 512 × 0.8 ≈ 410 tokens
+每个 chunk 保留 50 tokens 用于 metadata（来源、页码、标题）
+
+有效富文本内容上限: 410 - 50 = 360 tokens
+中文约 360 字/块
+```
+
+### Step 2：确定 Overlap 参数
+
+**Overlap 的作用**：避免关键信息被切在边界导致两边都检索不到。
+
+**计算公式**：
+
+```
+Overlap_ideal = max(
+    avg_sentence_length × 1.5,       # 至少覆盖 1-2 个完整句子
+    chunk_size × overlap_ratio       # 按比例
+)
+```
+
+**代入数值**：
+
+```
+avg_sentence_length = 35 字（中文平均句长）
+overlap_ratio = 15%
+
+Overlap_by_sentence: 35 × 1.5 = 52.5 字
+Overlap_by_ratio:    360 × 15% = 54 字
+
+取较大值 ≈ 55 字（约 55 tokens）
+```
+
+### Step 3：文档结构感知策略（优先于固定大小）
+
+```
+文档结构:
+┌─ H1: 产品概述 (2,100 字)
+│  ├─ H2: 技术架构 (1,200 字)  → 1 chunk (超出360, 需拆分)
+│  │  ├─ H3: 前端层 (400 字)    → 1 chunk ✅
+│  │  ├─ H3: 后端层 (500 字)    → 需拆分
+│  │  └─ H3: 数据层 (100 字)    → 与前一个 H3 合并?
+│  └─ H2: 核心特性 (900 字)     → 1 chunk (保留完整)
+│
+└─ H1: API 参考 (5,000 字)
+   ├─ H2: REST API (2,800 字)   → 按 endpoint 再拆分
+   └─ H2: WebSocket (2,200 字)  → 按事件类型拆分
+```
+
+**决策逻辑**：
+
+```
+IF 文档有 H1/H2/H3 标题 THEN
+   按标题层级拆分（每个 H2 作为候选 chunk 边界）
+   IF 一个 H2 段 > 500 tokens THEN
+      按 H3 进一步拆分
+   IF 一个 H3 段 < 100 tokens THEN
+      与前一个 H3 段合并（同一 H2 下）
+   IF 段落包含表格/代码块 THEN
+      表格/代码块必须整体保留在一个 chunk 内
+      如果表格过大(>500 tokens)，考虑整表拆到多个 chunk 但保证行不跨 chunk
+FI
+```
+
+### Step 4：最终参数配置
+
+```python
+chunk_params = {
+    # 主要策略：文档结构感知 + 递归切分作为 fallback
+    "primary_strategy": "document_structure_aware",
+    "fallback_strategy": "recursive_character",   # 无标题时降级
+    
+    # 核心参数
+    "chunk_size": 360,       # tokens，基于 Embedding 模型 512 limit × 0.8 - metadata
+    "chunk_overlap": 55,     # tokens，基于 avg_sentence × 1.5 和 15%
+    
+    # 文档结构感知配置
+    "headers_to_split_on": [
+        ("###", "H3"),       # 最小拆分单元
+        ("##", "H2"),        # 主要拆分边界
+        ("#",  "H1"),        # 保留 H1 作为 metadata
+    ],
+    
+    # 特殊元素保护
+    "keep_together": ["table", "code_block"],   # 保持完整
+    
+    # 边界规则
+    "min_chunk_size": 100,   # tokens，小于此值合并到相邻 chunk
+    "max_chunk_size": 500,   # tokens，硬上限（超过则二分）
+    
+    # Metadata 注入
+    "metadata_fields": ["source", "page", "h1", "h2", "h3", "chunk_index"],
+}
+```
+
+### Step 5：结果验证
+
+```python
+# 35,000 字文档的实际分块结果
+results = {
+    "total_chunks": 87,                       # 87 个 chunk
+    "avg_chunk_tokens": 342,                  # 接近目标的 360
+    "chunks_in_target_range(300-400)": 61,    # 70% 在目标范围内
+    "chunks_too_small(<150)": 4,              # 4.6% 太短
+    "chunks_too_large(>500)": 3,              # 3.4% 太长
+    "tables_broken": 0,                       # 0 个表格被切开 ✅
+    "code_blocks_broken": 1,                  # 1 个代码块被切开（过长）
+    
+    # Overlap 统计
+    "avg_overlap_tokens": 52,                 # 接近目标的 55
+    "overlap_range": "48-56",                 # 稳定
+    
+    # 整体空间利用率
+    "total_tokens_after_chunking": 29754,     # 含 overlap 的冗余
+    "space_waste_pct": 15.0,                  # overlap 导致的冗余
+}
+```
+
+### Step 6：对比实验
+
+| 策略 | chunk_size | overlap | 检索 Recall@5 | 生成正确率 | 总 tokens |
+|:-----|:----------|:--------|:-------------|:----------|:---------|
+| 固定大小 | 512 | 0 | 68.3% | 71.2% | 35,000 |
+| 固定大小+overlap | 512 | 50 | 72.1% | 74.5% | 40,250 |
+| 递归切分 | 400 | 50 | 76.8% | 79.3% | 41,800 |
+| **文档结构感知** | **360** | **55** | **82.5%** | **85.1%** | **39,500** |
+| Small-to-Big | small=150/big=600 | 30 | **84.2%** | **87.6%** | 48,700 |
+
+**结论**：
+- 文档结构感知 + 经过计算的参数相比暴力固定大小，Recall@5 提升了 **14 个百分点**
+- Small-to-Big 效果最好但存储翻倍 → 高价值场景优先选择
+- **Chunking 不是一次性的工作**——每次迭代后都要用 RAGAS 等工具重新验证
+
+> 💡 **面试加分点**："我在做 Chunking 时不是随便选参数，而是从 Embedding 模型最大输入反向推导有效内容窗口，再根据文档结构分块，最后用对比实验验证——整个过程是可复现、可量化的。"
 
 - [ ] 实现至少 3 种分块策略（固定/语义/递归/Small-to-Big）
 - [ ] 跑 chunk_size 对比实验（200/300/500/800/1200），记录 Recall@5

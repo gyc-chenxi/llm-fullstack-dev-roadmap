@@ -92,9 +92,20 @@ import torch
 3. "我理解 GQA 的工程动机——KV Cache 带宽是推理瓶颈，不是算力"
 4. "我做过 LoRA 微调，知道 r/alpha/target_modules 对效果的影响"
 
-## 面试参考
+## 📐 本阶段核心数学公式速查
 
-详见 `_00_7day_deep_dive_reference.md` — 包含面试拷问 Top 2 + 原理级排障场景
+> 面试考的不是"你知不知道这个公式"，而是"你能不能讲清楚为什么这么设计"。
+
+| 公式 | 数学表达 | 一句话工程直觉 |
+|:-----|:---------|:--------------|
+| **Scaled Dot-Product Attention** | $\text{Attention}(Q,K,V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$ | 除以 $\sqrt{d_k}$ 防止 softmax 梯度消失 — $\text{Var}(q\cdot k) = d_k$，方差越大分布越极端 |
+| **RoPE 旋转编码** | $f(x_m, m) = x_m \cdot e^{i m\theta}$ | 旋转后 Q·K 只依赖相对位置 $i-j$ — 内积 = $x_m^\top R_{m-n} x_n$ |
+| **KV Cache 显存** | $M_{KV} = 2 \cdot n_L \cdot n_{kv\_h} \cdot d_h \cdot L \cdot B \cdot \text{dtype\_bytes}$ | LLaMA 3 8B 在 8K 上下文下需要约 **2 GB** KV Cache → 上下文长度是显存杀手 |
+| **Decoder 速度** | $\text{speed} \approx \text{BW} / (n_{\text{params}} \times 2\text{bytes})$ | A100-80G 跑 8B 模型约 **125 tok/s** — 瓶颈在显存带宽，不在算力 |
+| **训练 FLOPs** | $T_{\text{train}} \approx 6 \cdot n_{\text{params}} \cdot N_{\text{tokens}}$ | 前向 2 FLOPs + 反向 4 FLOPs — GPU 账单的数学依据 |
+| **FlashAttention** | $\text{memory} = O(N)$ 而非 $O(N^2)$ | 分块 tiling 避免显存存整个 $N\times N$ 注意力矩阵 |
+
+> 完整公式推导见 [`00_transformer.md#核心数学公式速查`](./00_transformer.md)
 
 ## 下一阶段
 

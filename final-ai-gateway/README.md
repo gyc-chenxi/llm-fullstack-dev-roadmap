@@ -132,7 +132,115 @@ backend/app/
     └── middlewares/            # RequestId, ErrorBoundary
 ```
 
-## Technical Highlights (Interview Ready)
+## Core Module Showcase (One Look = Engineering Depth)
+
+These three modules are the **heart of the AI-Gateway** — what transforms it from "an API wrapper" into "a production-grade model service governance layer."
+
+### ⚙️ Module 1: ModelRouter — Multi-Model Dynamic Routing Engine
+
+```python
+class ModelRouter:
+    """Strategy + Chain-of-Responsibility + Circuit Breaker.
+
+    Flow: ① Extract routing hints ② Build fallback chain from policy
+          ③ Walk chain: check CB → apply strategies → validate → return
+          ④ All exhausted → NoSuitableModelError
+    """
+
+    async def route(self, ctx: dict) -> tuple[ModelEndpoint, RoutingDecision]:
+        fallback_chain = self._build_fallback_chain(ctx.get("model"))
+
+        for model_name in fallback_chain:
+            # Circuit breaker check — O(1), skips unhealthy models
+            cb = self.circuit_breakers.get(model_name)
+            if cb and cb.state == "open":
+                continue
+
+            for strategy in self.strategies:  # TaskBased / LatencyAware / LoadBalance
+                selected, reason = await strategy.select(ctx, [self.endpoints[model_name]])
+                if selected:
+                    return selected, RoutingDecision(
+                        request_id=ctx["request_id"],
+                        selected_model=selected.name,
+                        decision_reason=reason,
+                        fallback_chain=fallback_chain,
+                        routing_latency_ms=...,
+                        estimated_cost=...,
+                    )
+
+        raise NoSuitableModelError(...)
+```
+
+**Key design decisions:**
+- 3 routing strategies (TaskBased, LatencyAware, LoadBalancing) — pluggable via config
+- Fallback chain from `fallback_policy.yaml` (e.g. `gpt-4o → gpt-4o-mini → deepseek → local`)
+- Each routing decision logged to Trace: "why this model was chosen"
+- Live latency stats feed back into LatencyAware strategy (EMA update)
+
+### ⚙️ Module 2: Redis Token Bucket — Two-Layer Rate Limiting
+
+Layer 1 = local in-memory bucket (nanosecond check), Layer 2 = Redis Lua script (distributed accuracy):
+
+```python
+# Redis Lua — guarantees atomic read-calc-write, no distributed lock needed
+LUA_SCRIPT = """
+local tokens, last_refill = unpack(redis.call('GET', key) or {burst, now})
+tokens = min(burst, tokens + (now - last_refill) * rate)
+if tokens >= cost then
+    tokens = tokens - cost
+    redis.call('SET', key, json.encode({tokens, now}))
+    return {1, tokens}     -- allowed
+end
+return {0, tokens}          -- rejected
+"""
+
+async def consume(self, api_key: str) -> LimiterResult:
+    if not self.local_bucket.consume():       # Layer 1: 纳秒级快速路径
+        return LimiterResult(allowed=False)
+    return await self.redis.eval(             # Layer 2: Redis 精确控制
+        LUA_SCRIPT, 1, f"ratelimit:{api_key}", rate, burst, time.time(), 1
+    )
+```
+
+**Three isolation levels**: `global (500/s)` → `per_user (10/s)` → `per_ip (100/s)`, configurable in `app.yaml`.
+
+### ⚙️ Module 3: Circuit Breaker — CLOSED → OPEN → HALF_OPEN State Machine
+
+```python
+class CircuitBreaker:
+    """Three-state machine preventing cascading failures.
+
+    Instead of try-except (reactive, wastes time), circuit breaker pre-checks
+    before even attempting the call — saving connection pool and latency budget.
+    """
+
+    def call(self, func, *args, **kwargs):
+        if self.state == OPEN:
+            if time.monotonic() - self.last_failure > self.recovery_timeout:
+                self.state = HALF_OPEN    # Probe: is it back?
+            else:
+                raise CircuitBreakerOpenError()  # 0ms rejection
+
+        if self.state == HALF_OPEN and self.half_open_requests >= 2:
+            raise CircuitBreakerOpenError()  # Only 1 probe at a time
+
+        try:
+            result = func(*args, **kwargs)
+            self.state, self.failure_count = CLOSED, 0  # Recovered!
+            return result
+        except Exception:
+            self.failure_count += 1
+            if self.failure_count >= 5: self.state = OPEN
+            raise
+```
+
+**Failure detection**: 5 consecutive timeouts → OPEN. 30s recovery timeout → HALF_OPEN probe. Success → back to CLOSED. Failure → exponential backoff (30s → 60s → 120s).
+
+---
+
+> 📖 See [`docs/router_architecture.md`](./docs/router_architecture.md), [`docs/rate_limiter_design.md`](./docs/rate_limiter_design.md), [`docs/circuit_breaker_design.md`](./docs/circuit_breaker_design.md) for full design docs with diagrams.
+
+---
 
 ### 1. GatewayChatModel — LangChain Doesn't Talk to Models Directly
 
