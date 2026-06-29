@@ -15,7 +15,7 @@
 | Day 3 | [Phase 2](../phase2_llm_internals/) — 理解 Transformer | 看懂 Attention 公式，能画维度流动 |
 | Day 4 | [Phase 3](../phase3_rag/) — 跑通 RAG | 一个最简 RAG Demo 能跑起来 |
 | Day 5 | [Phase 5](../phase5_agent/) — 玩 Agent | ReAct Agent + 工具调用 |
-| Day 6-7 | [Phase 6](../final_ai_gateway/) — 理解网关 | 看懂 AI-Gateway 设计文档 |
+| Day 6-7 | [Phase 6](../final-ai-gateway/) — 理解网关 | 看懂 AI-Gateway 设计文档 |
 
 > 🎯 **结果**：对大模型全栈有宏观认知，能调 API，能讲清楚基本概念。
 
@@ -53,7 +53,7 @@
 | 2 | **Unified LLM Client** | [Phase 1](../phase1_prompt_api/02_llm_client.md) | ⭐⭐ | 2-3天 |
 | 3 | **FastAPI Chat Service** | [Phase 1](../phase1_prompt_api/03_fastapi_chat.md) | ⭐⭐ | 2-3天 |
 | 4 | **LangGraph RAG Agent** | [Phase 3](../phase3_rag/05_langgraph_rag.md) → [Phase 5](../phase5_agent/) | ⭐⭐⭐ | 5-7天 |
-| 5 | **AI-Gateway** | [Phase 6](../final_ai_gateway/) | ⭐⭐⭐⭐⭐ | 10-16天 |
+| 5 | **AI-Gateway** | [Phase 6](../final-ai-gateway/) | ⭐⭐⭐⭐⭐ | 10-16天 |
 
 > ⚠️ 做项目时如果卡住，回头补对应的 Phase 理论基础。
 

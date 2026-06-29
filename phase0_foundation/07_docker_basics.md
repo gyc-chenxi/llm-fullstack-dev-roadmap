@@ -108,7 +108,7 @@ version: "3.9"
 services:
   # 🧠 API 网关
   api:
-    build: ./final_ai_gateway
+    build: ./final-ai-gateway
     ports:
       - "8000:8000"
     env_file:

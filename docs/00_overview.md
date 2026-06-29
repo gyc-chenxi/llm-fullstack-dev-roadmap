@@ -1257,7 +1257,7 @@ llm-fullstack-roadmap/
 │   ├── tool_calling/            # 工具定义与调用
 │   └── agent_api/               # Agent 服务化
 │
-├── final_ai_gateway/            # Phase 6：AI-Gateway
+├── final-ai-gateway/            # Phase 6：AI-Gateway
 │   ├── README.md
 │   ├── backend/
 │   │   ├── app.py               # FastAPI 主入口

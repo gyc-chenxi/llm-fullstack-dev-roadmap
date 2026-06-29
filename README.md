@@ -303,44 +303,66 @@ graph TB
 ```
 llm-fullstack-dev-roadmap/              # 📦 仓库根目录
 │
-├── README.md                        # 📖 项目首页（你正在看的）
-├── learning-journal.md              # ✍️ 总学习心得与踩坑汇总
+├── README.md                        # 项目首页
+├── learning-journal.md              # 学习心得与踩坑汇总
 ├── LICENSE                          # MIT
 ├── .gitignore
-├── requirements.txt
+├── requirements.txt                 # 基础依赖
 │
 ├── docs/                            # 📚 通用文档
-│   ├── 00_overview.md               #   项目总览
-│   ├── 01_environment_setup.md      #   🆕 三平台环境搭建（macOS/Win/Linux）
+│   ├── 00_overview.md               #   项目总览与技能矩阵
+│   ├── 01_environment_setup.md      #   三平台环境搭建（macOS/Win/Linux）
 │   ├── 01_original_plan.md          #   原始计划
-│   └── 05_troubleshooting.md        #   常见问题与排障
+│   ├── 05_troubleshooting.md        #   常见问题与排障
+│   ├── PORTFOLIO_GUIDE.md           #   作品集面试讲法指南
+│   └── START_HERE.md                #   快速开始路径选择
 │
 ├── phase0_foundation/               # 🛠️ Phase 0 — 基建与复习 (Day 1-5)
 │   ├── 01_python_review.md          #   Python 高频特性 + NumPy/Pandas/Matplotlib
 │   ├── 02_ml_dl_review.ipynb        #   ML/DL 基础复习
 │   ├── 03_neural_network_map.ipynb  #   神经网络架构地图
 │   ├── 04_nlp_cv_llm_overview.ipynb #   NLP/CV/LLM 全景总览
-│   ├── 05_llm_concepts_glossary.md  #   🌟 43 个 LLM 核心概念术语表
+│   ├── 05_llm_concepts_glossary.md  #   43 个 LLM 核心概念术语表
 │   ├── 06_git_github.md             #   Git 工作流 + SSH + Conventional Commits
 │   ├── 07_docker_basics.md          #   Docker + Redis + PostgreSQL 快速上手
 │   ├── 08_linux_shell_basics.md     #   Linux/Shell 命令行基础
 │   ├── 09_pytorch_basics.ipynb      #   PyTorch 基础实战
 │   ├── 10_project_scaffolding.md    #   项目工程化脚手架
-│   └── 11_developer_tools.md        #   开发工具链配置
+│   ├── 11_developer_tools.md        #   开发工具链配置
+│   ├── learning-issues.md           #   踩坑记录
+│   └── README.md                    #   学习导航
 │
 ├── phase1_prompt_api/               # 💬 Phase 1 — Prompt + API (Day 6-15)
-│   ├── 01_prompt_cookbook.md        #   25+ Prompt 模板库（6 大类）
+│   ├── 01_prompt_cookbook.md        #   25+ Prompt 模板库（6 大类 26 模板）
 │   ├── 02_llm_client.md             #   统一 LLM 客户端（7 个 Provider）
 │   ├── 03_fastapi_chat.md           #   FastAPI 聊天服务（含测试）
 │   ├── 04_web_chat_demo.md          #   Vue3 + TypeScript SSE 流式前端
-│   ├── 05_prompt_advanced.md        #   Prompt 进阶（CoT/结构化/防幻觉）
+│   ├── 05_prompt_advanced.md        #   Prompt 进阶（CoT/Reflexion/结构化/防幻觉）
 │   ├── 06_doc_generation_prompts.md #   文档生成提示词
-│   ├── 07_env_secrets_mgmt.md       #   🆕 API Key 管理与安全
+│   ├── 07_env_secrets_mgmt.md       #   API Key 管理与安全
 │   ├── 08_testing_guide.md          #   LLM 调用测试指南
-│   └── llm_chat_service/            #   🆕 完整 FastAPI 项目
+│   ├── learning-issues.md
+│   ├── README.md
+│   │
+│   └── llm_chat_service/            # FastAPI 完整后端项目
+│       ├── pyproject.toml           #   项目依赖
+│       ├── Makefile                 #   一键命令
+│       ├── .env.example
+│       ├── app/
+│       │   ├── main.py              #   FastAPI 入口
+│       │   ├── config.py            #   配置加载
+│       │   ├── auth.py              #   API Key 鉴权
+│       │   ├── dependencies.py      #   依赖注入
+│       │   ├── errors.py            #   统一错误处理
+│       │   ├── middleware/          #   中间件
+│       │   ├── routes/             #   Chat + Health + Models 路由
+│       │   └── schemas/            #   Pydantic 请求/响应 Schema
+│       └── tests/                   #   pytest 单元测试
+│           ├── conftest.py
+│           └── test_chat.py
 │
 ├── phase2_llm_internals/            # 🧠 Phase 2 — LLM 底层 + 工业微调 (Day 16-28)
-│   ├── 00_transformer.md            #   Transformer 架构总览 + Shape 流动
+│   ├── 00_transformer.md            #   Transformer 架构 + Shape 流动 + 数学公式
 │   ├── 01_attention.ipynb           #   Scaled Dot-Product Attention
 │   ├── 02_mha_mqa_gqa.ipynb         #   MHA / MQA / GQA
 │   ├── 03_rope.ipynb                #   RoPE 旋转位置编码
@@ -351,20 +373,24 @@ llm-fullstack-dev-roadmap/              # 📦 仓库根目录
 │   ├── 08_quantization.md           #   量化技术详解（GPTQ/AWQ/GGUF）
 │   ├── 09_attention_from_scratch.md #   手写 MHA + GQA（PyTorch）
 │   ├── 10_lora_demo.md              #   LoRA 微调实战（完整训练循环）
-│   ├── 11_fine-tuning_techniques.md #   🌟 SFT/RLHF/DPO/蒸馏全景
-│   ├── 12_deployment_vllm.md        #   🆕 vLLM 推理引擎与部署
-│   └── _00_7day_deep_dive_ref.md    #   面试拷问/排障场景/工程映射参考
+│   ├── 11_fine-tuning_techniques.md #   SFT/RLHF/DPO/蒸馏全景
+│   ├── 12_deployment_vllm.md        #   vLLM 推理引擎与部署
+│   ├── _00_7day_deep_dive_ref.md    #   面试拷问/排障场景/工程映射参考
+│   ├── learning-issues.md
+│   └── README.md
 │
 ├── phase3_rag/                      # 📚 Phase 3 — RAG 体系 (Day 29-45)
 │   ├── 01_naive_rag.md              #   最简 RAG 完整实现
-│   ├── 02_document_loader.md        #   🆕 工业文档解析器（5格式+表格+OCR）
+│   ├── 02_document_loader.md        #   工业文档解析器（5格式+表格+OCR）
 │   ├── 03_vector_index.md           #   向量索引（FAISS/Chroma+benchmark）
 │   ├── 04_hybrid_search.md          #   混合检索（BM25+Vector+RRF+Reranker）
 │   ├── 05_langgraph_rag.md          #   LangGraph RAG 状态机（8节点）
-│   ├── 06_rag_evaluation.md         #   🆕 RAGAS/TruLens 量化评测
+│   ├── 06_rag_evaluation.md         #   RAGAS/TruLens 量化评测
 │   ├── 07_rag_web_app.md            #   RAG Web 应用（FastAPI+Vue3+Docker）
-│   ├── 08_advanced_chunking.md      #   高级分块策略
-│   └── 09_llamaindex_basics.md      #   LlamaIndex 入门
+│   ├── 08_advanced_chunking.md      #   高级分块策略 + 参数计算实战
+│   ├── 09_llamaindex_basics.md      #   LlamaIndex 入门
+│   ├── learning-issues.md
+│   └── README.md
 │
 ├── phase4_projects/                 # 🔥 Phase 4 — 11 大项目 (Day 46-75)
 │   ├── 01_mlx_lm/                   #   MLX LM — Apple Silicon 推理与微调
@@ -374,9 +400,10 @@ llm-fullstack-dev-roadmap/              # 📦 仓库根目录
 │   ├── 05_qwen_vl_llava.md          #   Qwen-VL/LLaVA — 多模态理解
 │   ├── 06_langgraph_rag.md          #   LangGraph RAG — 企业级实战
 │   ├── 07_llamaindex.md             #   LlamaIndex — 知识库框架
-│   ├── 08_graphrag.md               #   GraphRAG — 图谱检索增强
-│   ├── 09_swe_agent.md              #   SWE-agent — AI 代码修复
-│   └── PROJECTS_SUMMARY.md          #   项目矩阵总结
+│   ├── 09_swe-agent-lab/            #   SWE-agent — AI 代码修复实战 lab
+│   ├── PROJECTS_SUMMARY.md          #   项目矩阵总结
+│   ├── learning-issues.md
+│   └── README.md
 │
 ├── phase5_agent/                    # 🤖 Phase 5 — Agent 架构 (Day 76-84)
 │   ├── 01_react_agent.md            #   ReAct Agent 完整实现
@@ -386,171 +413,108 @@ llm-fullstack-dev-roadmap/              # 📦 仓库根目录
 │   ├── 05_open_source_agent_platforms.md # Dify/RAGFlow/Coze 实战
 │   ├── 06_multi_agent_patterns.md   #   多 Agent 协作 + CrewAI
 │   ├── 07_agent_evaluation.md       #   Agent 评估体系 + 可观测性
-│   └── 08_agent_security.md         #   Agent 安全（注入攻防）
+│   ├── 08_agent_security.md         #   Agent 安全（注入攻防）
+│   ├── demo_README.md               #   Agent 演示说明
+│   ├── learning-issues.md
+│   └── README.md
 │
-├── final_ai_gateway/                # 🏗️ Phase 6 — AI-Gateway (Day 85-100)
-│   ├── README.md                    # 独立 README，面试作品集核心
-│   ├── design_doc.md                # 完整架构设计文档
-│   ├── INTERVIEW-QUESTIONS.md       # Gateway 面试高频题
-│   ├── PROGRESS.md                  # 迭代进度表
-│   ├── Makefile                     # 一键命令（lint/test/run/deploy）
-│   ├── .env.example                 # 环境变量模板
+├── final-ai-gateway/                # 🏗️ Phase 6 — AI-Gateway (Day 85-100)
+│   ├── README.md                    #   独立 README 作品集
+│   ├── design_doc.md                #   完整架构设计文档（23KB）
+│   ├── INTERVIEW-QUESTIONS.md       #   Gateway 面试高频题
+│   ├── PROGRESS.md                  #   迭代进度表
+│   ├── TROUBLESHOOTING-*.md         #   5 篇排障指南
+│   ├── Makefile                     #   一键命令
+│   ├── .env.example                 #   环境变量模板
 │   │
-│   ├── backend/                     # 🐍 FastAPI 后端 (DDD 分层架构)
-│   │   ├── pyproject.toml           #   项目元数据与依赖
-│   │   ├── app/
-│   │   │   ├── main.py              #   FastAPI 入口 + lifespan 生命周期
-│   │   │   ├── config.py            #   配置加载（YAML + 环境变量覆盖）
-│   │   │   │
-│   │   │   ├── domain/              #   🧠 领域层（零外部依赖，纯 Python）
-│   │   │   │   ├── entities/        #     领域实体
-│   │   │   │   │   ├── inference_request.py   # 推理请求模型
-│   │   │   │   │   ├── model_profile.py       # 模型 Profile（层数/头数/维度）
-│   │   │   │   │   ├── slot.py                # Slot 状态机  IDLE→BUSY→DRAINING
-│   │   │   │   │   ├── queue_ticket.py        # 队列票据
-│   │   │   │   │   ├── stream_session.py      # SSE 流式会话
-│   │   │   │   │   ├── fault_event.py         # 熔断/故障事件
-│   │   │   │   │   ├── agent_run.py           # Agent 运行记录
-│   │   │   │   │   ├── rag_request.py         # RAG 请求实体
-│   │   │   │   │   ├── tool_call.py           # 工具调用记录
-│   │   │   │   │   └── trace_run.py           # Trace 追踪记录
-│   │   │   │   ├── value_objects/   #     值对象（不可变）
-│   │   │   │   │   ├── token_budget.py        # Token 预算计算
-│   │   │   │   │   ├── admission_decision.py  # 准入决策
-│   │   │   │   │   ├── priority.py            # 优先级值对象
-│   │   │   │   │   ├── prefix_hash.py         # Prefix Cache Hash
-│   │   │   │   │   ├── latency_metrics.py     # 延迟指标
-│   │   │   │   │   ├── retrieval_hit.py       # 检索命中
-│   │   │   │   │   ├── citation.py            # 引用验证
-│   │   │   │   │   ├── agent_state_snapshot.py # Agent 状态快照
-│   │   │   │   │   └── stream_event.py        # SSE 事件
-│   │   │   │   ├── services/        #     领域服务（核心业务逻辑）
-│   │   │   │   │   ├── router.py              # ⭐ 多模型动态路由（策略模式）
-│   │   │   │   │   ├── admission_controller.py # 准入控制（Token + Slot 检查）
-│   │   │   │   │   ├── slot_allocator.py      # Slot 分配器
-│   │   │   │   │   ├── token_bucket_limiter.py # ⭐ 令牌桶限流
-│   │   │   │   │   ├── token_budget_estimator.py # Token 预算估算
-│   │   │   │   │   ├── circuit_breaker.py     # ⭐ 熔断器（三态状态机）
-│   │   │   │   │   ├── prefix_cache_policy.py # Prefix Cache 策略
-│   │   │   │   │   ├── output_guard.py        # 输出质量守卫
-│   │   │   │   │   ├── stream_health_detector.py # 流式健康检测
-│   │   │   │   │   ├── rag_quality_guard.py   # RAG 质量守卫
-│   │   │   │   │   ├── agent_loop_guard.py    # Agent 循环守卫
-│   │   │   │   │   └── long_context_planner.py # 长上下文规划器
-│   │   │   │   └── ports/           #     端口接口（依赖倒置）
-│   │   │   │       ├── llm_client.py          # LLM 客户端抽象
-│   │   │   │       ├── queue_repository.py    # 队列仓储接口
-│   │   │   │       ├── slot_repository.py     # Slot 仓储接口
-│   │   │   │       ├── metrics_repository.py  # 指标仓储接口
-│   │   │   │       ├── trace_repository.py    # Trace 仓储接口
-│   │   │   │       ├── tokenizer_port.py      # Tokenizer 接口
-│   │   │   │       ├── retriever_port.py      # 检索器端口
-│   │   │   │       ├── rag_runtime_port.py    # RAG 运行时端口
-│   │   │   │       ├── agent_runtime_port.py  # Agent 运行时端口
-│   │   │   │       ├── tool_registry_port.py  # 工具注册端口
-│   │   │   │       ├── prompt_cache_repository.py # Prompt Cache 接口
-│   │   │   │       └── system_probe.py        # 系统探针接口
-│   │   │   │
-│   │   │   ├── application/         #   🎬 应用层（Use Cases + 编排器）
-│   │   │   │   ├── dto/             #     数据传输对象
-│   │   │   │   ├── use_cases/       #     用例
-│   │   │   │   │   ├── submit_chat_use_case.py      # 提交聊天
-│   │   │   │   │   ├── stream_chat_use_case.py      # 流式聊天
-│   │   │   │   │   ├── resume_stream_use_case.py    # SSE 断线恢复
-│   │   │   │   │   ├── cancel_request_use_case.py   # 取消请求
-│   │   │   │   │   └── dequeue_request_use_case.py  # 出队处理
-│   │   │   │   └── orchestrators/   #     编排器（后台协程）
-│   │   │   │       ├── inference_orchestrator.py    # 推理编排
-│   │   │   │       ├── queue_worker.py              # ⭐ 队列消费者（异步）
-│   │   │   │       ├── metrics_collector.py         # 指标收集器
-│   │   │   │       └── trace_collector.py           # Trace 收集器
-│   │   │   │
-│   │   │   └── infrastructure/      #   🔌 基础设施层（外部依赖实现）
-│   │   │       ├── redis/           #     Redis 实现
-│   │   │       │   ├── connection.py                # 连接池管理
-│   │   │       │   ├── redis_priority_queue.py      # ⭐ 优先级队列
-│   │   │       │   ├── redis_slot_repo.py           # Slot 仓储
-│   │   │       │   ├── redis_metrics_repo.py        # 指标仓储
-│   │   │       │   ├── redis_trace_repo.py          # Trace 仓储
-│   │   │       │   ├── redis_stream_session_repo.py # SSE 会话仓储
-│   │   │       │   ├── redis_token_bucket.py        # ⭐ Redis 令牌桶
-│   │   │       │   └── prompt_cache_repo.py         # Prompt Cache 仓储
-│   │   │       ├── llm_clients/     #     LLM 客户端实现
-│   │   │       │   ├── client_factory.py            # 工厂模式
-│   │   │       │   ├── llamacpp_client.py           # llama.cpp 适配
-│   │   │       │   ├── ollama_client.py             # Ollama 适配
-│   │   │       │   ├── openai_compatible_client.py  # OpenAI 兼容适配
-│   │   │       │   └── gateway_chat_model.py        # LangChain 集成
-│   │   │       ├── retrieval/       #     检索基础设施
-│   │   │       │   ├── document_loader.py           # 文档加载
-│   │   │       │   ├── text_splitter.py             # 文本分块
-│   │   │       │   ├── vector_store_repo.py         # 向量存储
-│   │   │       │   ├── bm25_retriever.py            # BM25 检索
-│   │   │       │   ├── hybrid_retriever.py          # 混合检索
-│   │   │       │   └── reranker.py                  # 重排序
-│   │   │       ├── langchain_runtime/ #     LangChain RAG 运行时
-│   │   │       ├── langgraph_runtime/ #     LangGraph Agent 运行时
-│   │   │       ├── benchmark/       #     压测引擎
-│   │   │       ├── sse/             #     SSE 事件存储
-│   │   │       ├── tokenizer/       #     Tokenizer 封装
-│   │   │       ├── prompt_cache/    #     Prompt Cache 实现
-│   │   │       └── probes/          #     系统探针（macOS/Linux 内存）
+│   ├── backend/                     # 🐍 FastAPI 后端（DDD 四层架构）
+│   │   ├── pyproject.toml
+│   │   ├── scripts/                 #   工具脚本
+│   │   ├── tests/
+│   │   │   ├── unit/               #   单元测试（Mock 外部依赖）
+│   │   │   │   ├── test_application.py
+│   │   │   │   └── test_rag_agent.py
+│   │   │   ├── integration/         #   集成测试（真实 Redis）
+│   │   │   │   └── test_infrastructure.py
+│   │   │   └── e2e/                 #   端到端测试
 │   │   │
-│   │   ├── interface/               #   🌐 接口层（HTTP/SSE/WS）
-│   │   │   ├── http/
-│   │   │   │   ├── routes_chat.py           # POST /api/v1/chat
-│   │   │   │   ├── routes_metrics.py        # GET /api/v1/metrics
-│   │   │   │   ├── routes_slots.py          # GET /api/v1/slots
-│   │   │   │   ├── routes_trace.py          # GET /api/v1/trace
-│   │   │   │   ├── routes_rag.py            # POST /api/v1/rag/query
-│   │   │   │   ├── routes_agent.py          # POST /api/v1/agent/run
-│   │   │   │   ├── routes_admin.py          # GET /api/v1/admin/health
-│   │   │   │   └── routes_benchmark.py      # POST /api/v1/benchmark
-│   │   │   ├── middlewares/
-│   │   │   │   ├── request_id_middleware.py     # Request-ID 注入
-│   │   │   │   └── error_boundary_middleware.py # 全局异常捕获
-│   │   │   ├── sse/
-│   │   │   │   └── stream_endpoint.py          # SSE 端点包装器
-│   │   │   └── websocket/
-│   │   │
-│   │   └── tests/                    # 🧪 测试（单元/集成/E2E）
-│   │       ├── unit/                 #   单元测试（Mock 外部依赖）
-│   │       ├── integration/          #   集成测试（真实 Redis）
-│   │       └── e2e/                  #   端到端测试（整链路）
+│   │   └── app/                     #   主应用
+│   │       ├── main.py              #   FastAPI 入口 + lifespan 生命周期
+│   │       ├── config.py            #   配置加载（YAML + 环境变量覆盖）
+│   │       │
+│   │       ├── domain/              #   🧠 领域层（零外部依赖）
+│   │       │   ├── entities/        #     10 个领域实体
+│   │       │   ├── value_objects/   #     9 个值对象
+│   │       │   ├── services/        #     12 个领域服务
+│   │       │   ├── policies/        #     6 条领域策略
+│   │       │   └── ports/           #     12 个端口接口
+│   │       │
+│   │       ├── application/         #   🎬 应用层
+│   │       │   ├── dto/             #     7 个数据传输对象
+│   │       │   ├── use_cases/       #     5 个用例
+│   │       │   └── orchestrators/   #     4 个编排器
+│   │       │
+│   │       ├── infrastructure/      #   🔌 基础设施层
+│   │       │   ├── redis/           #     8 个 Redis 仓储
+│   │       │   ├── llm_clients/     #     4 个 LLM 客户端
+│   │       │   ├── retrieval/       #     6 个检索模块
+│   │       │   ├── langchain_runtime/ #   LangChain RAG 运行时
+│   │       │   ├── langgraph_runtime/ #  LangGraph Agent 运行时
+│   │       │   ├── benchmark/       #     压测引擎
+│   │       │   ├── sse/             #     SSE 事件存储
+│   │       │   ├── tokenizer/       #     Tokenizer 封装
+│   │       │   ├── prompt_cache/    #     Prompt Cache
+│   │       │   └── probes/          #     系统探针
+│   │       │
+│   │       └── interface/           #   🌐 接口层
+│   │           ├── http/            #     8 个路由模块
+│   │           ├── middlewares/     #     Request-ID + ErrorBoundary
+│   │           ├── sse/             #     SSE 端点
+│   │           └── websocket/       #     WebSocket 端点
 │   │
-│   ├── frontend/                     # 🎨 Vue3 + Vite Dashboard
+│   ├── frontend/                    # 🎨 Vue3 + Vite Dashboard
 │   │   ├── src/
-│   │   │   ├── App.vue               #   主入口
-│   │   │   ├── main.js               #   挂载点
-│   │   │   ├── components/           #   组件（Overview/Benchmark/Trace/Panels）
-│   │   │   └── stores/               #   Pinia 状态管理
+│   │   │   ├── App.vue
+│   │   │   ├── main.js
+│   │   │   ├── api/index.js         #   API 客户端
+│   │   │   ├── router/index.js       #   路由配置
+│   │   │   ├── stores/metrics.js    #   Pinia 状态管理
+│   │   │   └── components/
+│   │   │       ├── OverviewPanel.vue #   QPS/TTFT/错误率大屏
+│   │   │       ├── ChatMonitor.vue  #   聊天请求追踪
+│   │   │       ├── RagMonitor.vue   #   RAG 检索质量监控
+│   │   │       ├── AgentMonitor.vue #   Agent 运行追踪
+│   │   │       ├── BenchmarkPanel.vue # 并发压测面板
+│   │   │       └── TraceDetail.vue  #   全链路 Trace 详情
 │   │   ├── index.html
 │   │   ├── package.json
 │   │   └── vite.config.js
 │   │
-│   ├── configs/                      # ⚙️ 配置中心
-│   │   ├── app.yaml                  #   应用配置
-│   │   ├── model.yaml                #   模型定义与路由策略
-│   │   ├── logging.yaml              #   日志级别与输出
-│   │   └── rag.yaml                  #   RAG 检索参数
+│   ├── configs/                     # ⚙️ 配置中心
+│   │   ├── app.yaml                 #   应用配置（Redis/限流/日志）
+│   │   ├── model.yaml               #   模型定义与路由策略
+│   │   ├── logging.yaml             #   日志级别与输出
+│   │   └── rag.yaml                 #   RAG 检索参数
 │   │
-│   ├── docker/                       # 🐳 Docker 部署
-│   │   ├── docker-compose.yml        #   全家桶编排
-│   │   ├── Dockerfile.gateway        #   FastAPI 镜像
-│   │   ├── nginx.conf                #   反向代理 + SSL
-│   │   └── redis.conf                #   Redis 配置
+│   ├── docker/                      # 🐳 Docker 部署
+│   │   ├── docker-compose.yml       #   全家桶编排
+│   │   ├── Dockerfile.gateway       #   FastAPI 镜像
+│   │   ├── nginx.conf               #   反向代理 + SSL
+│   │   └── redis.conf               #   Redis 配置
 │   │
-│   ├── scripts/                      # 📜 工具脚本
-│   │   ├── seed_db.py                #   数据库初始化
-│   │   └── bench_gateway.py          #   压测脚本
+│   ├── scripts/                     # 📜 工具脚本
+│   ├── docs/                        # 📖 架构设计文档
+│   │   ├── router_architecture.md   #   路由引擎设计
+│   │   ├── rate_limiter_design.md   #   限流器设计
+│   │   └── circuit_breaker_design.md #  熔断器设计
 │   │
-│   └── docs/                         # 📖 架构文档
-│       ├── router_architecture.md    #   路由引擎设计
-│       ├── rate_limiter_design.md    #   限流器设计
-│       └── circuit_breaker_design.md #   熔断器设计
+│   └── .claude/                     #   Claude Code 配置
 │
 └── weekly_logs/                     # 📝 每周学习周记
+    └── week01.md
 ```
+
+> 📌 文件统计（不含 `.git` / `node_modules` / 缓存目录）：**~180+ 源文件**，涵盖 Python、Vue、YAML、Docker、Markdown。Phase 6 单后端即有 **80+ Python 源文件**（DDD 四层 50+ 模块 + 边界层 20+ 路由/中间件）。
 
 > 💡 `.ipynb` 适合边看边跑代码，`.md` 适合纯文本/公式/理论。🆕 标注为新增或大幅扩写的企业级模块。
 
